@@ -1,0 +1,108 @@
+// Ponentes centrales. La página usa los que la organización guarda en el panel (Académico → Ponentes centrales);
+// esta lista solo se usa si el servidor no los envía. Las fotos están en /public/ponentes/.
+// Si "foto" es null se muestra un placeholder con las iniciales.
+// "ponencia" queda en null hasta tener el título de cada conferencia; "magistral" muestra la etiqueta de conferencista.
+const ponentesBase = [
+  {
+    id: 1,
+    nombre: 'Dr. Adrián Scribano',
+    institucion: 'CONICET',
+    pais: 'Argentina',
+    foto: '/ponentes/adrian-scribano.jpg',
+    ponencia: null,
+    bio: 'Sociólogo e investigador principal del Consejo Nacional de Investigaciones Científicas y Técnicas (CONICET) de Argentina.',
+  },
+  {
+    id: 2,
+    nombre: 'Mtro. Lorenzo Espinoza Gómez',
+    institucion: 'Universidad Autónoma Chapingo',
+    pais: 'México',
+    foto: '/ponentes/lorenzo-espinoza.jpg',
+    ponencia: null,
+    bio: 'Docente del Departamento de Sociología Rural de la Universidad Autónoma Chapingo.',
+  },
+  {
+    id: 3,
+    nombre: 'Dr. Jaime Ríos Burga',
+    institucion: 'Universidad Nacional Mayor de San Marcos',
+    pais: 'Perú',
+    foto: '/ponentes/jaime-rios.jpg',
+    ponencia: null,
+    bio: 'Docente de la Facultad de Ciencias Sociales de la Universidad Nacional Mayor de San Marcos.',
+  },
+  {
+    id: 4,
+    nombre: 'Dr. Florentino Vizcarra Pinto',
+    institucion: 'Universidad Intercultural de Quillabamba (UNIQ)',
+    pais: 'Perú',
+    foto: '/ponentes/florentino-vizcarra.jpg',
+    ponencia: null,
+    bio: 'Director académico de Ciencias Sociales de la Universidad Intercultural de Quillabamba.',
+  },
+  {
+    id: 5,
+    nombre: 'Dr. Vicente Alanoca Arocutipa',
+    institucion: 'Universidad Nacional del Altiplano',
+    pais: 'Perú',
+    foto: '/ponentes/vicente-alanoca.jpg',
+    ponencia: null,
+    bio: 'Docente de la Escuela Profesional de Antropología de la Facultad de Ciencias Sociales de la Universidad Nacional del Altiplano.',
+  },
+  {
+    id: 6,
+    nombre: 'Dr. Ángel Canales Gutiérrez',
+    institucion: 'Universidad Nacional del Altiplano',
+    pais: 'Perú',
+    foto: '/ponentes/angel-canales.jpg',
+    ponencia: null,
+    bio: 'Docente principal de la Facultad de Biología de la Universidad Nacional del Altiplano.',
+  },
+  {
+    id: 7,
+    nombre: 'Dr. Emilio Chambi Apaza',
+    institucion: 'Universidad Nacional del Altiplano',
+    pais: 'Perú',
+    foto: '/ponentes/emilio-chambi.jpg',
+    ponencia: null,
+    bio: 'Docente de la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano.',
+  },
+  {
+    id: 8,
+    nombre: 'Dr. Juan Casazola Ccama',
+    institucion: 'Universidad Nacional del Altiplano',
+    pais: 'Perú',
+    foto: '/ponentes/juan-casazola.jpg',
+    ponencia: null,
+    bio: 'Docente de la Escuela Profesional de Derecho de la Facultad de Ciencias Jurídicas y Políticas de la Universidad Nacional del Altiplano.',
+  },
+  {
+    id: 9,
+    nombre: 'Antrop. Rubén Saraza Barriga',
+    institucion: 'Sabio originario aimara lupaka',
+    pais: 'Perú',
+    foto: '/ponentes/ruben-saraza.jpg',
+    ponencia: null,
+    bio: 'Antropólogo y sabio originario aimara lupaka, dedicado al estudio de la sabiduría ancestral.',
+  },
+  {
+    id: 10,
+    nombre: 'Antrop. Rolando Pilco Mallea',
+    institucion: 'IDECA Puno',
+    pais: 'Perú',
+    foto: '/ponentes/rolando-pilco.jpg',
+    ponencia: null,
+    bio: 'Antropólogo y director de IDECA Puno.',
+  },
+  {
+    id: 11,
+    nombre: 'Dr. Porfirio Enríquez Salas',
+    institucion: 'Universidad Nacional del Altiplano',
+    pais: 'Perú',
+    foto: '/ponentes/porfirio-enriquez.jpg',
+    ponencia: null,
+    bio: 'Docente de la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano.',
+  },
+]
+
+const delServidor = globalThis.__CONGRESO__?.ponentes
+export const ponentes = Array.isArray(delServidor) ? delServidor : ponentesBase

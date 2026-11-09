@@ -1,0 +1,9 @@
+Coloca aquí los archivos descargables con estos nombres (ver src/data/descargas.js):
+
+  bases-convocatoria.pdf
+  plantilla-resumen.docx
+  programa-general.pdf
+  afiche-congreso.jpg
+  libro-resumenes.pdf   (marcar disponible: true cuando esté listo)
+
+Puedes borrar este archivo.

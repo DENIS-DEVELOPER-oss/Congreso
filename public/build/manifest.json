@@ -1,0 +1,67 @@
+{
+  "_Arriba-C53v5-F8.js": {
+    "file": "assets/Arriba-C53v5-F8.js",
+    "name": "Arriba",
+    "css": [
+      "assets/Arriba-DMuYAHVs.css"
+    ]
+  },
+  "_Arriba-DMuYAHVs.css": {
+    "file": "assets/Arriba-DMuYAHVs.css",
+    "src": "_Arriba-DMuYAHVs.css"
+  },
+  "_Plantilla-4BA-ZvZA.js": {
+    "file": "assets/Plantilla-4BA-ZvZA.js",
+    "name": "Plantilla",
+    "imports": [
+      "_Arriba-C53v5-F8.js"
+    ]
+  },
+  "_descargas-B3hrkJzQ.js": {
+    "file": "assets/descargas-B3hrkJzQ.js",
+    "name": "descargas",
+    "imports": [
+      "_Arriba-C53v5-F8.js"
+    ]
+  },
+  "_user-Hb88Bu2m.js": {
+    "file": "assets/user-Hb88Bu2m.js",
+    "name": "user",
+    "imports": [
+      "_Arriba-C53v5-F8.js"
+    ]
+  },
+  "resources/js/main.jsx": {
+    "file": "assets/main-zub-hn84.js",
+    "name": "main",
+    "src": "resources/js/main.jsx",
+    "isEntry": true,
+    "imports": [
+      "_Arriba-C53v5-F8.js",
+      "_descargas-B3hrkJzQ.js",
+      "_user-Hb88Bu2m.js"
+    ]
+  },
+  "resources/js/paginas/cuenta.jsx": {
+    "file": "assets/cuenta-CsrlrXDz.js",
+    "name": "cuenta",
+    "src": "resources/js/paginas/cuenta.jsx",
+    "isEntry": true,
+    "imports": [
+      "_Arriba-C53v5-F8.js",
+      "_Plantilla-4BA-ZvZA.js",
+      "_descargas-B3hrkJzQ.js"
+    ]
+  },
+  "resources/js/paginas/inscripcion.jsx": {
+    "file": "assets/inscripcion-C7Sbhehg.js",
+    "name": "inscripcion",
+    "src": "resources/js/paginas/inscripcion.jsx",
+    "isEntry": true,
+    "imports": [
+      "_Arriba-C53v5-F8.js",
+      "_Plantilla-4BA-ZvZA.js",
+      "_user-Hb88Bu2m.js"
+    ]
+  }
+}

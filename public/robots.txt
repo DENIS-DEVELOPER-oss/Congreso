@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://congresosaberes.net/sitemap.xml

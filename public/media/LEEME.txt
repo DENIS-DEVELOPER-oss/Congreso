@@ -1,0 +1,11 @@
+Fotos y video del sitio (configúralos en src/data/evento.js → heroMedia y presentacionImagen).
+
+Recomendaciones:
+- Video del hero: MP4 (H.264), 10 a 20 segundos, sin audio, 1920x1080 o 1280x720, menos de 6 MB.
+  Tomas lentas: el lago Titicaca, Taquile, manos tejiendo, la ciudad universitaria.
+- Póster del video: JPG de la primera toma, 1920x1080, menos de 300 KB (mejor en .webp).
+- Imagen de Presentación: JPG/WEBP vertical u horizontal, 1200 px de ancho, menos de 250 KB.
+- Usa fotos propias o con permiso, y coloca el crédito del autor.
+  Si fotografías a tejedoras o tejedores, pide su consentimiento y menciónalos.
+
+Puedes borrar este archivo.
