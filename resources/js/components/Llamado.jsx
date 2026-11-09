@@ -21,7 +21,7 @@ export default function Llamado() {
               Participa en Puno o desde cualquier lugar del mundo
             </h2>
             <p className="mt-3 text-white/75">
-              La inscripción es gratuita: regístrate en dos minutos y recibe al instante tu acceso al Aula virtual, con el programa y los enlaces de Zoom.
+              La inscripción es gratuita: regístrate en dos minutos y recibe al instante tu acceso al Aula virtual, con el programa y los enlaces de Google Meet.
             </p>
           </div>
           <div className="mt-8 flex shrink-0 flex-col gap-3 sm:flex-row lg:mt-0">

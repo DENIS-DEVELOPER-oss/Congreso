@@ -166,8 +166,8 @@ function TarjetaConvocatoria() {
 function TarjetaPasos() {
   const pasos = [
     { Icono: UserPlus, titulo: 'Regístrate', texto: 'Completa el formulario con tus datos y tu categoría.' },
-    { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Al instante te llega tu usuario, tu contraseña y el programa con Zoom.' },
-    { Icono: KeyRound, titulo: 'Ingresa al Aula virtual', texto: 'Únete por Zoom, envía tu resumen y descarga tu certificado.' },
+    { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Al instante te llega tu usuario, tu contraseña y el programa con Google Meet.' },
+    { Icono: KeyRound, titulo: 'Ingresa al Aula virtual', texto: 'Únete por Google Meet, envía tu resumen y descarga tu certificado.' },
   ]
   return (
     <ol className="space-y-3">
@@ -228,7 +228,7 @@ const DIAPOSITIVAS = [
     etiqueta: 'Inscripciones',
     antetitulo: evento.inscripcionesAbiertas ? 'Inscripción gratuita' : 'Inscripción gratuita · muy pronto',
     titulo: 'Asegura tu participación',
-    texto: 'Regístrate en dos minutos y participa en el campus UNA Puno o por Zoom. Al instante te llega tu acceso al Aula virtual.',
+    texto: 'Regístrate en dos minutos y participa en el campus UNA Puno o por Google Meet. Al instante te llega tu acceso al Aula virtual.',
     botones: [
       { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
       { texto: 'Ingresar al aula', href: RUTAS.cuenta },

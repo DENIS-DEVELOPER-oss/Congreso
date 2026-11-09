@@ -29,8 +29,8 @@ const eventoBase = {
   puedeProbarInscripcion: false,
   ciudad: 'Puno, Perú',
   correo: 'contacto@congresosaberes.net',
-  telefono: '+51 951 000 000',
-  whatsapp: '51951000000', // solo dígitos, con código de país
+  telefono: '+51 951 913 416',
+  whatsapp: '51951913416', // solo dígitos, con código de país
   direccion: 'Av. Floral 1153, Ciudad Universitaria, Puno, Perú',
   mapaUrl: 'https://maps.google.com/maps?q=Universidad%20Nacional%20del%20Altiplano%20Puno&z=15&output=embed',
   // URL "embed" de YouTube para mostrar la sección En vivo, p. ej. 'https://www.youtube.com/embed/ID_DEL_VIDEO'
@@ -55,7 +55,7 @@ const eventoBase = {
   ],
   beneficios: [
     'Inscripción gratuita',
-    'Participación presencial en el campus UNA Puno o virtual por Zoom',
+    'Participación presencial en el campus UNA Puno o virtual por Google Meet',
     'Certificado digital con código de verificación',
     'Acceso al Aula virtual con el programa, los enlaces y el material',
   ],

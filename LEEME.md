@@ -6,15 +6,15 @@ Laravel 12 + Filament 5 (panel de organización) + React/Vite (diseño de la pá
 |---|---|
 | `/` | Página principal |
 | `/inscripcion` | Registro público y gratuito: solo datos personales y categoría |
-| `/aula` | Aula virtual: sesiones por Zoom, envío de resúmenes y certificados (usuario = DNI o correo) |
+| `/aula` | Aula virtual: sesiones por Google Meet, envío de resúmenes y certificados (usuario = DNI o correo) |
 | `/verificar/CODIGO` | Comprueba si un certificado es auténtico (a esta página lleva el QR del PDF) |
 | `/admin` | Panel de organización (solo con usuario y contraseña) |
 
 ## El congreso según los afiches
 
-- **Modalidad presencial y virtual**: sede en el campus de la UNA Puno y transmisión por Zoom.
+- **Modalidad presencial y virtual**: sede en el campus de la UNA Puno y transmisión por Google Meet.
 - **Inscripción gratuita**: al registrarse, la inscripción queda **confirmada al instante** (sin pago ni voucher)
-  y la persona ve los enlaces de Zoom en el Aula virtual.
+  y la persona ve los enlaces de Google Meet en el Aula virtual.
   Se controla en *Datos del congreso → Inscripción y pagos → La inscripción es gratuita*; si algún día se desactiva,
   vuelven las tarifas, los medios de pago y la validación de vouchers.
 - **Resúmenes hasta el 20 de noviembre**: 250 palabras, plantilla oficial, **5 palabras clave**, ponencia presencial o virtual.
@@ -47,12 +47,12 @@ horas académicas y % de asistencia. La página, los correos y los certificados 
 
 1. La persona se **registra** en `/inscripcion` (nombre, DNI, celular, correo y categoría).
 2. **Al instante** le llega el correo *"Aula virtual: confirmación de acceso"*: usuario (DNI o correo), **contraseña temporal**,
-   botón *Ingresar al aula* y el **programa** con horarios y enlaces de Zoom.
+   botón *Ingresar al aula* y el **programa** con horarios y enlaces de Google Meet.
 3. En el **Aula virtual** (`/aula`) entra con su DNI o correo; la primera vez crea su propia contraseña (eso también confirma su correo).
-   Ahí ve sus sesiones con el botón **Unirse por Zoom**, envía resúmenes y descarga certificados.
-4. En el panel, **Asistencia → Sesiones**: carga el tema, ponente, horario y **enlace de Zoom** de cada sesión.
+   Ahí ve sus sesiones con el botón **Unirse por Google Meet**, envía resúmenes y descarga certificados.
+4. En el panel, **Asistencia → Sesiones**: carga el tema, ponente, horario y **enlace de Google Meet** de cada sesión.
 5. **Asistencia → Registrar asistencia**: en el campus con el código o el DNI, uno por uno; en línea, pegando la lista
-   de DNI/correos del reporte de asistentes de Zoom.
+   de DNI/correos del reporte de asistentes de Google Meet.
 6. **Certificados**: se emiten a quienes cumplen el % de asistencia y se envían por correo.
 
 **Reenviar acceso** (en Inscripciones o Participantes) genera una contraseña temporal nueva y vuelve a enviar el correo.

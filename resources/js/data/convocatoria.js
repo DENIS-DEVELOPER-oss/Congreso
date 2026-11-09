@@ -1,7 +1,7 @@
 // Bases de la convocatoria de ponencias (según el afiche oficial)
 export const modalidades = [
   { valor: 'presencial', texto: 'Ponencia presencial', detalle: 'En el campus de la UNA Puno' },
-  { valor: 'virtual', texto: 'Ponencia virtual', detalle: 'En vivo por Zoom' },
+  { valor: 'virtual', texto: 'Ponencia virtual', detalle: 'En vivo por Google Meet' },
 ]
 
 export const cierreResumenes = '20 de noviembre de 2026'

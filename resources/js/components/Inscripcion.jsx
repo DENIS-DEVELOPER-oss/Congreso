@@ -43,7 +43,7 @@ const INICIAL = {
 const PASOS = [
   { titulo: 'Regístrate', texto: 'Tu nombre, DNI, celular y correo: menos de dos minutos.' },
   { titulo: 'Recibe tu acceso al instante', texto: 'Te llega un correo con tu usuario, una contraseña temporal y el programa.' },
-  { titulo: 'Ingresa al Aula virtual', texto: 'Únete a las sesiones por Zoom y, si presentas una ponencia, envía tu resumen.' },
+  { titulo: 'Ingresa al Aula virtual', texto: 'Únete a las sesiones por Google Meet y, si presentas una ponencia, envía tu resumen.' },
 ]
 
 // El orden de las claves define qué campo recibe el foco primero
@@ -144,7 +144,7 @@ export default function Inscripcion({ conTitulo = true }) {
           <TituloSeccion
             etiqueta="Registro"
             titulo="Inscripción"
-            descripcion="Regístrese con sus datos y recibirá al instante, por correo, su acceso al Aula virtual con el programa y los enlaces de Zoom."
+            descripcion="Regístrese con sus datos y recibirá al instante, por correo, su acceso al Aula virtual con el programa y los enlaces de Google Meet."
           />
         )}
 
@@ -165,7 +165,7 @@ export default function Inscripcion({ conTitulo = true }) {
                   pasos={[
                     'Abre el correo «Aula virtual: confirmación de acceso» (si no lo ves, revisa spam).',
                     'Ingresa al aula con tu DNI y la contraseña temporal, y crea tu propia contraseña.',
-                    'Envía tu resumen hasta el 20 de noviembre y únete a las sesiones presencialmente o por Zoom.',
+                    'Envía tu resumen hasta el 20 de noviembre y únete a las sesiones presencialmente o por Google Meet.',
                   ]}
                   textoOtro="Registrar a otra persona"
                   onOtro={f.reiniciar}

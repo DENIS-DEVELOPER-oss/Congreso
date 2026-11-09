@@ -7,7 +7,7 @@ import { TituloSeccion } from './Andino.jsx'
 import { Inclinable } from './Efectos.jsx'
 import Reveal from './Reveal.jsx'
 
-const PASOS = ['Regístrate con tus datos', 'Recibe al instante tu acceso al aula', 'Únete por Zoom desde donde estés']
+const PASOS = ['Regístrate con tus datos', 'Recibe al instante tu acceso al aula', 'Únete por Google Meet desde donde estés']
 
 export default function Accesos() {
   return (
@@ -16,7 +16,7 @@ export default function Accesos() {
         <TituloSeccion
           etiqueta="Participa"
           titulo="Inscripción y Aula virtual"
-          descripcion="Regístrese en la página y recibirá al instante, por correo, su acceso al Aula virtual: ahí realizará el resto de trámites y se unirá a las sesiones por Zoom."
+          descripcion="Regístrese en la página y recibirá al instante, por correo, su acceso al Aula virtual: ahí realizará el resto de trámites y se unirá a las sesiones por Google Meet."
         />
 
         <div className="grid gap-6 lg:grid-cols-5">
@@ -59,7 +59,7 @@ export default function Accesos() {
                 Ingresa con tu DNI o tu correo y la contraseña que recibiste al registrarte.
               </p>
               <ul className="mt-5 space-y-2 text-sm text-slate-600">
-                {['Únete a las sesiones por Zoom', 'Envía tus resúmenes', 'Descarga tu certificado'].map((t) => (
+                {['Únete a las sesiones por Google Meet', 'Envía tus resúmenes', 'Descarga tu certificado'].map((t) => (
                   <li key={t} className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-emerald-600" strokeWidth={3} aria-hidden="true" /> {t}
                   </li>

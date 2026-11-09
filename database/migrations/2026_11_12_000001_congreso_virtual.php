@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-// Congreso virtual: cada sesión es también una clase del Aula (título, ponente, horario y enlace de Zoom).
+// Congreso virtual: cada sesión es también una clase del Aula (título, ponente, horario y enlace de Google Meet).
 // La contraseña que llega por correo es temporal: al primer ingreso se pide crear una propia.
 return new class extends Migration
 {
@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('ponente', 200)->nullable()->after('titulo');
             $table->time('hora_inicio')->nullable()->after('fecha');
             $table->time('hora_fin')->nullable()->after('hora_inicio');
-            $table->string('enlace', 500)->nullable()->after('hora_fin'); // enlace de Zoom
+            $table->string('enlace', 500)->nullable()->after('hora_fin'); // enlace de Google Meet
             $table->string('material', 500)->nullable()->after('enlace'); // enlace a diapositivas o lecturas
         });
 

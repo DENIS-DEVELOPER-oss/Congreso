@@ -8,7 +8,7 @@
   <p style="margin:0 0 14px;">Estimado(a) {{ $participante->nombres }}:</p>
   <p style="margin:0 0 20px;">
     Tu inscripción {{ $gratuita ? 'gratuita ' : '' }}en el <strong>{{ config('congreso.nombre') }}</strong> {{ $gratuita ? 'está confirmada' : 'fue registrada' }}. Hemos creado tu cuenta en el
-    <strong>Aula virtual</strong>, donde encontrarás el enlace de Zoom de cada sesión, el material y tu certificado.
+    <strong>Aula virtual</strong>, donde encontrarás el enlace de Google Meet de cada sesión, el material y tu certificado.
   </p>
 
   <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 20px;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;">
@@ -40,14 +40,14 @@
             <strong style="color:#0f172a;">{{ $s->titulo ?? $s->nombre }}</strong><br />
             @if ($s->ponente)<span style="color:#64748b;">{{ $s->ponente }}</span><br />@endif
             @if ($conZoom && $s->enlace)
-              <a href="{{ $s->enlace }}" style="color:#1d4ed8;">Unirse por Zoom</a>
+              <a href="{{ $s->enlace }}" style="color:#1d4ed8;">Unirse por Google Meet</a>
             @endif
           </td>
         </tr>
       @endforeach
     </table>
     @unless ($conZoom)
-      <p style="margin:0 0 22px;font-size:13px;color:#64748b;">Los enlaces de Zoom aparecerán en el Aula virtual cuando se valide tu pago.</p>
+      <p style="margin:0 0 22px;font-size:13px;color:#64748b;">Los enlaces de Google Meet aparecerán en el Aula virtual cuando se valide tu pago.</p>
     @endunless
   @endif
 

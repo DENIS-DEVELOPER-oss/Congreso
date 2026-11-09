@@ -9,7 +9,7 @@ export default function PaginaInscripcion() {
     <Plantilla pagina="inscripcion">
       <CabeceraPagina
         titulo="Inscripción"
-        descripcion="Regístrate con tu nombre, DNI, celular y correo. La inscripción es gratuita: al instante te llegará tu acceso al Aula virtual, con el programa y los enlaces de Zoom."
+        descripcion="Regístrate con tu nombre, DNI, celular y correo. La inscripción es gratuita: al instante te llegará tu acceso al Aula virtual, con el programa y los enlaces de Google Meet."
       >
         <a href="#inscripcion" className="btn-primario">
           Ir al registro <ArrowDown className="h-4 w-4" aria-hidden="true" />

@@ -12,7 +12,7 @@ const PASOS = [
   },
   {
     Icono: Video,
-    titulo: 'Virtual por Zoom',
+    titulo: 'Virtual por Google Meet',
     texto: 'Las sesiones se transmiten en vivo. Ingresa con tu nombre completo o el correo de tu inscripción para registrar tu asistencia.',
   },
   {

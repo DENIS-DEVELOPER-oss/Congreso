@@ -73,10 +73,10 @@ export default function Contacto() {
                 </span>
                 <h3 className="mt-5 font-display text-3xl font-extrabold">¿Problemas para ingresar al aula?</h3>
                 <p className="mt-3 max-w-lg leading-relaxed text-white/75">
-                  Te ayudamos a recuperar tu contraseña, encontrar el enlace de Zoom o enviar tu resumen. Respondemos por WhatsApp y correo durante los días del congreso.
+                  Te ayudamos a recuperar tu contraseña, encontrar el enlace de Google Meet o enviar tu resumen. Respondemos por WhatsApp y correo durante los días del congreso.
                 </p>
                 <ul className="mt-6 space-y-2 text-sm text-white/80">
-                  {['¿No te llegó el correo? Revisa spam o pide una contraseña nueva en el aula.', 'Ingresa a Zoom con tu nombre completo para registrar tu asistencia.', 'Ten a la mano tu DNI: es tu usuario.'].map((t) => (
+                  {['¿No te llegó el correo? Revisa spam o pide una contraseña nueva en el aula.', 'Ingresa a Google Meet con tu nombre completo para registrar tu asistencia.', 'Ten a la mano tu DNI: es tu usuario.'].map((t) => (
                     <li key={t} className="flex gap-2">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-naranja" aria-hidden="true" />
                       {t}

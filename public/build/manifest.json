@@ -1,6 +1,6 @@
 {
-  "_Arriba-C53v5-F8.js": {
-    "file": "assets/Arriba-C53v5-F8.js",
+  "_Arriba-BQoVAhdp.js": {
+    "file": "assets/Arriba-BQoVAhdp.js",
     "name": "Arriba",
     "css": [
       "assets/Arriba-DMuYAHVs.css"
@@ -10,58 +10,58 @@
     "file": "assets/Arriba-DMuYAHVs.css",
     "src": "_Arriba-DMuYAHVs.css"
   },
-  "_Plantilla-4BA-ZvZA.js": {
-    "file": "assets/Plantilla-4BA-ZvZA.js",
+  "_Plantilla-CTFc2b-T.js": {
+    "file": "assets/Plantilla-CTFc2b-T.js",
     "name": "Plantilla",
     "imports": [
-      "_Arriba-C53v5-F8.js"
+      "_Arriba-BQoVAhdp.js"
     ]
   },
-  "_descargas-B3hrkJzQ.js": {
-    "file": "assets/descargas-B3hrkJzQ.js",
+  "_descargas-uILDlR1V.js": {
+    "file": "assets/descargas-uILDlR1V.js",
     "name": "descargas",
     "imports": [
-      "_Arriba-C53v5-F8.js"
+      "_Arriba-BQoVAhdp.js"
     ]
   },
-  "_user-Hb88Bu2m.js": {
-    "file": "assets/user-Hb88Bu2m.js",
+  "_user-ChCiLAc-.js": {
+    "file": "assets/user-ChCiLAc-.js",
     "name": "user",
     "imports": [
-      "_Arriba-C53v5-F8.js"
+      "_Arriba-BQoVAhdp.js"
     ]
   },
   "resources/js/main.jsx": {
-    "file": "assets/main-zub-hn84.js",
+    "file": "assets/main-DaJimhcs.js",
     "name": "main",
     "src": "resources/js/main.jsx",
     "isEntry": true,
     "imports": [
-      "_Arriba-C53v5-F8.js",
-      "_descargas-B3hrkJzQ.js",
-      "_user-Hb88Bu2m.js"
+      "_Arriba-BQoVAhdp.js",
+      "_descargas-uILDlR1V.js",
+      "_user-ChCiLAc-.js"
     ]
   },
   "resources/js/paginas/cuenta.jsx": {
-    "file": "assets/cuenta-CsrlrXDz.js",
+    "file": "assets/cuenta-CYuIdV-8.js",
     "name": "cuenta",
     "src": "resources/js/paginas/cuenta.jsx",
     "isEntry": true,
     "imports": [
-      "_Arriba-C53v5-F8.js",
-      "_Plantilla-4BA-ZvZA.js",
-      "_descargas-B3hrkJzQ.js"
+      "_Arriba-BQoVAhdp.js",
+      "_Plantilla-CTFc2b-T.js",
+      "_descargas-uILDlR1V.js"
     ]
   },
   "resources/js/paginas/inscripcion.jsx": {
-    "file": "assets/inscripcion-C7Sbhehg.js",
+    "file": "assets/inscripcion-C80i5JPv.js",
     "name": "inscripcion",
     "src": "resources/js/paginas/inscripcion.jsx",
     "isEntry": true,
     "imports": [
-      "_Arriba-C53v5-F8.js",
-      "_Plantilla-4BA-ZvZA.js",
-      "_user-Hb88Bu2m.js"
+      "_Arriba-BQoVAhdp.js",
+      "_Plantilla-CTFc2b-T.js",
+      "_user-ChCiLAc-.js"
     ]
   }
 }

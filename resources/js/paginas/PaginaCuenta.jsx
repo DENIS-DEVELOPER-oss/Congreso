@@ -1,5 +1,5 @@
 // Aula virtual: el participante entra con su DNI o correo y la contraseña temporal que recibe al registrarse.
-// La primera vez crea su propia contraseña. Desde aquí entra a las sesiones por Zoom, sube su voucher (si hay pago),
+// La primera vez crea su propia contraseña. Desde aquí entra a las sesiones por Google Meet, sube su voucher (si hay pago),
 // envía resúmenes y descarga certificados.
 import { useCallback, useEffect, useState } from 'react'
 import { Award, CalendarClock, Download, ExternalLink, KeyRound, Loader2, Lock, LogOut, ShieldCheck, Video } from 'lucide-react'
@@ -22,7 +22,7 @@ const COLOR_ESTADO = {
 
 const hoyISO = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' })
 
-// Programa del aula con los enlaces de Zoom (bloque oscuro, lo primero que se ve)
+// Programa del aula con los enlaces de Google Meet (bloque oscuro, lo primero que se ve)
 function Sesiones({ sesiones, bloqueado }) {
   const hoy = hoyISO()
   return (
@@ -41,7 +41,7 @@ function Sesiones({ sesiones, bloqueado }) {
       {bloqueado && (
         <p className="mb-5 flex gap-3 rounded-xl bg-white/[0.07] p-4 text-sm text-white/85 ring-1 ring-white/10">
           <Lock className="h-5 w-5 shrink-0 text-naranja" aria-hidden="true" />
-          Los enlaces de Zoom aparecerán aquí cuando validemos tu pago. Sube tu voucher más abajo.
+          Los enlaces de Google Meet aparecerán aquí cuando validemos tu pago. Sube tu voucher más abajo.
         </p>
       )}
 
@@ -77,7 +77,7 @@ function Sesiones({ sesiones, bloqueado }) {
                       rel="noopener noreferrer"
                       className={`btn px-5 py-2.5 text-sm ${esHoy ? 'bg-naranja text-tierra hover:bg-[#fcd34d]' : 'border border-white/25 bg-white/5 text-white hover:border-white/50 hover:bg-white/10'}`}
                     >
-                      <Video className="h-4 w-4" aria-hidden="true" /> Unirse por Zoom
+                      <Video className="h-4 w-4" aria-hidden="true" /> Unirse por Google Meet
                     </a>
                   ) : (
                     <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2 text-xs font-semibold text-white/60 ring-1 ring-white/10">
@@ -272,7 +272,7 @@ export default function PaginaCuenta() {
         titulo="Aula virtual"
         descripcion={
           perfil
-            ? 'Únete a las sesiones por Zoom, envía tus resúmenes y descarga tus certificados.'
+            ? 'Únete a las sesiones por Google Meet, envía tus resúmenes y descarga tus certificados.'
             : 'Ingresa con tu DNI o tu correo y la contraseña que te enviamos al registrarte.'
         }
       />

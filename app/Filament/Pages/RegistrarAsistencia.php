@@ -20,8 +20,8 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use UnitEnum;
 
-// Registro de asistencia de las sesiones por Zoom: uno por uno (código, DNI o correo)
-// o varios a la vez pegando la lista del reporte de asistentes de Zoom
+// Registro de asistencia de las sesiones por Google Meet: uno por uno (código, DNI o correo)
+// o varios a la vez pegando la lista del reporte de asistentes de Google Meet
 class RegistrarAsistencia extends Page implements HasTable
 {
     use InteractsWithTable;
@@ -61,7 +61,7 @@ class RegistrarAsistencia extends Page implements HasTable
                         ->columnSpan(2),
                 ]),
                 Textarea::make('lista')->label('Registrar varios a la vez')->rows(4)
-                    ->placeholder("Pega aquí los DNI o correos del reporte de asistentes de Zoom,\nuno por línea o separados por comas")
+                    ->placeholder("Pega aquí los DNI o correos del reporte de asistentes de Google Meet,\nuno por línea o separados por comas")
                     ->helperText('Se registran solo las inscripciones con pago validado; al terminar verás el resumen.'),
             ]);
     }

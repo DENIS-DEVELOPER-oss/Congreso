@@ -64,8 +64,8 @@ return [
 
     // EDITABLE. Contacto que se muestra en la página y en los correos
     'correo_contacto' => env('CONGRESO_CORREO', 'contacto@congresosaberes.net'),
-    'telefono' => '+51 951 000 000',
-    'whatsapp' => '51951000000', // solo dígitos, con código de país
+    'telefono' => '+51 951 913 416',
+    'whatsapp' => '51951913416', // solo dígitos, con código de país
 
     // EDITABLE. Fechas importantes de la portada (fecha AAAA-MM-DD, en orden)
     'fechas_importantes' => [
@@ -80,7 +80,7 @@ return [
         ['nombre' => null, 'cargo' => 'Director(a) del Instituto de Investigaciones para el Desarrollo Social Andino (IIDSA)', 'firma' => null],
     ],
 
-    // EDITABLE. Si es true, el enlace de Zoom solo se muestra en el Aula a quienes tienen el pago validado
+    // EDITABLE. Si es true, el enlace de Google Meet solo se muestra en el Aula a quienes tienen el pago validado
     'zoom_solo_con_pago' => true,
 
     // EDITABLE. Certificados

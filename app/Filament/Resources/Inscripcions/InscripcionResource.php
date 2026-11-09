@@ -86,7 +86,7 @@ class InscripcionResource extends Resource
             ->requiresConfirmation()
             ->modalHeading('Enviar acceso al Aula virtual')
             ->modalDescription(fn (Inscripcion $record) => "Se enviará a {$record->participante->correo} su usuario ({$record->participante->documento}), "
-                .'una contraseña temporal nueva, el programa con Zoom y, si aún no pagó, el monto y los medios de pago.'
+                .'una contraseña temporal nueva, el programa con Google Meet y, si aún no pagó, el monto y los medios de pago.'
                 .($record->participante->tieneAcceso() ? ' La contraseña anterior dejará de funcionar.' : '')
                 .($record->participante->correoConfirmado() ? '' : ' Atención: este participante aún no confirmó su correo.'))
             ->action(fn (Inscripcion $record) => Accesos::enviar($record->participante)

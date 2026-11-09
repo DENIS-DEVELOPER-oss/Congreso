@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 
-// Confirmación de acceso al Aula virtual: usuario, contraseña temporal, programa con Zoom y datos de pago
+// Confirmación de acceso al Aula virtual: usuario, contraseña temporal, programa con Google Meet y datos de pago
 class AccesoAula extends Mailable
 {
     public function __construct(public Participante $participante, public string $clave) {}
