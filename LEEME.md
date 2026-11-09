@@ -116,7 +116,7 @@ solo PHP y Composer (Bluehost los trae por SSH).
 ```bash
 ssh USUARIO@50.6.61.88
 cd ~
-git clone https://github.com/TU_USUARIO/congreso-saberes.git congreso
+git clone https://github.com/DENIS-DEVELOPER-oss/Congreso.git congreso
 ```
 Si el repositorio es **privado**, GitHub pedirá usuario y un *token* en lugar de la contraseña
 (GitHub → Settings → Developer settings → Personal access tokens → *Fine-grained*, con permiso de lectura de *Contents* en ese repositorio).
