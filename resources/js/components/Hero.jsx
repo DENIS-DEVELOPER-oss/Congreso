@@ -4,6 +4,7 @@ import { descargarIcs, urlGoogleCalendar } from '../lib/calendario.js'
 import { evento } from '../data/evento.js'
 import { ponentes } from '../data/ponentes.js'
 import { modalidades } from '../data/convocatoria.js'
+import { afiche } from '../data/afiches.js'
 import { RUTAS } from '../lib/rutas.js'
 import { FranjaTejida } from './Andino.jsx'
 import { useCarrusel } from './Carrusel.jsx'
@@ -192,12 +193,39 @@ function TarjetaPasos() {
   )
 }
 
+// Afiche oficial a la derecha (en celular, debajo del texto); al tocarlo se abre en grande
+function Afiche({ a }) {
+  return (
+    <a
+      href={a.src}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block overflow-hidden rounded-2xl bg-white shadow-[0_30px_60px_-28px_rgb(15_23_42/0.5)] ring-1 ring-white transition duration-500 hover:-translate-y-1"
+    >
+      <img src={a.src} alt={`${a.titulo}: ${a.texto}`} decoding="async" className="aspect-video w-full object-cover transition duration-700 group-hover:scale-[1.02]" />
+      <span className="sr-only"> (se abre en una pestaña nueva)</span>
+    </a>
+  )
+}
+
 // ---------- Diapositivas ----------
 const DIAPOSITIVAS = [
   {
     id: 'congreso',
     etiqueta: 'El congreso',
     Visual: FechasImportantes,
+  },
+  {
+    id: 'afiche-congreso',
+    etiqueta: 'Afiche oficial',
+    antetitulo: 'Afiche oficial',
+    titulo: 'I Congreso Internacional',
+    texto: '26 y 27 de noviembre de 2026 en el campus de la UNA Puno, en modalidad presencial y virtual. Inscripción gratuita.',
+    botones: [
+      { texto: 'Ver el afiche', href: afiche('congreso').src, principal: true, externo: true },
+      { texto: 'Todos los afiches', href: '#afiches' },
+    ],
+    afiche: afiche('congreso'),
   },
   {
     id: 'ponentes',
@@ -212,6 +240,18 @@ const DIAPOSITIVAS = [
     Visual: MosaicoPonentes,
   },
   {
+    id: 'afiche-ponentes',
+    etiqueta: 'Afiche ponentes',
+    antetitulo: 'Afiche · ponentes centrales',
+    titulo: 'Once ponentes de tres países',
+    texto: 'Especialistas de Perú, Argentina y México en conferencias centrales y mesas temáticas.',
+    botones: [
+      { texto: 'Ver el afiche', href: afiche('ponentes').src, principal: true, externo: true },
+      { texto: 'Conocer a los ponentes', href: '#ponentes' },
+    ],
+    afiche: afiche('ponentes'),
+  },
+  {
     id: 'convocatoria',
     etiqueta: 'Convocatoria',
     antetitulo: 'Convocatoria de ponencias',
@@ -222,6 +262,18 @@ const DIAPOSITIVAS = [
       { texto: 'Leer las bases', href: '#convocatoria' },
     ],
     Visual: TarjetaConvocatoria,
+  },
+  {
+    id: 'afiche-ejes',
+    etiqueta: 'Afiche ejes',
+    antetitulo: 'Afiche · ejes temáticos',
+    titulo: 'Seis ejes de diálogo',
+    texto: 'Interculturalidad, Buen Vivir, universidad intercultural, descolonización, gestión sostenible y pluriculturalidad.',
+    botones: [
+      { texto: 'Ver el afiche', href: afiche('ejes').src, principal: true, externo: true },
+      { texto: 'Ver los ejes', href: '#ejes' },
+    ],
+    afiche: afiche('ejes'),
   },
   {
     id: 'inscripcion',
@@ -301,11 +353,20 @@ function TextoDiapositiva({ d }) {
         <span className="h-px w-10 bg-naranja" aria-hidden="true" />
         {d.antetitulo}
       </p>
-      <h2 className="mt-4 max-w-2xl text-4xl leading-[1.05] font-extrabold text-oscuro sm:text-5xl xl:text-6xl">{d.titulo}</h2>
-      <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">{d.texto}</p>
-      <div data-apartar-flotantes className="mt-9 flex flex-col gap-3 sm:flex-row">
+      <h2
+        className={`mt-4 max-w-2xl leading-[1.05] font-extrabold text-oscuro ${d.afiche ? 'text-3xl sm:text-4xl xl:text-5xl' : 'text-4xl sm:text-5xl xl:text-6xl'}`}
+      >
+        {d.titulo}
+      </h2>
+      <p className={`max-w-xl text-lg leading-relaxed text-slate-600 ${d.afiche ? 'mt-4' : 'mt-6'}`}>{d.texto}</p>
+      <div data-apartar-flotantes className={`flex flex-col gap-3 sm:flex-row ${d.afiche ? 'mt-7' : 'mt-9'}`}>
         {d.botones.map((b) => (
-          <a key={b.texto} href={b.href} className={claseBoton(b.principal)}>
+          <a
+            key={b.texto}
+            href={b.href}
+            {...(b.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className={claseBoton(b.principal)}
+          >
             {b.texto}
             {b.principal && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />}
           </a>
@@ -378,14 +439,27 @@ export default function Hero() {
                 aria-label={`${i + 1} de ${DIAPOSITIVAS.length}: ${d.etiqueta}`}
                 aria-hidden={!visible}
                 inert={!visible}
-                className={`grid items-center gap-12 [grid-area:1/1] lg:grid-cols-12 lg:gap-16 ${
+                className={`grid items-center [grid-area:1/1] lg:grid-cols-12 ${d.afiche ? 'gap-6 lg:gap-12' : 'gap-12 lg:gap-16'} ${
                   visible ? 'z-10 opacity-100 transition-[opacity,transform] duration-700' : 'pointer-events-none translate-y-3 opacity-0 transition-[opacity,transform] duration-500'
                 }`}
               >
-                <div className="lg:col-span-7">{i === 0 ? <TextoCongreso /> : <TextoDiapositiva d={d} />}</div>
-                <div className={`hidden lg:col-span-5 lg:block ${i === 0 ? 'animate-aparecer' : ''}`} style={i === 0 ? { animationDelay: '380ms' } : undefined}>
-                  <d.Visual />
-                </div>
+                {d.afiche ? (
+                  <>
+                    <div className="lg:col-span-5">
+                      <TextoDiapositiva d={d} />
+                    </div>
+                    <div className="lg:col-span-7">
+                      <Afiche a={d.afiche} />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="lg:col-span-7">{i === 0 ? <TextoCongreso /> : <TextoDiapositiva d={d} />}</div>
+                    <div className={`hidden lg:col-span-5 lg:block ${i === 0 ? 'animate-aparecer' : ''}`} style={i === 0 ? { animationDelay: '380ms' } : undefined}>
+                      <d.Visual />
+                    </div>
+                  </>
+                )}
               </div>
             )
           })}
@@ -393,7 +467,12 @@ export default function Hero() {
 
         {/* Controles: pestañas con nombre y barra de progreso, flechas y pausa */}
         <div className="mt-10 flex items-center gap-3 lg:mt-14">
-          <div className="grid flex-1 grid-cols-4 gap-2 sm:gap-3" role="tablist" aria-label="Elegir diapositiva">
+          <div
+            className="grid flex-1 gap-1.5 sm:gap-2.5"
+            style={{ gridTemplateColumns: `repeat(${DIAPOSITIVAS.length}, minmax(0, 1fr))` }}
+            role="tablist"
+            aria-label="Elegir diapositiva"
+          >
             {DIAPOSITIVAS.map((d, i) => (
               <button
                 key={d.id}
@@ -416,7 +495,7 @@ export default function Hero() {
                   )}
                 </span>
                 <span
-                  className={`mt-2 hidden text-sm font-semibold transition-colors group-focus-visible/tab:underline sm:block ${
+                  className={`mt-2 hidden truncate text-xs font-semibold transition-colors group-focus-visible/tab:underline lg:block xl:text-sm ${
                     i === actual ? 'text-oscuro' : 'text-slate-500 group-hover/tab:text-oscuro'
                   }`}
                 >
