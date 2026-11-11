@@ -13,7 +13,7 @@ import Convocatoria from './components/Convocatoria.jsx'
 import Accesos from './components/Accesos.jsx'
 import Descargas from './components/Descargas.jsx'
 import Afiches from './components/Afiches.jsx'
-import Aliados, { FranjaOrganizan } from './components/Aliados.jsx'
+import FranjaOrganizan from './components/Organizan.jsx'
 import Preguntas from './components/Preguntas.jsx'
 import Contacto from './components/Contacto.jsx'
 import Footer from './components/Footer.jsx'
@@ -47,7 +47,6 @@ export default function App() {
         <Accesos />
         <Descargas />
         <Afiches />
-        <Aliados />
         <Llamado />
         <Preguntas />
         <Contacto />

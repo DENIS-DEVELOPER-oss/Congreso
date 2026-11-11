@@ -1,4 +1,5 @@
 import { ArrowUp } from 'lucide-react'
+import { aliados } from '../data/aliados.js'
 import { evento } from '../data/evento.js'
 import { enlace, RUTAS } from '../lib/rutas.js'
 import { FranjaTejida, PatronRombos } from './Andino.jsx'
@@ -47,9 +48,8 @@ export default function Footer({ pagina = 'inicio' }) {
             </div>
           </div>
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/60">
-            Organizado por la Escuela Profesional de Sociología y el Instituto de Investigaciones para el Desarrollo Social
-            Andino (IIDSA) de la Facultad de Ciencias Sociales, con el Vicerrectorado Académico de la Universidad Nacional
-            del Altiplano – {evento.ciudad}.
+            Organizado por la Universidad Nacional del Altiplano – {evento.ciudad} (Vicerrectorado Académico, Facultad de
+            Ciencias Sociales, Escuela Profesional de Sociología e IIDSA) y el Colegio de Sociólogos del Perú.
           </p>
           <ListaRedes variante="oscuro" className="mt-6" />
         </div>
@@ -83,6 +83,22 @@ export default function Footer({ pagina = 'inicio' }) {
           <a href={RUTAS.inscripcion} className="btn-primario mt-6">
             Inscríbete ahora
           </a>
+        </div>
+      </div>
+
+      {/* Sello institucional: las insignias de quienes organizan, en todas las páginas */}
+      <div className="border-t border-white/10">
+        <div className="contenedor flex flex-col items-center gap-4 px-4 py-7 sm:px-6 lg:flex-row lg:justify-center lg:gap-8">
+          <p className="text-xs font-bold tracking-wide text-white/40 uppercase">Organizan</p>
+          <ul className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
+            {aliados.map((a) => (
+              <li key={a.nombre} title={a.nombre === 'IIDSA' ? a.corto : a.nombre}>
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white p-1.5 shadow-sm ring-1 ring-white/20 sm:h-16 sm:w-16">
+                  <img src={a.logo} alt={a.nombre} loading="lazy" className="max-h-full max-w-full object-contain" />
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 

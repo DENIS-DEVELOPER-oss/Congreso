@@ -219,10 +219,10 @@ const DIAPOSITIVAS = [
     etiqueta: 'Afiche oficial',
     antetitulo: 'Afiche oficial',
     titulo: 'I Congreso Internacional',
-    texto: '26 y 27 de noviembre de 2026 en el campus de la UNA Puno, en modalidad presencial y virtual. Inscripción gratuita.',
+    texto: '26 y 27 de noviembre de 2026 en el campus de la UNA Puno, presencial y virtual. Lo organizan seis instituciones académicas del Perú.',
     botones: [
       { texto: 'Ver el afiche', afiche: afiche('congreso'), principal: true },
-      { texto: 'Todos los afiches', href: '#afiches' },
+      { texto: 'Ver los organizadores', href: '#organizan' },
     ],
     afiche: afiche('congreso'),
   },

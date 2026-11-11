@@ -3,8 +3,8 @@ export const afiches = [
   {
     id: 'congreso',
     titulo: 'Afiche oficial',
-    texto: 'Fecha, sede, modalidad presencial y virtual e inscripción gratuita.',
-    src: '/media/afiches/afiche-congreso.jpg',
+    texto: 'Fechas, sede en Puno y las seis instituciones que organizan el congreso.',
+    src: '/media/afiches/afiche-organizadores.jpg',
   },
   {
     id: 'ponentes',

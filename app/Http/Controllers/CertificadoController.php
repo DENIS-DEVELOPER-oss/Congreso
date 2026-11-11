@@ -54,7 +54,7 @@ class CertificadoController extends Controller
     // Insignias de las instituciones organizadoras (public/insignias), incrustadas en el PDF
     private static function insignias(): array
     {
-        return collect(['unap', 'vicerrectorado-academico', 'facultad-ciencias-sociales', 'sociologia'])
+        return collect(['unap', 'vicerrectorado-academico', 'facultad-ciencias-sociales', 'sociologia', 'iidsa', 'colegio-sociologos'])
             ->map(fn ($n) => public_path("insignias/{$n}.png"))
             ->filter(fn ($ruta) => is_file($ruta))
             ->map(fn ($ruta) => 'data:image/png;base64,'.base64_encode(file_get_contents($ruta)))

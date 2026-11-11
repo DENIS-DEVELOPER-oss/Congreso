@@ -14,7 +14,7 @@
     .marco-interior { position: absolute; top: 12.5mm; left: 12.5mm; right: 12.5mm; bottom: 12.5mm; border: 0.4mm solid #fbbf24; }
     .contenido { position: absolute; top: 19mm; left: 28mm; right: 28mm; text-align: center; }
     .insignias { margin-bottom: 2.5mm; }
-    .insignias img { height: 15mm; margin: 0 4mm; vertical-align: middle; }
+    .insignias img { height: 14mm; margin: 0 3mm; vertical-align: middle; }
     .instituciones { font-family: Helvetica, Arial, sans-serif; font-size: 9.5pt; letter-spacing: 0.6pt; text-transform: uppercase; color: #2563eb; line-height: 1.5; }
     .titulo { margin-top: 5mm; font-size: 40pt; letter-spacing: 6pt; color: #1e3a8a; }
     .linea { margin: 3mm auto 0; width: 50mm; border-top: 0.5mm solid #fbbf24; }
@@ -45,7 +45,8 @@
       @endif
       <div class="instituciones">
         Universidad Nacional del Altiplano · Vicerrectorado Académico · Facultad de Ciencias Sociales<br />
-        Escuela Profesional de Sociología · Instituto de Investigaciones para el Desarrollo Social Andino (IIDSA)
+        Escuela Profesional de Sociología · Instituto de Investigaciones para el Desarrollo Social Andino (IIDSA)<br />
+        Colegio de Sociólogos del Perú
       </div>
 
       <div class="titulo">CERTIFICADO</div>
