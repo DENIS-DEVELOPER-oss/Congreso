@@ -10,7 +10,7 @@ export const programa = [
       { hora: '08:00', tipo: 'general', titulo: 'Acreditación de participantes', ponente: 'Comisión organizadora', lugar: 'Educación Continua UNA Puno' },
       { hora: '09:00', tipo: 'general', titulo: 'Ceremonia de inauguración', ponente: 'Autoridades de la UNA Puno', lugar: 'Educación Continua UNA Puno' },
       { hora: '10:00', tipo: 'conferencia', titulo: 'Conferencias centrales', ponente: 'Ponentes centrales', lugar: 'Educación Continua UNA Puno' },
-      { hora: '15:00', tipo: 'mesa', titulo: 'Mesas temáticas: saberes andino-amazónicos', ponente: 'Ponentes de las mesas', lugar: 'Educación Continua UNA Puno' },
+      { hora: '15:00', tipo: 'mesa', titulo: 'Mesas temáticas: saberes andinoamazónicos', ponente: 'Ponentes de las mesas', lugar: 'Educación Continua UNA Puno' },
       { hora: '18:00', tipo: 'cultural', titulo: 'Presentación cultural de bienvenida', ponente: 'Conjuntos de la región Puno', lugar: 'Educación Continua UNA Puno' },
     ],
   },

@@ -2,9 +2,9 @@
 // lo marcado como "por confirmar" sigue siendo de ejemplo.
 // Si cambias fechas, sede o precios, actualiza también los metadatos de index.html.
 const eventoBase = {
-  nombre: 'Congreso Saberes Andino-Amazónicos',
+  nombre: 'Congreso Saberes Andinoamazónicos',
   nombreCompleto:
-    'I Congreso Internacional: Saberes Andino-Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
+    'I Congreso Internacional: Saberes Andinoamazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
   edicion: 'I Congreso Internacional',
   lema: 'Formación universitaria con pertinencia intercultural e interepistémica',
   descripcionCorta:
@@ -68,9 +68,9 @@ const eventoBase = {
     'Acceso al Aula virtual con el programa, el material y tu certificado',
   ],
   // Agregar aquí el cierre de envío de resúmenes y de inscripciones cuando estén definidos
-  // (formato '15 nov 2026', en orden cronológico)
+  // (formato '20 nov 2026', en orden cronológico)
   fechasImportantes: [
-    { fecha: '15 nov 2026', texto: 'Cierre de recepción de resúmenes' },
+    { fecha: '20 nov 2026', texto: 'Cierre de recepción de resúmenes' },
     { fecha: '26 nov 2026', texto: 'Inauguración y primer día del congreso' },
     { fecha: '27 nov 2026', texto: 'Segundo día y clausura' },
   ],

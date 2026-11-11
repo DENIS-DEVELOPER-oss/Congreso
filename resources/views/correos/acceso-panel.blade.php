@@ -1,4 +1,4 @@
-<x-correo etiqueta="Panel de organización · Acceso" titulo="I Congreso Internacional: Saberes Andino-Amazónicos">
+<x-correo etiqueta="Panel de organización · Acceso" titulo="I Congreso Internacional: Saberes Andinoamazónicos">
   <p style="margin:0 0 14px;">Hola, {{ $usuario->name }}:</p>
   <p style="margin:0 0 20px;">
     Te dieron acceso al <strong>panel de organización</strong> del {{ config('congreso.nombre') }} como

@@ -20,23 +20,23 @@ $pagina = fn (string $pagina, string $entrada, string $titulo, string $descripci
 Route::get('/', fn () => $pagina(
     'inicio',
     'resources/js/main.jsx',
-    'Congreso Saberes Andino-Amazónicos 2026 | Sociología UNA Puno',
-    'I Congreso Internacional Saberes Andino-Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria, 26 y 27 de noviembre de 2026 en Puno, Perú. Organiza la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano. Convocatoria de ponencias e inscripciones abiertas.',
-    'Congreso Saberes Andino-Amazónicos 2026 · Puno, Perú',
+    'Congreso Saberes Andinoamazónicos 2026 | Sociología UNA Puno',
+    'I Congreso Internacional Saberes Andinoamazónicos y Diálogo Intercultural en la Educación Superior Universitaria, 26 y 27 de noviembre de 2026 en Puno, Perú. Organiza la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano. Convocatoria de ponencias e inscripciones abiertas.',
+    'Congreso Saberes Andinoamazónicos 2026 · Puno, Perú',
     'Formación universitaria con pertinencia intercultural e interepistémica. 26 y 27 de noviembre de 2026. ¡Inscripciones abiertas!',
 ));
 
 Route::get('/inscripcion', fn () => $pagina(
     'inscripcion',
     'resources/js/paginas/inscripcion.jsx',
-    'Inscripción | Congreso Saberes Andino-Amazónicos 2026',
-    'Inscríbete al I Congreso Internacional Saberes Andino-Amazónicos (26 y 27 de noviembre de 2026, Puno): tarifas, medios de pago y formulario de inscripción.',
+    'Inscripción | Congreso Saberes Andinoamazónicos 2026',
+    'Inscríbete al I Congreso Internacional Saberes Andinoamazónicos (26 y 27 de noviembre de 2026, Puno): tarifas, medios de pago y formulario de inscripción.',
 ));
 
 Route::get('/aula', fn () => $pagina(
     'cuenta',
     'resources/js/paginas/cuenta.jsx',
-    'Aula virtual | Congreso Saberes Andino-Amazónicos 2026',
+    'Aula virtual | Congreso Saberes Andinoamazónicos 2026',
     'Ingresa al Aula virtual con tu DNI o correo para ver el programa, el estado de tu ponencia y descargar tus certificados.',
 ));
 

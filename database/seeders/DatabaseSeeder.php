@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         // Programa del aula virtual (horario de Perú). Títulos y ponentes por confirmar: se editan en el panel.
         $sesiones = [
             ['Día 1 – mañana', '2026-11-26', '09:00', '13:00', 'Inauguración y conferencias centrales', 'Ponentes centrales'],
-            ['Día 1 – tarde', '2026-11-26', '15:00', '19:00', 'Mesas temáticas: saberes andino-amazónicos', 'Ponentes de las mesas'],
+            ['Día 1 – tarde', '2026-11-26', '15:00', '19:00', 'Mesas temáticas: saberes andinoamazónicos', 'Ponentes de las mesas'],
             ['Día 2 – mañana', '2026-11-27', '09:00', '13:00', 'Diálogo intercultural en la educación superior universitaria', 'Panel de ponentes centrales'],
             ['Día 2 – tarde', '2026-11-27', '15:00', '19:00', 'Mesas temáticas y clausura', 'Comisión organizadora'],
         ];

@@ -13,7 +13,7 @@
                   <tr>
                     <td style="vertical-align:middle;">
                       <p style="margin:0;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#1d4ed8;font-weight:bold;">I Congreso Internacional</p>
-                      <p style="margin:2px 0 0;font-size:18px;font-weight:bold;color:#1e3a8a;">Saberes Andino-Amazónicos</p>
+                      <p style="margin:2px 0 0;font-size:18px;font-weight:bold;color:#1e3a8a;">Saberes Andinoamazónicos</p>
                     </td>
                     <td style="vertical-align:middle;text-align:right;font-size:11px;line-height:1.5;color:#64748b;">
                       Escuela Profesional de Sociología · IIDSA<br />Universidad Nacional del Altiplano

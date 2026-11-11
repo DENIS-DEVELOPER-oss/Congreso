@@ -102,7 +102,7 @@ export default function Temporizador() {
 
   if (fase === 'despues') {
     return (
-      <div className="border-b border-white/10 py-7 text-center">
+      <div className="py-8 text-center">
         <p className="font-display text-xl font-extrabold sm:text-2xl">Gracias por participar en el {evento.edicion}</p>
         <p className="mt-1 text-sm text-white/75">Descarga tu certificado desde el Aula virtual.</p>
       </div>
@@ -111,7 +111,7 @@ export default function Temporizador() {
 
   if (fase === 'durante') {
     return (
-      <div className="flex flex-col items-center gap-2 border-b border-white/10 py-7 text-center sm:flex-row sm:justify-center sm:gap-4">
+      <div className="flex flex-col items-center gap-2 py-8 text-center sm:flex-row sm:justify-center sm:gap-4">
         <span className="inline-flex items-center gap-2 rounded-full bg-red-500/15 px-3 py-1 text-xs font-bold tracking-[0.14em] text-red-300 uppercase ring-1 ring-red-400/30">
           <Radio className="h-4 w-4 animate-pulse" aria-hidden="true" /> En curso
         </span>
@@ -124,7 +124,7 @@ export default function Temporizador() {
   const dias = casillas[0].valor
 
   return (
-    <div className="border-b border-white/10 py-8">
+    <div className="pt-8 pb-10">
       <div className="overflow-hidden rounded-2xl bg-white/[0.05] shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)] ring-1 ring-white/10 sm:flex">
         <BloqueFecha />
 

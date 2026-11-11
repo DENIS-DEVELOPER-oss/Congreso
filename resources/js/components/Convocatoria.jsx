@@ -71,7 +71,7 @@ function Bases() {
 }
 
 const MENSAJE_RESUMEN =
-  'Hola, envío mi resumen para el Congreso Saberes Andino-Amazónicos.\nNombre completo:\nDNI:\nEje temático:'
+  'Hola, envío mi resumen para el Congreso Saberes Andinoamazónicos.\nNombre completo:\nDNI:\nEje temático:'
 
 // Por ahora los resúmenes se reciben por WhatsApp o correo (la comisión los registra en el panel)
 function EnvioResumen() {
@@ -105,7 +105,7 @@ function EnvioResumen() {
           <MessageCircle className="h-4 w-4" aria-hidden="true" /> Enviar por WhatsApp
         </a>
         <a
-          href={`mailto:${correo}?subject=${encodeURIComponent('Envío de resumen – Congreso Saberes Andino-Amazónicos')}&body=${encodeURIComponent(MENSAJE_RESUMEN.replace('Hola, envío', 'Hola, adjunto'))}`}
+          href={`mailto:${correo}?subject=${encodeURIComponent('Envío de resumen – Congreso Saberes Andinoamazónicos')}&body=${encodeURIComponent(MENSAJE_RESUMEN.replace('Hola, envío', 'Hola, adjunto'))}`}
           className="btn-secundario"
         >
           <Mail className="h-4 w-4" aria-hidden="true" /> Enviar por correo
@@ -135,7 +135,7 @@ export default function Convocatoria() {
         <TituloSeccion
           etiqueta="Ponencias"
           titulo="Convocatoria de ponencias"
-          descripcion="Se reciben resúmenes de docentes, investigadores y estudiantes sobre saberes andino-amazónicos, interculturalidad y educación superior universitaria. Los trabajos son evaluados por el Comité organizador y el resultado se comunica por correo electrónico."
+          descripcion="Se reciben resúmenes de docentes, investigadores y estudiantes sobre saberes andinoamazónicos, interculturalidad y educación superior universitaria. Los trabajos son evaluados por el Comité organizador y el resultado se comunica por correo electrónico."
         />
 
         <div className="grid gap-6 lg:grid-cols-12">

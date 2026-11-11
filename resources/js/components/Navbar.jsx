@@ -172,8 +172,7 @@ export default function Navbar({ pagina = 'inicio' }) {
 
   // Arriba la barra es transparente; al hacer scroll (o abrir el menú) se vuelve sólida
   const solido = conScroll || abierto
-  // En la marca, sin guion: «Saberes Andinoamazónicos» (forma válida en una sola palabra)
-  const nombreCorto = evento.nombre.replace(/^Congreso\s+/i, '').replace('Andino-Amazónicos', 'Andinoamazónicos')
+  const nombreCorto = evento.nombre.replace(/^Congreso\s+/i, '')
   const masActivo = SECUNDARIOS.some((s) => s.href === activo)
 
   // Menú tipo pestañas (estilo institucional): texto limpio y una barra dorada en el borde inferior de la barra

@@ -21,7 +21,7 @@ export const preguntas = [
   {
     pregunta: '¿Cómo envío mi ponencia?',
     respuesta:
-      `Envía tu resumen (250 palabras, con la plantilla oficial) en PDF o Word por WhatsApp al ${evento.telefono} o al correo ${evento.correo}, hasta el 15 de noviembre de 2026. Indica tu nombre completo, DNI y eje temático. El Comité organizador evaluará tu trabajo y te comunicará el resultado por correo.`,
+      `Envía tu resumen (250 palabras, con la plantilla oficial) en PDF o Word por WhatsApp al ${evento.telefono} o al correo ${evento.correo}, hasta el 20 de noviembre de 2026. Indica tu nombre completo, DNI y eje temático. El Comité organizador evaluará tu trabajo y te comunicará el resultado por correo.`,
   },
   {
     pregunta: '¿Cómo se registra mi asistencia?',

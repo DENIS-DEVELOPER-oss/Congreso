@@ -259,6 +259,10 @@
     hyphens: auto;
     overflow-wrap: break-word;
   }
+  /* La portada (carrusel) tiene letra grande y pocas palabras por línea: justificada dejaría huecos */
+  #inicio :is(p, li) {
+    text-align: start;
+  }
   /* Los títulos nunca se justifican (dentro de una tarjeta heredarían la alineación de la lista) */
   :is(main, footer) :is(h1, h2, h3, h4, h5, h6) {
     text-align: start;

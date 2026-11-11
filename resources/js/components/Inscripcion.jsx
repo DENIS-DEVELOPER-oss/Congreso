@@ -113,7 +113,7 @@ function PanelInformativo() {
 
 // Mientras la organización no abra las inscripciones (panel → Datos del congreso)
 const SOLICITUD =
-  'Hola, deseo inscribirme en el I Congreso Internacional Saberes Andino-Amazónicos.\nNombres y apellidos:\nDNI:\nCelular:\nCorreo:\nInstitución:\nParticipo como (estudiante, docente, profesional o ponente):'
+  'Hola, deseo inscribirme en el I Congreso Internacional Saberes Andinoamazónicos.\nNombres y apellidos:\nDNI:\nCelular:\nCorreo:\nInstitución:\nParticipo como (estudiante, docente, profesional o ponente):'
 
 // Mientras el formulario en línea está cerrado, la inscripción se solicita a la comisión: como asistente o como ponente
 function OpcionInscripcion({ Icono, titulo, texto, children }) {
@@ -146,14 +146,14 @@ function InscripcionesCerradas() {
             <MessageCircle className="h-4 w-4" aria-hidden="true" /> Solicitar inscripción
           </a>
           <a
-            href={`mailto:${correo}?subject=${encodeURIComponent('Solicitud de inscripción – Congreso Saberes Andino-Amazónicos')}&body=${encodeURIComponent(SOLICITUD)}`}
+            href={`mailto:${correo}?subject=${encodeURIComponent('Solicitud de inscripción – Congreso Saberes Andinoamazónicos')}&body=${encodeURIComponent(SOLICITUD)}`}
             className="mt-2.5 inline-flex items-center gap-1.5 text-sm font-semibold text-rojizo-oscuro hover:underline"
           >
             <Mail className="h-4 w-4" aria-hidden="true" /> o por correo
           </a>
         </OpcionInscripcion>
 
-        <OpcionInscripcion Icono={Mic} titulo="Como ponente" texto="Presenta tu investigación: envía tu resumen con la plantilla oficial hasta el 15 de noviembre.">
+        <OpcionInscripcion Icono={Mic} titulo="Como ponente" texto="Presenta tu investigación: envía tu resumen con la plantilla oficial hasta el 20 de noviembre.">
           <a href="/#convocatoria" className="btn-primario w-full">
             Enviar mi resumen <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </a>
@@ -207,7 +207,7 @@ export default function Inscripcion({ conTitulo = true }) {
                   pasos={[
                     'Abre el correo «Aula virtual: confirmación de acceso» (si no lo ves, revisa spam).',
                     'Ingresa al aula con tu DNI y la contraseña temporal, y crea tu propia contraseña.',
-                    'Envía tu resumen hasta el 15 de noviembre y participa en las sesiones en Educación Continua de la UNA Puno.',
+                    'Envía tu resumen hasta el 20 de noviembre y participa en las sesiones en Educación Continua de la UNA Puno.',
                   ]}
                   textoOtro="Registrar a otra persona"
                   onOtro={f.reiniciar}

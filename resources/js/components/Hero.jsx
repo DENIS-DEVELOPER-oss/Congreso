@@ -4,7 +4,7 @@ import { descargarIcs, urlGoogleCalendar } from '../lib/calendario.js'
 import { evento } from '../data/evento.js'
 import { ponentes } from '../data/ponentes.js'
 import { modalidades } from '../data/convocatoria.js'
-import { afiche } from '../data/afiches.js'
+import { afiche, miniatura } from '../data/afiches.js'
 import { VisorAfiche } from './Afiches.jsx'
 import { RUTAS } from '../lib/rutas.js'
 import { FranjaTejida } from './Andino.jsx'
@@ -151,7 +151,7 @@ function TarjetaConvocatoria() {
         ))}
       </ul>
       <p className="mt-5 text-sm text-slate-600">
-        Resumen de 250 palabras con la plantilla oficial. Recepción hasta el <strong className="text-oscuro">15 de noviembre</strong>.
+        Resumen de 250 palabras con la plantilla oficial. Recepción hasta el <strong className="text-oscuro">20 de noviembre</strong>.
       </p>
     </div>
   )
@@ -202,7 +202,16 @@ function Afiche({ a, onAbrir, cargar }) {
       className="group block w-full overflow-hidden rounded-2xl bg-white shadow-[0_30px_60px_-28px_rgb(15_23_42/0.5)] ring-1 ring-white transition duration-500 hover:-translate-y-1"
     >
       {cargar ? (
-        <img src={a.src} alt="" decoding="async" className="aspect-video w-full object-cover transition duration-700 group-hover:scale-[1.02]" />
+        <img
+          src={a.src}
+          srcSet={`${miniatura(a.src)} 800w, ${a.src} 1600w`}
+          sizes="(min-width: 1024px) 700px, 100vw"
+          width="1600"
+          height="900"
+          alt=""
+          decoding="async"
+          className="aspect-video w-full object-cover transition duration-700 group-hover:scale-[1.02]"
+        />
       ) : (
         <span className="block aspect-video w-full bg-slate-100" />
       )}
@@ -234,7 +243,7 @@ const DIAPOSITIVAS = [
     etiqueta: 'Ponentes',
     antetitulo: 'Ponentes centrales',
     titulo: 'Investigadores y sabios originarios en diálogo',
-    texto: 'Conferencias de especialistas de Argentina, México y el Perú sobre saberes andino-amazónicos, interculturalidad y universidad.',
+    texto: 'Conferencias de especialistas de Argentina, México y el Perú sobre saberes andinoamazónicos, interculturalidad y universidad.',
     botones: [
       { texto: 'Conocer a los ponentes', href: '#ponentes', principal: true },
       { texto: 'Ver el programa', href: '#programa' },
@@ -258,7 +267,7 @@ const DIAPOSITIVAS = [
     etiqueta: 'Convocatoria',
     antetitulo: 'Convocatoria de ponencias',
     titulo: 'Presenta tu investigación',
-    texto: 'Envía tu resumen por WhatsApp o correo electrónico hasta el 15 de noviembre. El Comité organizador evaluará cada trabajo.',
+    texto: 'Envía tu resumen por WhatsApp o correo electrónico hasta el 20 de noviembre. El Comité organizador evaluará cada trabajo.',
     botones: [
       { texto: 'Enviar mi resumen', href: '#convocatoria', principal: true },
       { texto: 'Inscribirme', href: RUTAS.inscripcion },
@@ -321,8 +330,8 @@ function TextoCongreso() {
           {evento.edicion}
         </span>
       </p>
-      <h1 aria-label={evento.nombreCompleto} className="mt-4 text-[2.6rem] leading-[1.02] font-extrabold text-oscuro min-[400px]:text-5xl sm:text-6xl lg:text-[3.3rem] xl:text-[3.85rem]">
-        {['Saberes', 'Andino-Amazónicos'].map((linea, i) => (
+      <h1 aria-label={evento.nombreCompleto} className="mt-4 text-[min(2.6rem,9.3vw)] leading-[1.02] font-extrabold text-oscuro min-[400px]:text-[min(3rem,9.3vw)] sm:text-6xl lg:text-[3.3rem] xl:text-[3.85rem]">
+        {['Saberes', 'Andinoamazónicos'].map((linea, i) => (
           <span key={linea} className="block overflow-hidden pb-[0.08em]" aria-hidden="true">
             <span
               className={`block animate-subir ${i === 1 ? 'bg-linear-to-r from-[#1d4ed8] via-[#3b82f6] to-[#1d4ed8] bg-clip-text text-transparent' : ''}`}
@@ -445,7 +454,7 @@ export default function Hero() {
                   </>
                 ) : (
                   <>
-                    <div className="lg:col-span-7">{i === 0 ? <TextoCongreso /> : <TextoDiapositiva d={d} />}</div>
+                    <div className="min-w-0 lg:col-span-7">{i === 0 ? <TextoCongreso /> : <TextoDiapositiva d={d} />}</div>
                     <div className={`hidden lg:col-span-5 lg:block ${i === 0 ? 'animate-aparecer' : ''}`} style={i === 0 ? { animationDelay: '380ms' } : undefined}>
                       <d.Visual />
                     </div>

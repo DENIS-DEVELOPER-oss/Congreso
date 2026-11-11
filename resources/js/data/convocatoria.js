@@ -3,7 +3,7 @@ export const modalidades = [
   { valor: 'presencial', texto: 'Ponencia presencial', detalle: 'En Educación Continua de la UNA Puno' },
 ]
 
-export const cierreResumenes = '15 de noviembre de 2026'
+export const cierreResumenes = '20 de noviembre de 2026'
 
 // Estructura del resumen
 export const estructura = ['Introducción', 'Métodos', 'Resultados', 'Conclusiones']

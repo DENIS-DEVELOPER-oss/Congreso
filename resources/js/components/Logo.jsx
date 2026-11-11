@@ -5,7 +5,7 @@ import { Chakana } from './Andino.jsx'
 
 const ALT = 'Escudo de la Escuela Profesional de Sociología – UNA Puno'
 
-export default function Logo({ className = 'h-10 w-10', alt = ALT, src = '/insignias/sociologia.png' }) {
+export default function Logo({ className = 'h-10 w-10', alt = ALT, src = '/insignias/web/sociologia.png' }) {
   const [fallo, setFallo] = useState(false)
 
   if (fallo) {

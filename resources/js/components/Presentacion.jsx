@@ -34,7 +34,7 @@ export default function Presentacion() {
               <p className="first-letter:float-left first-letter:mt-1.5 first-letter:mr-2 first-letter:font-display first-letter:text-[4.6rem] first-letter:leading-[0.75] first-letter:font-semibold first-letter:text-rojizo-oscuro">
                 La Escuela Profesional de Sociología y el Instituto de Investigaciones para el Desarrollo Social Andino
                 (IIDSA) de la Universidad Nacional del Altiplano organizan el I Congreso Internacional «Saberes
-                Andino-Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria», que se realizará en
+                Andinoamazónicos y Diálogo Intercultural en la Educación Superior Universitaria», que se realizará en
                 Educación Continua de la UNA Puno, en modalidad presencial, el 26 y 27 de noviembre de 2026.
               </p>
               <p>

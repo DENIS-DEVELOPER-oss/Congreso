@@ -13,14 +13,14 @@
     {{-- Vista previa al compartir (Facebook, WhatsApp, LinkedIn, X) --}}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_PE" />
-    <meta property="og:site_name" content="Congreso Saberes Andino-Amazónicos" />
+    <meta property="og:site_name" content="Congreso Saberes Andinoamazónicos" />
     <meta property="og:url" content="{{ $url }}" />
     <meta property="og:title" content="{{ $tituloSocial }}" />
     <meta property="og:description" content="{{ $descripcionSocial }}" />
     <meta property="og:image" content="{{ url('/og-image.jpg') }}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Afiche del Congreso Saberes Andino-Amazónicos 2026" />
+    <meta property="og:image:alt" content="Afiche del Congreso Saberes Andinoamazónicos 2026" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ $tituloSocial }}" />
     <meta name="twitter:description" content="{{ $descripcionSocial }}" />
@@ -32,7 +32,7 @@
         {!! json_encode([
           '@context' => 'https://schema.org',
           '@type' => 'EducationEvent',
-          'name' => 'I Congreso Internacional: Saberes Andino-Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
+          'name' => 'I Congreso Internacional: Saberes Andinoamazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
           'description' => 'Formación universitaria con pertinencia intercultural e interepistémica.',
           'startDate' => config('congreso.fecha_inicio'),
           'endDate' => config('congreso.fecha_fin'),
@@ -78,7 +78,7 @@
     @vite($entrada)
   </head>
   <body>
-    <noscript>Activa JavaScript para ver el sitio del Congreso Saberes Andino-Amazónicos.</noscript>
+    <noscript>Activa JavaScript para ver el sitio del Congreso Saberes Andinoamazónicos.</noscript>
     <div id="root"></div>
   </body>
 </html>

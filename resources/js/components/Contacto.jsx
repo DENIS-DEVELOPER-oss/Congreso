@@ -6,7 +6,7 @@ import { BotonesWhatsApp, EnlacesCorreo } from './Canales.jsx'
 import ListaRedes, { hayRedes } from './Redes.jsx'
 import Reveal from './Reveal.jsx'
 
-const CONSULTA = 'Hola, tengo una consulta sobre el Congreso Saberes Andino-Amazónicos.'
+const CONSULTA = 'Hola, tengo una consulta sobre el Congreso Saberes Andinoamazónicos.'
 
 // Tarjeta de un dato de contacto: ícono, título y su contenido (uno o varios enlaces)
 function Dato({ Icono, titulo, nota, children }) {
@@ -50,7 +50,7 @@ export default function Contacto() {
             </Reveal>
             <Reveal delay={100}>
               <Dato Icono={Mail} titulo="Correo electrónico">
-                <EnlacesCorreo asunto="Consulta – Congreso Saberes Andino-Amazónicos" />
+                <EnlacesCorreo asunto="Consulta – Congreso Saberes Andinoamazónicos" />
               </Dato>
             </Reveal>
             <Reveal delay={200}>
@@ -99,7 +99,7 @@ export default function Contacto() {
                 </ul>
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <BotonesWhatsApp mensaje="Hola, necesito ayuda con el Aula virtual del Congreso Saberes Andino-Amazónicos." segundo="oscuro" className="sm:flex-nowrap" />
+                <BotonesWhatsApp mensaje="Hola, necesito ayuda con el Aula virtual del Congreso Saberes Andinoamazónicos." segundo="oscuro" className="sm:flex-nowrap" />
                 <a href={RUTAS.cuenta} className="btn border border-white/25 bg-white/5 text-white hover:border-white/50 hover:bg-white/10">
                   Ir al Aula virtual
                 </a>

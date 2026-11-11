@@ -54,7 +54,7 @@ export default function AnuncioInicio() {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Afiche del I Congreso Internacional Saberes Andino-Amazónicos"
+      aria-label="Afiche del I Congreso Internacional Saberes Andinoamazónicos"
       className="fixed inset-0 z-[70] flex animate-aparecer items-center justify-center bg-black/55 p-4"
       onClick={(e) => e.target === e.currentTarget && cerrar()}
     >
@@ -74,7 +74,7 @@ export default function AnuncioInicio() {
             src="/media/afiches/afiche-vertical.jpg"
             width="900"
             height="1314"
-            alt="Ponentes centrales del I Congreso Internacional Saberes Andino-Amazónicos: once ponentes de Argentina, México y el Perú. 26 y 27 de noviembre de 2026, Puno, evento presencial. ¡Inscríbete gratis!"
+            alt="I Congreso Internacional Saberes Andinoamazónicos: 26 y 27 de noviembre de 2026 en Educación Continua UNA Puno, evento presencial. Cierre de resúmenes el 20 de noviembre. ¡Inscríbete gratis!"
             className="block h-auto max-h-[calc(85dvh-2rem)] w-auto max-w-[calc(100vw-3.5rem)]"
           />
           <span className="sr-only">Ir a la inscripción</span>

@@ -1,4 +1,4 @@
-<x-correo etiqueta="Aula virtual · Acceso" titulo="I Congreso Internacional: Saberes Andino-Amazónicos">
+<x-correo etiqueta="Aula virtual · Acceso" titulo="I Congreso Internacional: Saberes Andinoamazónicos">
   <p style="margin:0 0 14px;">Hola, {{ $participante->nombres }}:</p>
   <p style="margin:0 0 20px;">
     Tu inscripción en el <strong>{{ config('congreso.nombre') }}</strong> está confirmada. Estos son tus datos para ingresar al

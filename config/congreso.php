@@ -4,8 +4,8 @@
 // estos valores solo se usan mientras no se haya guardado nada ahí. Ver App\Support\Ajustes.
 return [
 
-    'nombre' => 'I Congreso Internacional: Saberes Andino-Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
-    'nombre_corto' => 'Congreso Saberes Andino-Amazónicos',
+    'nombre' => 'I Congreso Internacional: Saberes Andinoamazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
+    'nombre_corto' => 'Congreso Saberes Andinoamazónicos',
     'fechas_texto' => '26 y 27 de noviembre de 2026',
     'fecha_inicio' => '2026-11-26T08:00:00-05:00',
     'fecha_fin' => '2026-11-27T19:00:00-05:00',
@@ -68,7 +68,7 @@ return [
 
     // EDITABLE. Fechas importantes de la portada (fecha AAAA-MM-DD, en orden)
     'fechas_importantes' => [
-        ['fecha' => '2026-11-15', 'texto' => 'Cierre de recepción de resúmenes'],
+        ['fecha' => '2026-11-20', 'texto' => 'Cierre de recepción de resúmenes'],
         ['fecha' => '2026-11-26', 'texto' => 'Inauguración y primer día del congreso'],
         ['fecha' => '2026-11-27', 'texto' => 'Segundo día y clausura'],
     ],

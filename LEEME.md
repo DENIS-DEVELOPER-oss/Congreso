@@ -167,3 +167,15 @@ súbelo con el Administrador de archivos a `/home/USUARIO/`, descomprímelo y si
 
 ### Copias de seguridad
 **cPanel → Backup**: descarga la base de datos y la carpeta `congreso/storage/app/private` (resúmenes y firmas) al menos una vez por semana, y a diario durante el congreso.
+
+## Rendimiento del servidor (VPS con nginx)
+
+`deploy/nginx-congreso-rendimiento.conf` activa la compresión de JS y CSS (unas 3 veces más livianos) y la caché del navegador: los archivos de `public/build` se guardan un año (llevan huella en el nombre) y las imágenes un día. Se instala una sola vez:
+
+```bash
+sudo cp /var/www/congreso/deploy/nginx-congreso-rendimiento.conf /etc/nginx/snippets/
+sudo sed -i 's#^\(\s*\)root /var/www/congreso/public;#&\n\1include snippets/nginx-congreso-rendimiento.conf;#' /etc/nginx/sites-available/congreso
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+Si `nginx -t` muestra un error, no se recarga nada y el sitio sigue funcionando como antes.
