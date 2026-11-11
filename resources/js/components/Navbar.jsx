@@ -68,7 +68,8 @@ function FranjaInstitucional({ oculta }) {
       <div className="contenedor flex h-9 items-center justify-between gap-4 px-4 text-[11px] font-semibold tracking-wide sm:px-6 sm:text-xs">
         <p className="flex min-w-0 items-center gap-2 truncate uppercase">
           <img src="/insignias/unap.png" alt="" className="h-6 w-auto shrink-0" />
-          <span className="truncate lg:hidden">Universidad Nacional del Altiplano · Puno</span>
+          <span className="truncate min-[400px]:hidden">Universidad Nacional del Altiplano</span>
+          <span className="hidden truncate min-[400px]:inline lg:hidden">Universidad Nacional del Altiplano · Puno</span>
           <span className="hidden truncate lg:inline">
             Universidad Nacional del Altiplano
             <span className="mx-2 text-naranja" aria-hidden="true">·</span>
