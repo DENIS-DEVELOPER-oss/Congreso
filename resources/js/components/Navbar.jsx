@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, ChevronDown, KeyRound, Menu, X } from 'lucide-react'
+import { ArrowRight, ChevronDown, KeyRound, Mail, Menu, MessageCircle, X } from 'lucide-react'
 import { evento } from '../data/evento.js'
 import { enlace, RUTAS } from '../lib/rutas.js'
 import Logo from './Logo.jsx'
@@ -55,6 +55,45 @@ function EnlaceMovil({ e, i, abierto, activo, onCerrar, destino }) {
         {activo === e.href && <span className="h-1.5 w-1.5 rounded-full bg-rojizo" aria-hidden="true" />}
       </a>
     </li>
+  )
+}
+
+// Franja institucional sobre el menú (como la cabecera de los afiches). Se oculta al bajar la página.
+function FranjaInstitucional({ oculta }) {
+  return (
+    <div
+      className={`overflow-hidden bg-[#0b1f5c] text-white transition-[max-height,opacity] duration-500 ${oculta ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100'}`}
+      aria-hidden={oculta || undefined}
+    >
+      <div className="contenedor flex h-9 items-center justify-between gap-4 px-4 text-[11px] font-semibold tracking-wide sm:px-6 sm:text-xs">
+        <p className="flex min-w-0 items-center gap-2 truncate uppercase">
+          <img src="/insignias/unap.png" alt="" className="h-6 w-auto shrink-0" />
+          <span className="truncate lg:hidden">Universidad Nacional del Altiplano · Puno</span>
+          <span className="hidden truncate lg:inline">
+            Universidad Nacional del Altiplano
+            <span className="mx-2 text-naranja" aria-hidden="true">·</span>
+            IIDSA
+            <span className="mx-2 text-naranja" aria-hidden="true">·</span>
+            Facultad de Ciencias Sociales – Escuela Profesional de Sociología
+          </span>
+        </p>
+        <div className="hidden shrink-0 items-center gap-5 font-medium normal-case sm:flex">
+          <a href={`mailto:${evento.correo}`} tabIndex={oculta ? -1 : undefined} className="inline-flex items-center gap-1.5 text-white/85 transition hover:text-naranja">
+            <Mail className="h-3.5 w-3.5" aria-hidden="true" /> {evento.correo}
+          </a>
+          <a
+            href={`https://wa.me/${evento.whatsapp}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            tabIndex={oculta ? -1 : undefined}
+            className="inline-flex items-center gap-1.5 text-white/85 transition hover:text-naranja"
+          >
+            <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> {evento.telefono}
+          </a>
+        </div>
+      </div>
+      <span className="block h-0.5 bg-naranja" aria-hidden="true" />
+    </div>
   )
 }
 
@@ -137,6 +176,8 @@ export default function Navbar({ pagina = 'inicio' }) {
           : 'border-b border-transparent bg-transparent'
       }`}
     >
+      <FranjaInstitucional oculta={conScroll} />
+
       <div
         className="listado-textil absolute inset-x-0 top-0 h-[3px] origin-left"
         style={{ transform: `scaleX(${progreso})` }}

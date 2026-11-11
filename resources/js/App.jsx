@@ -13,13 +13,14 @@ import Convocatoria from './components/Convocatoria.jsx'
 import Accesos from './components/Accesos.jsx'
 import Descargas from './components/Descargas.jsx'
 import Afiches from './components/Afiches.jsx'
-import Aliados from './components/Aliados.jsx'
+import Aliados, { FranjaOrganizan } from './components/Aliados.jsx'
 import Preguntas from './components/Preguntas.jsx'
 import Contacto from './components/Contacto.jsx'
 import Footer from './components/Footer.jsx'
 import Privacidad from './components/Privacidad.jsx'
 import WhatsApp from './components/WhatsApp.jsx'
 import Arriba from './components/Arriba.jsx'
+import AnuncioInicio from './components/AnuncioInicio.jsx'
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
         <Programa />
         <Ponentes />
         <Comites />
+        <FranjaOrganizan />
         <Convocatoria />
         <Accesos />
         <Descargas />
@@ -54,6 +56,7 @@ export default function App() {
       <WhatsApp />
       <Arriba />
       <Privacidad />
+      <AnuncioInicio />
     </>
   )
 }

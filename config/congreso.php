@@ -94,4 +94,7 @@ return [
 
     // Cloudflare Turnstile (opcional): si hay clave secreta, se exige la verificación anti-bots
     'turnstile_secret' => env('TURNSTILE_SECRET'),
+
+    // Clave del instalador web (/api/instalar). Vacía = instalador apagado
+    'instalador_clave' => env('INSTALADOR_CLAVE', ''),
 ];

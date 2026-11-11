@@ -62,7 +62,7 @@ class RegistrarAsistencia extends Page implements HasTable
                 ]),
                 Textarea::make('lista')->label('Registrar varios a la vez')->rows(4)
                     ->placeholder("Pega aquí los DNI o correos del reporte de asistentes de Google Meet,\nuno por línea o separados por comas")
-                    ->helperText('Se registran solo las inscripciones con pago validado; al terminar verás el resumen.'),
+                    ->helperText('Se registran solo las inscripciones confirmadas (validadas); al terminar verás el resumen.'),
             ]);
     }
 
@@ -102,7 +102,7 @@ class RegistrarAsistencia extends Page implements HasTable
             Notification::make()->title("No hay ninguna inscripción con «{$texto}»")->danger()->send();
         } elseif ($inscripcion->estado !== 'validada') {
             Notification::make()->title($inscripcion->participante->nombre_completo)
-                ->body('Su pago aún no está validado (estado: '.Inscripcion::ESTADOS[$inscripcion->estado].'). Revísalo en Inscripciones.')
+                ->body('Su inscripción no está validada (estado: '.Inscripcion::ESTADOS[$inscripcion->estado].'). Revísala en Inscripciones.')
                 ->warning()->send();
         } else {
             $asistencia = Asistencia::firstOrCreate(
@@ -143,7 +143,7 @@ class RegistrarAsistencia extends Page implements HasTable
 
         $detalle = collect([
             $ya ? "{$ya} ya estaban registrados" : null,
-            $sinPago ? count($sinPago).' sin pago validado: '.implode(', ', array_slice($sinPago, 0, 5)) : null,
+            $sinPago ? count($sinPago).' sin inscripción validada: '.implode(', ', array_slice($sinPago, 0, 5)) : null,
             $noEncontrados ? count($noEncontrados).' no encontrados: '.implode(', ', array_slice($noEncontrados, 0, 5)) : null,
         ])->filter()->implode(' · ');
 

@@ -5,6 +5,7 @@ import { evento } from '../data/evento.js'
 import { ponentes } from '../data/ponentes.js'
 import { modalidades } from '../data/convocatoria.js'
 import { afiche } from '../data/afiches.js'
+import { VisorAfiche } from './Afiches.jsx'
 import { RUTAS } from '../lib/rutas.js'
 import { FranjaTejida } from './Andino.jsx'
 import { useCarrusel } from './Carrusel.jsx'
@@ -12,12 +13,6 @@ import { Magnetico } from './Efectos.jsx'
 import PaisajeHero from './PaisajeHero.jsx'
 
 const INTERVALO = 7000
-
-const INSTITUCIONES = [
-  { titulo: 'Universidad Nacional del Altiplano', detalle: 'Puno · Perú' },
-  { titulo: 'IIDSA', detalle: 'Instituto de Investigaciones para el Desarrollo Social Andino' },
-  { titulo: 'Facultad de Ciencias Sociales', detalle: 'Escuela Profesional de Sociología' },
-]
 
 // Video o foto de Puno detrás del hero (si está configurado en evento.heroMedia)
 function MediaHero() {
@@ -193,18 +188,22 @@ function TarjetaPasos() {
   )
 }
 
-// Afiche oficial a la derecha (en celular, debajo del texto); al tocarlo se abre en grande
-function Afiche({ a }) {
+// Afiche oficial a la derecha (en celular, debajo del texto); al tocarlo se abre en el visor de la página.
+// La imagen se descarga recién cuando su diapositiva está por mostrarse (cargar), no al abrir la portada.
+function Afiche({ a, onAbrir, cargar }) {
   return (
-    <a
-      href={a.src}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group block overflow-hidden rounded-2xl bg-white shadow-[0_30px_60px_-28px_rgb(15_23_42/0.5)] ring-1 ring-white transition duration-500 hover:-translate-y-1"
+    <button
+      type="button"
+      onClick={() => onAbrir(a)}
+      aria-label={`Ver en grande: ${a.titulo}`}
+      className="group block w-full overflow-hidden rounded-2xl bg-white shadow-[0_30px_60px_-28px_rgb(15_23_42/0.5)] ring-1 ring-white transition duration-500 hover:-translate-y-1"
     >
-      <img src={a.src} alt={`${a.titulo}: ${a.texto}`} decoding="async" className="aspect-video w-full object-cover transition duration-700 group-hover:scale-[1.02]" />
-      <span className="sr-only"> (se abre en una pestaña nueva)</span>
-    </a>
+      {cargar ? (
+        <img src={a.src} alt="" decoding="async" className="aspect-video w-full object-cover transition duration-700 group-hover:scale-[1.02]" />
+      ) : (
+        <span className="block aspect-video w-full bg-slate-100" />
+      )}
+    </button>
   )
 }
 
@@ -222,7 +221,7 @@ const DIAPOSITIVAS = [
     titulo: 'I Congreso Internacional',
     texto: '26 y 27 de noviembre de 2026 en el campus de la UNA Puno, en modalidad presencial y virtual. Inscripción gratuita.',
     botones: [
-      { texto: 'Ver el afiche', href: afiche('congreso').src, principal: true, externo: true },
+      { texto: 'Ver el afiche', afiche: afiche('congreso'), principal: true },
       { texto: 'Todos los afiches', href: '#afiches' },
     ],
     afiche: afiche('congreso'),
@@ -246,7 +245,7 @@ const DIAPOSITIVAS = [
     titulo: 'Once ponentes de tres países',
     texto: 'Especialistas de Perú, Argentina y México en conferencias centrales y mesas temáticas.',
     botones: [
-      { texto: 'Ver el afiche', href: afiche('ponentes').src, principal: true, externo: true },
+      { texto: 'Ver el afiche', afiche: afiche('ponentes'), principal: true },
       { texto: 'Conocer a los ponentes', href: '#ponentes' },
     ],
     afiche: afiche('ponentes'),
@@ -270,7 +269,7 @@ const DIAPOSITIVAS = [
     titulo: 'Seis ejes de diálogo',
     texto: 'Interculturalidad, Buen Vivir, universidad intercultural, descolonización, gestión sostenible y pluriculturalidad.',
     botones: [
-      { texto: 'Ver el afiche', href: afiche('ejes').src, principal: true, externo: true },
+      { texto: 'Ver el afiche', afiche: afiche('ejes'), principal: true },
       { texto: 'Ver los ejes', href: '#ejes' },
     ],
     afiche: afiche('ejes'),
@@ -346,7 +345,7 @@ function TextoCongreso() {
   )
 }
 
-function TextoDiapositiva({ d }) {
+function TextoDiapositiva({ d, onAfiche }) {
   return (
     <>
       <p className="flex items-center gap-3 text-sm font-semibold tracking-[0.14em] text-[#1d4ed8] uppercase">
@@ -360,17 +359,23 @@ function TextoDiapositiva({ d }) {
       </h2>
       <p className={`max-w-xl text-lg leading-relaxed text-slate-600 ${d.afiche ? 'mt-4' : 'mt-6'}`}>{d.texto}</p>
       <div data-apartar-flotantes className={`flex flex-col gap-3 sm:flex-row ${d.afiche ? 'mt-7' : 'mt-9'}`}>
-        {d.botones.map((b) => (
-          <a
-            key={b.texto}
-            href={b.href}
-            {...(b.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-            className={claseBoton(b.principal)}
-          >
-            {b.texto}
-            {b.principal && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />}
-          </a>
-        ))}
+        {d.botones.map((b) => {
+          const contenido = (
+            <>
+              {b.texto}
+              {b.principal && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />}
+            </>
+          )
+          return b.afiche ? (
+            <button key={b.texto} type="button" onClick={() => onAfiche(b.afiche)} className={claseBoton(b.principal)}>
+              {contenido}
+            </button>
+          ) : (
+            <a key={b.texto} href={b.href} className={claseBoton(b.principal)}>
+              {contenido}
+            </a>
+          )
+        })}
       </div>
     </>
   )
@@ -379,56 +384,27 @@ function TextoDiapositiva({ d }) {
 export default function Hero() {
   // Botón de pausa además de la pausa automática con el mouse encima (pauta de accesibilidad WCAG 2.2.2)
   const [detenido, setDetenido] = useState(false)
-  const { actual, ir, siguiente, anterior, corriendo, contenedor } = useCarrusel({ total: DIAPOSITIVAS.length, intervalo: INTERVALO, detenido })
+  const [verAfiche, setVerAfiche] = useState(null)
+  const { actual, ir, siguiente, anterior, corriendo, contenedor } = useCarrusel({ total: DIAPOSITIVAS.length, intervalo: INTERVALO, detenido: detenido || !!verAfiche })
+  // Diapositivas cuyo afiche ya se puede descargar: la actual y la siguiente (así está listo al llegar)
+  const [cargadas, setCargadas] = useState(() => new Set([0, 1]))
+  useEffect(() => {
+    setCargadas((c) => (c.has(actual) && c.has((actual + 1) % DIAPOSITIVAS.length) ? c : new Set([...c, actual, (actual + 1) % DIAPOSITIVAS.length])))
+  }, [actual])
 
   return (
     <section id="inicio" className="relative isolate overflow-hidden bg-[#eaf1ff]">
       <FondoHero />
 
       <div
-        className="salida-hero contenedor px-4 pt-24 pb-8 sm:px-6 sm:pt-28 lg:pt-32"
+        className="salida-hero contenedor px-4 pt-34 pb-8 sm:px-6 sm:pt-32 lg:pt-36"
         role="region"
         aria-roledescription="carrusel"
         aria-label="Destacados del congreso"
         {...contenedor}
       >
-        {/* Bloque institucional, igual que la cabecera de los afiches */}
-        <div {...entrada(0)}>
-          <ul className="flex flex-wrap items-stretch gap-x-4 gap-y-2 text-[11px] leading-tight sm:gap-x-5 sm:text-xs">
-            {INSTITUCIONES.map((inst, i) => (
-              <li key={inst.titulo} className={`flex items-center gap-4 sm:gap-5 ${i === 1 ? 'hidden md:flex' : ''}`}>
-                {i > 0 && <span className="hidden h-8 w-px bg-rojizo-oscuro/25 sm:block" aria-hidden="true" />}
-                <span>
-                  <span className="block font-display font-extrabold tracking-wide text-rojizo-oscuro uppercase">{inst.titulo}</span>
-                  <span className="block text-slate-600">{inst.detalle}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Aviso destacado en forma de píldora */}
-        <a
-          {...entrada(60)}
-          href={RUTAS.inscripcion}
-          className="group mt-6 inline-flex max-w-full animate-aparecer items-center gap-3 rounded-full border border-rojizo-oscuro/15 bg-white/85 py-1.5 pr-4 pl-1.5 text-sm shadow-[0_8px_24px_-14px_rgb(15_23_42/0.45)] backdrop-blur transition hover:border-rojizo-oscuro/40"
-        >
-          <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-rojizo-oscuro px-3 py-1 text-xs font-bold text-white">
-            <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-naranja opacity-75 motion-safe:animate-ping" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-naranja" />
-            </span>
-            {evento.inscripcionesAbiertas ? 'Inscripciones abiertas' : 'Inscripciones muy pronto'}
-          </span>
-          <span className="truncate font-medium text-slate-700">
-            <span className="hidden sm:inline">Inscripción gratuita · </span>
-            {evento.fechasTexto}
-          </span>
-          <ArrowRight className="h-4 w-4 shrink-0 text-rojizo-oscuro transition-transform group-hover:translate-x-1" aria-hidden="true" />
-        </a>
-
         {/* Todas las diapositivas ocupan la misma celda: la altura no salta al cambiar */}
-        <div className="mt-7 grid sm:mt-9">
+        <div className="grid">
           {DIAPOSITIVAS.map((d, i) => {
             const visible = i === actual
             return (
@@ -446,10 +422,10 @@ export default function Hero() {
                 {d.afiche ? (
                   <>
                     <div className="lg:col-span-5">
-                      <TextoDiapositiva d={d} />
+                      <TextoDiapositiva d={d} onAfiche={setVerAfiche} />
                     </div>
                     <div className="lg:col-span-7">
-                      <Afiche a={d.afiche} />
+                      <Afiche a={d.afiche} onAbrir={setVerAfiche} cargar={cargadas.has(i)} />
                     </div>
                   </>
                 ) : (
@@ -538,6 +514,7 @@ export default function Hero() {
         <p className="absolute right-4 bottom-6 text-[11px] text-slate-500 sm:right-6">{evento.heroMedia.credito}</p>
       )}
       <FranjaTejida tejer={false} />
+      <VisorAfiche afiche={verAfiche} onCerrar={() => setVerAfiche(null)} />
     </section>
   )
 }

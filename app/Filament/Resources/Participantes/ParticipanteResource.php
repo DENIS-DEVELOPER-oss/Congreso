@@ -6,7 +6,6 @@ use App\Filament\Concerns\SoloAdminBorra;
 use App\Filament\Resources\Inscripcions\InscripcionResource;
 use App\Filament\Resources\Participantes\Pages\EditParticipante;
 use App\Filament\Resources\Participantes\Pages\ListParticipantes;
-use App\Mail\ConfirmarCorreo;
 use App\Models\Inscripcion;
 use App\Models\Participante;
 use App\Support\Accesos;
@@ -97,13 +96,6 @@ class ParticipanteResource extends Resource
                     ->trueLabel('Confirmado')->falseLabel('Sin confirmar'),
             ])
             ->recordActions([
-                Action::make('reenviar')->label('Reenviar confirmación')->icon(Heroicon::OutlinedEnvelope)->color('gray')
-                    ->visible(fn (Participante $record) => ! $record->correoConfirmado())
-                    ->requiresConfirmation()
-                    ->modalDescription(fn (Participante $record) => "Se enviará el enlace de confirmación a {$record->correo}.")
-                    ->action(fn (Participante $record) => Correo::enviar($record->correo, new ConfirmarCorreo($record))
-                        ? Notification::make()->title('Enlace enviado')->success()->send()
-                        : Notification::make()->title('No se pudo enviar el correo')->danger()->send()),
                 Action::make('enviarAcceso')->label(fn (Participante $record) => $record->tieneAcceso() ? 'Reenviar acceso' : 'Enviar acceso')
                     ->icon(Heroicon::OutlinedKey)
                     ->requiresConfirmation()

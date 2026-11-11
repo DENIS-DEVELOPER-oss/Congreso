@@ -5,7 +5,9 @@ namespace App\Filament\Resources\Ponencias;
 use App\Filament\Concerns\SoloAdminBorra;
 use App\Filament\Resources\Ponencias\Pages\EditPonencia;
 use App\Filament\Resources\Ponencias\Pages\ListPonencias;
+use App\Mail\ResultadoPonencia;
 use App\Models\Ponencia;
+use App\Support\Correo;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -18,6 +20,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -123,15 +126,26 @@ class PonenciaResource extends Resource
             ->recordActions([
                 Action::make('archivo')->label('Resumen')->icon(Heroicon::OutlinedArrowDownTray)->color('gray')
                     ->url(fn (Ponencia $record) => route('archivos.ponencia', $record)),
-                Action::make('dictamen')->label('Dictamen')->icon(Heroicon::OutlinedScale)
-                    ->fillForm(fn (Ponencia $record) => ['estado' => $record->estado, 'observacion' => $record->observacion])
+                Action::make('dictamen')->label('Dictaminar')->icon(Heroicon::OutlinedScale)
+                    ->modalHeading(fn (Ponencia $record) => "Dictaminar {$record->codigo}")
+                    ->modalDescription('El autor recibirá un correo con el resultado y el comentario.')
+                    ->fillForm(fn (Ponencia $record) => [
+                        'estado' => $record->estado === 'recibida' ? null : $record->estado,
+                        'observacion' => $record->observacion,
+                    ])
                     ->schema([
-                        Select::make('estado')->options(Ponencia::ESTADOS)->required(),
-                        Textarea::make('observacion')->label('Comentario del comité')->rows(3),
+                        Select::make('estado')->label('Resultado')->required()->live()
+                            ->options(['aceptada' => 'Aceptada', 'observada' => 'Observada (debe corregir)', 'rechazada' => 'Rechazada']),
+                        Textarea::make('observacion')->label('Comentario para el autor')->rows(4)
+                            ->required(fn (Get $get) => in_array($get('estado'), ['observada', 'rechazada']))
+                            ->helperText(fn (Get $get) => $get('estado') === 'observada' ? 'Indica qué debe corregir: lo verá en el correo y en el Aula.' : null),
                     ])
                     ->action(function (Ponencia $record, array $data) {
                         $record->update($data);
-                        Notification::make()->title("{$record->codigo}: ".Ponencia::ESTADOS[$data['estado']])->success()->send();
+                        $enviado = Correo::enviar($record->autor->correo, new ResultadoPonencia($record->load('autor')));
+                        Notification::make()->title("{$record->codigo}: ".Ponencia::ESTADOS[$data['estado']])
+                            ->body($enviado ? 'Se envió el resultado al autor.' : 'Se guardó, pero no se pudo enviar el correo.')
+                            ->{$enviado ? 'success' : 'warning'}()->send();
                     }),
                 EditAction::make(),
             ])

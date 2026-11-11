@@ -27,3 +27,6 @@ Thumbs.db
 
 # El diseño compilado (public/build) SÍ se sube: el servidor no necesita Node
 /database/*.sqlite
+
+# Copias locales de la configuraciÃ³n (tienen claves): nunca se suben
+.env.respaldo*

@@ -1,6 +1,6 @@
 // Resúmenes del participante dentro del Aula virtual: lista con su estado y formulario de envío
 import { useState } from 'react'
-import { CheckCircle2, FileText, Layers, Plus, Send, Tags } from 'lucide-react'
+import { CheckCircle2, FileText, Layers, Plus, RefreshCw, Send, Tags } from 'lucide-react'
 import { modalidades } from '../../data/convocatoria.js'
 import { descargas } from '../../data/descargas.js'
 import { useFormulario } from '../../hooks/useFormulario.js'
@@ -127,12 +127,53 @@ function FormularioResumen({ ejes, onEnviado, onCancelar }) {
   )
 }
 
+// Resumen observado: el autor sube la versión corregida y vuelve a evaluación
+function CorregirResumen({ codigo, onListo, onCancelar }) {
+  const f = useFormulario({
+    inicial: { archivo: null },
+    prefijo: `corr-${codigo}`,
+    conCaptcha: false,
+    validar: (d) => {
+      const err = validarArchivo(d.archivo, { tipos: TIPOS_RESUMEN, maxMB: 5 })
+      return err ? { archivo: err === 'Adjunta un archivo.' ? 'Adjunta tu resumen corregido en PDF o Word.' : err } : {}
+    },
+    enviar: async (datos) => {
+      const r = await enviar(`/cuenta/ponencias/${codigo}/corregir`, aFormData(datos))
+      onListo(r)
+      return r
+    },
+  })
+  return (
+    <form onSubmit={f.onSubmit} noValidate aria-busy={f.enviando} className="mt-3 rounded-lg border border-amber-200 bg-amber-50/50 p-4">
+      <AlertaError>{f.estado === 'error' && f.mensaje}</AlertaError>
+      <CampoArchivo
+        id={f.idDe('archivo')}
+        label="Resumen corregido"
+        archivo={f.datos.archivo}
+        onArchivo={(a) => f.cambiar('archivo', a, true)}
+        error={f.errores.archivo}
+        aceptar=".pdf,.doc,.docx"
+        ayuda="PDF o Word · máximo 5 MB"
+      />
+      <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+        <button type="button" onClick={onCancelar} className="btn-secundario px-4 py-2 text-sm">
+          Cancelar
+        </button>
+        <button type="submit" className="btn-primario px-4 py-2 text-sm" disabled={f.enviando}>
+          <Send className="h-4 w-4" aria-hidden="true" /> {f.enviando ? 'Enviando…' : 'Enviar corrección'}
+        </button>
+      </div>
+    </form>
+  )
+}
+
 export default function Resumenes({ ponencias, ejes, onActualizar }) {
   const [abierto, setAbierto] = useState(false)
+  const [corrigiendo, setCorrigiendo] = useState(null)
 
   return (
     <Tarjeta
-      titulo="Mis resúmenes"
+      titulo="Mi ponencia"
       Icono={FileText}
       accion={
         !abierto && (
@@ -153,7 +194,22 @@ export default function Resumenes({ ponencias, ejes, onActualizar }) {
                 <p className="mt-0.5 text-sm text-slate-500">
                   {p.codigo} · {p.eje} · {p.modalidad} · {p.fecha}
                 </p>
-                {p.observacion && <p className="mt-2 rounded-md bg-slate-50 p-3 text-sm text-slate-700">Comité: {p.observacion}</p>}
+                {p.observacion && <p className="mt-2 rounded-md bg-slate-50 p-3 text-sm whitespace-pre-line text-slate-700">Comité: {p.observacion}</p>}
+                {p.estado === 'observada' &&
+                  (corrigiendo === p.codigo ? (
+                    <CorregirResumen
+                      codigo={p.codigo}
+                      onCancelar={() => setCorrigiendo(null)}
+                      onListo={(nuevo) => {
+                        setCorrigiendo(null)
+                        onActualizar(nuevo)
+                      }}
+                    />
+                  ) : (
+                    <button type="button" onClick={() => setCorrigiendo(p.codigo)} className="btn-primario mt-3 px-4 py-2 text-sm">
+                      <RefreshCw className="h-4 w-4" aria-hidden="true" /> Enviar corrección
+                    </button>
+                  ))}
               </div>
               <span className={`inline-flex w-fit shrink-0 rounded-full px-3 py-1 text-xs font-semibold ring-1 ${COLOR[p.estado] ?? 'bg-slate-100 text-slate-700 ring-slate-200'}`}>
                 {p.estadoTexto}

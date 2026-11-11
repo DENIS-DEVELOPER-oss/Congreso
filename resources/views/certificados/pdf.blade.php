@@ -12,9 +12,11 @@
     .hoja { position: absolute; top: 0; left: 0; width: 297mm; height: 210mm; background: #fbfaf6; }
     .marco { position: absolute; top: 9mm; left: 9mm; right: 9mm; bottom: 9mm; border: 1.5mm solid #1e3a8a; }
     .marco-interior { position: absolute; top: 12.5mm; left: 12.5mm; right: 12.5mm; bottom: 12.5mm; border: 0.4mm solid #fbbf24; }
-    .contenido { position: absolute; top: 22mm; left: 28mm; right: 28mm; text-align: center; }
+    .contenido { position: absolute; top: 19mm; left: 28mm; right: 28mm; text-align: center; }
+    .insignias { margin-bottom: 2.5mm; }
+    .insignias img { height: 15mm; margin: 0 4mm; vertical-align: middle; }
     .instituciones { font-family: Helvetica, Arial, sans-serif; font-size: 9.5pt; letter-spacing: 0.6pt; text-transform: uppercase; color: #2563eb; line-height: 1.5; }
-    .titulo { margin-top: 9mm; font-size: 40pt; letter-spacing: 6pt; color: #1e3a8a; }
+    .titulo { margin-top: 5mm; font-size: 40pt; letter-spacing: 6pt; color: #1e3a8a; }
     .linea { margin: 3mm auto 0; width: 50mm; border-top: 0.5mm solid #fbbf24; }
     .otorgado { margin-top: 7mm; font-family: Helvetica, Arial, sans-serif; font-size: 11pt; color: #475569; }
     .nombre { margin-top: 3mm; font-size: 30pt; font-style: italic; color: #0b1f5c; }
@@ -34,6 +36,13 @@
     <div class="marco-interior"></div>
 
     <div class="contenido">
+      @if ($insignias)
+        <div class="insignias">
+          @foreach ($insignias as $insignia)
+            <img src="{{ $insignia }}" alt="" />
+          @endforeach
+        </div>
+      @endif
       <div class="instituciones">
         Universidad Nacional del Altiplano · Vicerrectorado Académico · Facultad de Ciencias Sociales<br />
         Escuela Profesional de Sociología · Instituto de Investigaciones para el Desarrollo Social Andino (IIDSA)

@@ -1,11 +1,11 @@
-// Escudo de la Escuela. Si /logo-sociologia.png no existe o falla, muestra una chakana en su lugar
+// Escudo de la Escuela (a color). Si la imagen no existe o falla, muestra una chakana en su lugar
 // (así nunca aparece el ícono de imagen rota).
 import { useState } from 'react'
 import { Chakana } from './Andino.jsx'
 
 const ALT = 'Escudo de la Escuela Profesional de Sociología – UNA Puno'
 
-export default function Logo({ className = 'h-10 w-10', alt = ALT, src = '/logo-sociologia.png' }) {
+export default function Logo({ className = 'h-10 w-10', alt = ALT, src = '/insignias/sociologia.png' }) {
   const [fallo, setFallo] = useState(false)
 
   if (fallo) {
@@ -25,7 +25,7 @@ export default function Logo({ className = 'h-10 w-10', alt = ALT, src = '/logo-
       src={src}
       alt={alt}
       onError={() => setFallo(true)}
-      className={`shrink-0 rounded-full bg-white object-contain p-0.5 shadow-sm ${className}`}
+      className={`shrink-0 rounded-full bg-white object-contain p-1 shadow-sm ${className}`}
     />
   )
 }

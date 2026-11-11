@@ -29,6 +29,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // Cada usuario cambia su nombre, correo y contraseña desde el menú de su cuenta (arriba a la derecha)
+            ->profile(isSimple: false)
             ->brandName('Congreso · Panel de organización')
             ->favicon('/favicon.png')
             ->colors([
@@ -41,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Asistencia'),
                 NavigationGroup::make('Académico'),
                 NavigationGroup::make('Certificación'),
-                NavigationGroup::make('Configuración')->collapsed(),
+                NavigationGroup::make('Configuración'),
             ])
             ->sidebarCollapsibleOnDesktop()
             ->databaseNotifications(false)

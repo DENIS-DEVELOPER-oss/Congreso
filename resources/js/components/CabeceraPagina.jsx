@@ -11,7 +11,7 @@ export default function CabeceraPagina({ titulo, descripcion, children }) {
         <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-naranja/15 blur-3xl" />
       </div>
 
-      <div className="contenedor px-4 pt-28 pb-12 sm:px-6 sm:pt-32 sm:pb-14 lg:pb-16">
+      <div className="contenedor px-4 pt-36 pb-12 sm:px-6 sm:pt-40 sm:pb-14 lg:pb-16">
         <nav aria-label="Ruta de navegación">
           <ol className="flex items-center gap-1.5 text-sm text-slate-500">
             <li>

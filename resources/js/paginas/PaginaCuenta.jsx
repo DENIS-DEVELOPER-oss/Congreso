@@ -1,24 +1,18 @@
 // Aula virtual: el participante entra con su DNI o correo y la contraseña temporal que recibe al registrarse.
-// La primera vez crea su propia contraseña. Desde aquí entra a las sesiones por Google Meet, sube su voucher (si hay pago),
-// envía resúmenes y descarga certificados.
+// La primera vez crea su propia contraseña. Cuatro pestañas: Inicio (estado y sesiones por Google Meet),
+// Mi ponencia, Certificados y Mi perfil (nombre del certificado y contraseña).
 import { useCallback, useEffect, useState } from 'react'
-import { Award, CalendarClock, Download, ExternalLink, KeyRound, Loader2, Lock, LogOut, ShieldCheck, Video } from 'lucide-react'
+import { AlertTriangle, ArrowRight, Award, CalendarClock, CheckCircle2, Download, ExternalLink, FileText, Home, KeyRound, Loader2, Lock, LogOut, ShieldCheck, User, Video } from 'lucide-react'
 import CabeceraPagina from '../components/CabeceraPagina.jsx'
 import Ingreso from '../components/cuenta/Ingreso.jsx'
 import Pago from '../components/cuenta/Pago.jsx'
+import Perfil from '../components/cuenta/Perfil.jsx'
 import Resumenes from '../components/cuenta/Resumenes.jsx'
 import Tarjeta from '../components/cuenta/Tarjeta.jsx'
 import { AlertaError, BotonEnviar, Campo } from '../components/form/Campos.jsx'
 import { useFormulario } from '../hooks/useFormulario.js'
 import { enviar, obtener } from '../lib/api.js'
 import Plantilla from './Plantilla.jsx'
-
-const COLOR_ESTADO = {
-  validada: 'bg-emerald-50 text-emerald-800 ring-emerald-200',
-  pendiente: 'bg-amber-50 text-amber-900 ring-amber-200',
-  observada: 'bg-red-50 text-red-800 ring-red-200',
-  anulada: 'bg-slate-100 text-slate-700 ring-slate-200',
-}
 
 const hoyISO = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' })
 
@@ -200,46 +194,165 @@ function CrearClave({ perfil, onListo, onSalir }) {
   )
 }
 
+const PESTANAS = [
+  { id: 'inicio', texto: 'Inicio', Icono: Home },
+  { id: 'ponencia', texto: 'Mi ponencia', Icono: FileText },
+  { id: 'certificados', texto: 'Certificados', Icono: Award },
+  { id: 'perfil', texto: 'Mi perfil', Icono: User },
+]
+const pestanaDeUrl = () => {
+  const h = window.location.hash.slice(1)
+  return PESTANAS.some((p) => p.id === h) ? h : 'inicio'
+}
+
+// Tarjeta de estado del Inicio: ícono, título, texto y una acción opcional
+function Estado({ Icono, titulo, texto, tono = 'neutro', accion }) {
+  const tonos = {
+    bien: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+    pendiente: 'bg-amber-50 text-amber-800 ring-amber-200',
+    neutro: 'bg-crema text-rojizo-oscuro ring-naranja/40',
+  }
+  return (
+    <div className="tarjeta-fija flex items-start gap-4 p-5">
+      <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ring-1 ${tonos[tono]}`}>
+        <Icono className="h-5 w-5" aria-hidden="true" />
+      </span>
+      <div className="min-w-0">
+        <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">{titulo}</p>
+        <p className="mt-0.5 font-semibold text-oscuro">{texto}</p>
+        {accion}
+      </div>
+    </div>
+  )
+}
+
+function Inicio({ perfil, ir, onActualizar }) {
+  const { participante, inscripcion, ponencias, certificados } = perfil
+  const ultima = ponencias[0]
+  const enlace = (texto, pestana) => (
+    <button type="button" onClick={() => ir(pestana)} className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-rojizo-oscuro hover:underline">
+      {texto} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+    </button>
+  )
+  const textoInscripcion =
+    inscripcion?.estado === 'validada' ? 'Confirmada' : inscripcion?.estado === 'pendiente' ? 'Pago pendiente' : (inscripcion?.estadoTexto ?? 'Sin inscripción')
+
+  return (
+    <div className="space-y-6">
+      {participante.puedeEditarNombre && !participante.nombreConfirmado && (
+        <div className="flex flex-col gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="flex gap-3 text-sm text-amber-900">
+            <AlertTriangle className="h-5 w-5 shrink-0" aria-hidden="true" />
+            <span>
+              <strong>Confirma tu nombre</strong> tal como debe aparecer en tu certificado.
+            </span>
+          </p>
+          <button type="button" onClick={() => ir('perfil')} className="btn-primario shrink-0 px-4 py-2 text-sm">
+            Confirmar ahora
+          </button>
+        </div>
+      )}
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <Estado Icono={CheckCircle2} titulo="Inscripción" tono={inscripcion?.estado === 'validada' ? 'bien' : 'pendiente'} texto={textoInscripcion} />
+        <Estado
+          Icono={FileText}
+          titulo="Mi resumen"
+          tono={!ultima ? 'neutro' : ultima.estado === 'aceptada' ? 'bien' : ultima.estado === 'observada' ? 'pendiente' : 'neutro'}
+          texto={!ultima ? 'Aún no enviaste' : ultima.estado === 'recibida' ? 'En evaluación' : ultima.estadoTexto}
+          accion={enlace(!ultima ? 'Enviar mi resumen' : ultima.estado === 'observada' ? 'Ver qué corregir' : 'Ver detalle', 'ponencia')}
+        />
+        <Estado
+          Icono={Award}
+          titulo="Certificado"
+          tono={certificados.length ? 'bien' : 'neutro'}
+          texto={certificados.length ? 'Disponible' : 'Al terminar el congreso'}
+          accion={certificados.length ? enlace('Descargar', 'certificados') : null}
+        />
+      </div>
+
+      <Sesiones sesiones={perfil.sesiones} bloqueado={perfil.zoomBloqueado} />
+
+      {!perfil.inscripcionGratuita && <Pago inscripcion={inscripcion} medios={perfil.mediosPago} onActualizar={onActualizar} />}
+    </div>
+  )
+}
+
 function Panel({ perfil, onActualizar, onSalir }) {
   const { participante, inscripcion } = perfil
+  const [pestana, setPestana] = useState(pestanaDeUrl)
+
+  useEffect(() => {
+    const alCambiar = () => setPestana(pestanaDeUrl())
+    window.addEventListener('hashchange', alCambiar)
+    return () => window.removeEventListener('hashchange', alCambiar)
+  }, [])
+
+  const ir = (id) => {
+    setPestana(id)
+    window.history.replaceState(null, '', id === 'inicio' ? window.location.pathname : `#${id}`)
+    document.getElementById('aula-pestanas')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
     <div className="space-y-6">
       <div className="tarjeta-fija flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
-        <div>
+        <div className="min-w-0">
           <p className="text-sm text-slate-500">Bienvenido(a) al Aula virtual</p>
-          <p className="font-display text-3xl font-extrabold text-oscuro">{participante.nombre}</p>
+          <p className="font-display text-2xl font-extrabold [overflow-wrap:anywhere] text-oscuro sm:text-3xl">{participante.nombre}</p>
           <p className="mt-1 text-sm text-slate-600">
             DNI / Pasaporte {participante.documento}
             {inscripcion && <> · Código {inscripcion.codigo}</>}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          {inscripcion && (
-            <span className={`rounded-full px-3 py-1 text-sm font-semibold ring-1 ${COLOR_ESTADO[inscripcion.estado] ?? COLOR_ESTADO.anulada}`}>
-              {perfil.inscripcionGratuita && inscripcion.estado === 'validada'
-                ? 'Inscripción gratuita confirmada'
-                : `Inscripción: ${inscripcion.estado === 'pendiente' ? 'pago pendiente' : inscripcion.estadoTexto.toLowerCase()}`}
-            </span>
-          )}
-          <button type="button" onClick={onSalir} className="btn-secundario px-4 py-2 text-sm">
-            <LogOut className="h-4 w-4" aria-hidden="true" /> Salir
-          </button>
-        </div>
+        <button type="button" onClick={onSalir} className="btn-secundario w-fit shrink-0 px-4 py-2 text-sm">
+          <LogOut className="h-4 w-4" aria-hidden="true" /> Salir
+        </button>
       </div>
 
-      <Sesiones sesiones={perfil.sesiones} bloqueado={perfil.zoomBloqueado} />
+      <div
+        id="aula-pestanas"
+        role="tablist"
+        aria-label="Secciones del aula"
+        className="grid scroll-mt-24 grid-cols-2 gap-2 rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-slate-200 sm:grid-cols-4"
+      >
+        {PESTANAS.map(({ id, texto, Icono }) => {
+          const activa = pestana === id
+          return (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              id={`tab-${id}`}
+              aria-selected={activa}
+              aria-controls={`panel-${id}`}
+              onClick={() => ir(id)}
+              className={`flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold transition ${
+                activa ? 'bg-rojizo-oscuro text-white shadow' : 'text-slate-600 hover:bg-crema hover:text-oscuro'
+              }`}
+            >
+              <Icono className="h-4 w-4" aria-hidden="true" /> {texto}
+            </button>
+          )
+        })}
+      </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
-          {!perfil.inscripcionGratuita && <Pago inscripcion={inscripcion} medios={perfil.mediosPago} onActualizar={onActualizar} />}
-          <Resumenes ponencias={perfil.ponencias} ejes={perfil.ejes} onActualizar={onActualizar} />
-        </div>
-        <div className="space-y-6">
-          <Certificados certificados={perfil.certificados} />
-          <Tarjeta titulo="Mi contraseña" Icono={KeyRound}>
-            <FormularioClave />
-          </Tarjeta>
-        </div>
+      <div role="tabpanel" id={`panel-${pestana}`} aria-labelledby={`tab-${pestana}`}>
+        {pestana === 'inicio' && <Inicio perfil={perfil} ir={ir} onActualizar={onActualizar} />}
+        {pestana === 'ponencia' && <Resumenes ponencias={perfil.ponencias} ejes={perfil.ejes} onActualizar={onActualizar} />}
+        {pestana === 'certificados' && <Certificados certificados={perfil.certificados} />}
+        {pestana === 'perfil' && (
+          <div className="grid gap-6 lg:grid-cols-5">
+            <div className="lg:col-span-3">
+              <Perfil participante={participante} onActualizar={onActualizar} />
+            </div>
+            <div className="lg:col-span-2">
+              <Tarjeta titulo="Mi contraseña" Icono={KeyRound}>
+                <FormularioClave />
+              </Tarjeta>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -272,7 +385,7 @@ export default function PaginaCuenta() {
         titulo="Aula virtual"
         descripcion={
           perfil
-            ? 'Únete a las sesiones por Google Meet, envía tus resúmenes y descarga tus certificados.'
+            ? 'Tus sesiones por Google Meet, tu ponencia y tu certificado, en un solo lugar.'
             : 'Ingresa con tu DNI o tu correo y la contraseña que te enviamos al registrarte.'
         }
       />

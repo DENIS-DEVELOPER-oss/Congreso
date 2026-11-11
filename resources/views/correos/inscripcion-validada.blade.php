@@ -1,7 +1,6 @@
 <x-correo>
   <p style="margin:0 0 14px;">Hola, {{ $inscripcion->participante->nombres }}:</p>
 
-  <x-boton-confirmar :participante="$inscripcion->participante" />
 
   @if ($inscripcion->estado === 'validada')
     <p style="margin:0 0 14px;">Tu pago fue validado y tu inscripción al {{ config('congreso.nombre') }} está <strong>confirmada</strong>.</p>

@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\InscripcionController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\CertificadoController;
-use App\Http\Controllers\CorreoController;
 use App\Http\Controllers\CuentaController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +59,8 @@ Route::prefix('cuenta')->controller(CuentaController::class)->group(function () 
         Route::post('/salir', 'salir');
         Route::post('/pago', 'pago');
         Route::post('/ponencias', 'ponencia');
+        Route::post('/ponencias/{codigo}/corregir', 'corregirPonencia')->where('codigo', 'PON-\d+');
+        Route::post('/perfil', 'perfil');
         Route::post('/clave', 'clave');
     });
 });
@@ -68,11 +69,6 @@ Route::prefix('cuenta')->controller(CuentaController::class)->group(function () 
 Route::get('/certificados/{codigo}', [CertificadoController::class, 'descargar'])
     ->where('codigo', '[A-Z0-9]{10}')
     ->name('certificados.descargar');
-
-// Enlace del correo de constancia para confirmar la dirección (firmado: no se puede falsificar)
-Route::get('/confirmar-correo/{participante}', [CorreoController::class, 'confirmar'])
-    ->middleware('signed')
-    ->name('correo.confirmar');
 
 // Página pública de verificación (a ella lleva el QR impreso en el certificado)
 Route::get('/verificar/{codigo}', [CertificadoController::class, 'verificar'])

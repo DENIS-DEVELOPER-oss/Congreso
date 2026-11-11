@@ -13,6 +13,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
+use function Illuminate\Support\defer;
+
 class InscripcionController extends Controller
 {
     // POST /api/inscripciones → { codigo }
@@ -57,7 +59,8 @@ class InscripcionController extends Controller
         });
 
         $inscripcion->refresh()->load('participante');
-        Accesos::enviar($inscripcion->participante);
+        // El correo sale después de responder: la persona no espera al servidor de correo
+        defer(fn () => Accesos::enviar($inscripcion->participante));
 
         return response()->json(['codigo' => $inscripcion->codigo], 201);
     }

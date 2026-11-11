@@ -6,10 +6,10 @@ use App\Filament\Concerns\SoloAdminBorra;
 use App\Filament\Resources\Inscripcions\Pages\CreateInscripcion;
 use App\Filament\Resources\Inscripcions\Pages\EditInscripcion;
 use App\Filament\Resources\Inscripcions\Pages\ListInscripcions;
-use App\Mail\ConfirmarCorreo;
 use App\Mail\InscripcionValidada;
 use App\Models\Inscripcion;
 use App\Support\Accesos;
+use App\Support\Ajustes;
 use App\Support\Correo;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -85,20 +85,12 @@ class InscripcionResource extends Resource
             ->icon(Heroicon::OutlinedKey)->color('primary')
             ->requiresConfirmation()
             ->modalHeading('Enviar acceso al Aula virtual')
-            ->modalDescription(fn (Inscripcion $record) => "Se enviará a {$record->participante->correo} su usuario ({$record->participante->documento}), "
-                .'una contraseña temporal nueva, el programa con Google Meet y, si aún no pagó, el monto y los medios de pago.'
-                .($record->participante->tieneAcceso() ? ' La contraseña anterior dejará de funcionar.' : '')
-                .($record->participante->correoConfirmado() ? '' : ' Atención: este participante aún no confirmó su correo.'))
+            ->modalDescription(fn (Inscripcion $record) => "Se enviará a {$record->participante->correo} su usuario ({$record->participante->documento}) "
+                .'y una contraseña temporal nueva.'
+                .($record->participante->tieneAcceso() ? ' La contraseña anterior dejará de funcionar.' : ''))
             ->action(fn (Inscripcion $record) => Accesos::enviar($record->participante)
                 ? Notification::make()->title('Acceso enviado')->body($record->participante->correo)->success()->send()
                 : Notification::make()->title('No se pudo enviar el correo')->body('Revisa la configuración de correo del servidor.')->danger()->send());
-    }
-
-    public static function reenviarConfirmacion(Inscripcion $inscripcion): bool
-    {
-        $p = $inscripcion->participante;
-
-        return ! $p->correoConfirmado() && Correo::enviar($p->correo, new ConfirmarCorreo($p));
     }
 
     public static function colorEstado(?string $estado): string
@@ -121,7 +113,7 @@ class InscripcionResource extends Resource
             'validado_en' => now(),
         ]);
 
-        if (in_array($estado, ['validada', 'observada'])) {
+        if (! Ajustes::gratuita() && in_array($estado, ['validada', 'observada'])) {
             Correo::enviar($inscripcion->participante->correo, new InscripcionValidada($inscripcion));
         }
     }
@@ -242,13 +234,6 @@ class InscripcionResource extends Resource
                             self::cambiarEstado($record, 'observada', $data['observacion']);
                             Notification::make()->title('Se envió la observación al participante')->warning()->send();
                         }),
-                    Action::make('reenviarConfirmacion')->label('Reenviar confirmación de correo')->icon(Heroicon::OutlinedEnvelope)
-                        ->visible(fn (Inscripcion $record) => ! $record->participante->correoConfirmado())
-                        ->requiresConfirmation()
-                        ->modalDescription(fn (Inscripcion $record) => "Se enviará el enlace de confirmación a {$record->participante->correo}.")
-                        ->action(fn (Inscripcion $record) => self::reenviarConfirmacion($record)
-                            ? Notification::make()->title('Enlace enviado')->success()->send()
-                            : Notification::make()->title('No se pudo enviar el correo')->danger()->send()),
                     Action::make('anular')->label('Anular')->icon(Heroicon::OutlinedXCircle)->color('gray')
                         ->requiresConfirmation()
                         ->action(fn (Inscripcion $record) => self::cambiarEstado($record, 'anulada')),
@@ -273,14 +258,6 @@ class InscripcionResource extends Resource
                             $ok = $sin->filter(fn ($r) => Accesos::enviar($r->participante))->count();
                             Notification::make()->title("Se enviaron {$ok} de {$sin->count()} accesos")
                                 ->{$ok === $sin->count() ? 'success' : 'warning'}()->send();
-                        }),
-                    BulkAction::make('reenviarConfirmaciones')->label('Reenviar confirmación de correo')
-                        ->icon(Heroicon::OutlinedEnvelope)
-                        ->requiresConfirmation()
-                        ->modalDescription('Solo se envía a quienes aún no confirmaron su correo.')
-                        ->action(function (Collection $records) {
-                            $n = $records->load('participante')->filter(fn ($r) => self::reenviarConfirmacion($r))->count();
-                            Notification::make()->title("Se enviaron {$n} enlaces de confirmación")->success()->send();
                         }),
                     DeleteBulkAction::make(),
                 ]),

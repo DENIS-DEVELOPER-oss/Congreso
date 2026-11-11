@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+use function Illuminate\Support\defer;
+
 // Aula virtual del participante (página /aula). Rutas con sesión y protección CSRF: ver routes/web.php.
 class CuentaController extends Controller
 {
@@ -84,7 +86,7 @@ class CuentaController extends Controller
         $participante = $this->buscar($d['usuario']);
 
         if ($participante?->tieneAcceso()) {
-            Accesos::enviar($participante);
+            defer(fn () => Accesos::enviar($participante));
         }
 
         return response()->json([
@@ -105,7 +107,12 @@ class CuentaController extends Controller
             'inscripcionGratuita' => $gratuita,
             'participante' => [
                 'nombres' => $p->nombres,
+                'apellidos' => $p->apellidos,
                 'nombre' => $p->nombre_completo,
+                'institucion' => $p->institucion,
+                'nombreConfirmado' => $p->nombre_confirmado_en !== null,
+                // Una vez emitido el certificado, el nombre ya no se cambia desde el Aula
+                'puedeEditarNombre' => $p->certificados->isEmpty(),
                 'documento' => $p->documento,
                 'correo' => $p->correo,
                 'correoConfirmado' => $p->correoConfirmado(),
@@ -194,9 +201,60 @@ class CuentaController extends Controller
             'archivo' => $request->file('archivo')->store('ponencias'),
         ]);
         $ponencia->refresh()->load('autor', 'eje');
-        Correo::enviar($p->correo, new PonenciaRecibida($ponencia));
+        defer(fn () => Correo::enviar($p->correo, new PonenciaRecibida($ponencia)));
 
         return response()->json(['codigo' => $ponencia->codigo], 201);
+    }
+
+    // POST /cuenta/perfil { nombres, apellidos, institucion }: confirma cómo saldrá el nombre en el certificado
+    public function perfil(Request $request): JsonResponse
+    {
+        $p = $this->participante($request);
+        if ($p->certificados()->exists()) {
+            throw ValidationException::withMessages(['nombres' => 'Tu certificado ya fue emitido. Para corregir tu nombre, escríbenos.']);
+        }
+        $letras = "regex:/^[\\pL' -]+$/u";
+        $d = $request->validate([
+            'nombres' => ['required', 'string', 'max:100', $letras],
+            'apellidos' => ['required', 'string', 'max:100', $letras],
+            'institucion' => ['nullable', 'string', 'max:200'],
+        ], [
+            'nombres.required' => 'Escribe tus nombres.',
+            'apellidos.required' => 'Escribe tus apellidos.',
+            'nombres.regex' => 'Los nombres solo pueden llevar letras y espacios.',
+            'apellidos.regex' => 'Los apellidos solo pueden llevar letras y espacios.',
+        ]);
+        $p->forceFill([
+            'nombres' => trim(preg_replace('/\s+/', ' ', $d['nombres'])),
+            'apellidos' => trim(preg_replace('/\s+/', ' ', $d['apellidos'])),
+            'institucion' => filled($d['institucion'] ?? null) ? trim($d['institucion']) : null,
+            'nombre_confirmado_en' => now(),
+        ])->save();
+
+        return $this->yo($request);
+    }
+
+    // POST /cuenta/ponencias/{codigo}/corregir (multipart: archivo): nueva versión de un resumen observado
+    public function corregirPonencia(Request $request, string $codigo): JsonResponse
+    {
+        $ponencia = $this->participante($request)->ponencias()->where('codigo', $codigo)->firstOrFail();
+        if ($ponencia->estado !== 'observada') {
+            throw ValidationException::withMessages(['archivo' => 'Solo se puede reenviar un resumen observado por el comité.']);
+        }
+        $request->validate(['archivo' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120']], [
+            'archivo.required' => 'Adjunta tu resumen corregido en PDF o Word.',
+            'archivo.mimes' => 'El resumen debe ser PDF o Word (.doc o .docx).',
+            'archivo.max' => 'El archivo pesa más de 5 MB.',
+        ]);
+
+        $anterior = $ponencia->archivo;
+        $ponencia->update(['archivo' => $request->file('archivo')->store('ponencias'), 'estado' => 'recibida']);
+        if ($anterior && $anterior !== $ponencia->archivo) {
+            Storage::delete($anterior);
+        }
+        defer(fn () => Correo::enviar($ponencia->autor->correo, new PonenciaRecibida($ponencia->load('autor', 'eje'))));
+
+        return $this->yo($request);
     }
 
     // POST /cuenta/clave { actual, nueva, nueva_confirmation }

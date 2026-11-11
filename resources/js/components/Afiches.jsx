@@ -1,6 +1,6 @@
 // Galería de afiches oficiales: miniaturas que se abren en grande, con descarga
 import { useState } from 'react'
-import { Download, Expand } from 'lucide-react'
+import { ArrowLeft, Download, Expand } from 'lucide-react'
 import { afiches } from '../data/afiches.js'
 import { TituloSeccion } from './Andino.jsx'
 import Modal from './Modal.jsx'
@@ -29,10 +29,13 @@ export function VisorAfiche({ afiche, onCerrar }) {
     <Modal abierto={!!afiche} onCerrar={onCerrar} titulo={afiche?.titulo ?? ''} ancho="max-w-5xl">
       {afiche && (
         <>
-          <img src={afiche.src} alt={`${afiche.titulo}: ${afiche.texto}`} className="w-full rounded-lg" />
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-slate-600">{afiche.texto}</p>
-            <a href={afiche.src} download className="btn-primario shrink-0">
+          <img src={afiche.src} alt={`${afiche.titulo}: ${afiche.texto}`} className="mx-auto block max-h-[52dvh] w-auto max-w-full rounded-lg" />
+          <p className="mt-4 text-center text-sm text-slate-600">{afiche.texto}</p>
+          <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-center">
+            <button type="button" onClick={onCerrar} className="btn-secundario">
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Volver
+            </button>
+            <a href={afiche.src} download className="btn-primario">
               <Download className="h-4 w-4" aria-hidden="true" /> Descargar afiche
             </a>
           </div>

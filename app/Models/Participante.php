@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\URL;
 
 // Cada persona se registra una sola vez (por DNI o pasaporte).
 // También es el usuario de "Mi cuenta": entra con su DNI y la contraseña que le envía la organización.
@@ -21,6 +20,7 @@ class Participante extends Authenticatable
         return [
             'correo_verificado_en' => 'datetime',
             'acceso_enviado_en' => 'datetime',
+            'nombre_confirmado_en' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -48,17 +48,6 @@ class Participante extends Authenticatable
     public function correoConfirmado(): bool
     {
         return $this->correo_verificado_en !== null;
-    }
-
-    // Enlace firmado para confirmar el correo. Incluye una huella del correo: si después cambia, el enlace deja de valer.
-    public function urlConfirmacion(): string
-    {
-        return URL::signedRoute('correo.confirmar', ['participante' => $this->id, 'h' => $this->huellaCorreo()]);
-    }
-
-    public function huellaCorreo(): string
-    {
-        return substr(hash('sha256', strtolower($this->correo)), 0, 16);
     }
 
     public function inscripcion(): HasOne

@@ -1,11 +1,8 @@
-// Organizadores, auspiciadores y aliados (lista de ejemplo: confirmar antes de publicar).
-// logo: ruta en /public/aliados/ (PNG/SVG con fondo transparente) o null para mostrar solo el nombre.
+// Instituciones que organizan el congreso, con su insignia oficial (en /public/insignias/, fondo transparente).
+// Orden en que se muestran: universidad, vicerrectorado, escuela y facultad.
 export const aliados = [
-  { nombre: 'Universidad Nacional del Altiplano', logo: null, url: 'https://www.unap.edu.pe' },
-  { nombre: 'Facultad de Ciencias Sociales', logo: null, url: null },
-  { nombre: 'Escuela Profesional de Sociología', logo: '/logo-sociologia.png', url: null },
-  { nombre: 'Colegio de Sociólogos del Perú', logo: null, url: null },
-  { nombre: 'Red Latinoamericana de Sociología Andina', logo: null, url: null },
-  { nombre: 'Municipalidad Provincial de Puno', logo: null, url: null },
-  { nombre: 'Editorial Universitaria UNA', logo: null, url: null },
+  { nombre: 'Universidad Nacional del Altiplano', corto: 'UNA Puno', logo: '/insignias/unap.png', url: 'https://www.unap.edu.pe' },
+  { nombre: 'Vicerrectorado Académico', corto: 'UNA Puno', logo: '/insignias/vicerrectorado-academico.png', url: null },
+  { nombre: 'Escuela Profesional de Sociología', corto: 'UNA Puno', logo: '/insignias/sociologia.png', url: null },
+  { nombre: 'Facultad de Ciencias Sociales', corto: 'UNA Puno', logo: '/insignias/facultad-ciencias-sociales.png', url: null },
 ]

@@ -24,7 +24,7 @@ class InstaladorController extends Controller
 
     private function autorizar(Request $request): void
     {
-        $clave = (string) env('INSTALADOR_CLAVE', '');
+        $clave = (string) config('congreso.instalador_clave');
         abort_if(strlen($clave) < 12 || ! hash_equals($clave, (string) $request->input('clave')), 404);
     }
 
