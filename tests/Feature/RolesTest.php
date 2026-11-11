@@ -9,6 +9,7 @@ use App\Filament\Resources\Certificados\Pages\ListCertificados;
 use App\Filament\Resources\EjeTematicos\EjeTematicoResource;
 use App\Filament\Resources\Inscripcions\InscripcionResource;
 use App\Filament\Resources\Inscripcions\Pages\CreateInscripcion;
+use App\Filament\Resources\Inscripcions\Pages\ListInscripcions;
 use App\Filament\Resources\Participantes\ParticipanteResource;
 use App\Filament\Resources\Ponencias\Pages\ListPonencias;
 use App\Filament\Resources\Ponencias\PonenciaResource;
@@ -158,6 +159,43 @@ class RolesTest extends TestCase
             $this->get($url)->assertOk();
         }
         $this->get(route('archivos.ponencia', $ponencia))->assertNotFound(); // con sesión entra; el archivo de prueba no existe
+    }
+
+    public function test_las_solicitudes_de_la_web_aparecen_para_organizador_y_admin(): void
+    {
+        Mail::fake();
+        Storage::fake();
+        config(['congreso.inscripciones_abiertas' => false]);
+        EjeTematico::create(['titulo' => 'Eje de prueba', 'orden' => 1]);
+        $base = ['telefono' => '951913416', 'institucion' => 'UNA Puno', 'acepta_privacidad' => '1'];
+
+        $this->postJson('/api/solicitudes', $base + [
+            'tipo' => 'asistente', 'tipo_participante' => 'docente',
+            'nombres' => 'Ana', 'apellidos' => 'Quispe', 'documento' => '40111111', 'correo' => 'ana@example.com',
+        ])->assertCreated();
+        $this->post('/api/solicitudes', $base + [
+            'tipo' => 'ponente', 'nombres' => 'Luis', 'apellidos' => 'Mamani', 'documento' => '40222222', 'correo' => 'luis@example.com',
+            'eje' => 1, 'titulo' => 'Saberes aimaras en la universidad', 'palabras_clave' => 'a; b; c; d; e',
+            'archivo' => UploadedFile::fake()->create('resumen.pdf', 80, 'application/pdf'),
+        ], ['Accept' => 'application/json'])->assertCreated();
+
+        $asistente = Inscripcion::where('tipo_participante', 'docente')->firstOrFail();
+        $ponente = Inscripcion::where('tipo_participante', 'ponente')->firstOrFail();
+
+        foreach ([$this->organizador(), $this->admin()] as $usuario) {
+            $this->actingAs($usuario);
+            $this->assertSame('2', InscripcionResource::getNavigationBadge(), 'El menú avisa las solicitudes por confirmar');
+
+            Livewire::test(ListInscripcions::class)
+                ->assertCanSeeTableRecords([$asistente, $ponente])
+                ->set('activeTab', 'ponentes')->assertCanSeeTableRecords([$ponente])->assertCanNotSeeTableRecords([$asistente])
+                ->set('activeTab', 'asistentes')->assertCanSeeTableRecords([$asistente])->assertCanNotSeeTableRecords([$ponente])
+                ->set('activeTab', 'por_confirmar')->assertCanSeeTableRecords([$asistente, $ponente]);
+
+            $this->get(InscripcionResource::getUrl('edit', ['record' => $ponente]))->assertOk()->assertSee('Saberes aimaras en la universidad');
+            $this->get(route('archivos.ponencia', $ponente->resumen))->assertOk();
+            Livewire::test(ListPonencias::class)->assertCanSeeTableRecords([$ponente->resumen]);
+        }
     }
 
     public function test_el_organizador_inscribe_a_alguien_en_la_sede_sin_datos_de_pago(): void

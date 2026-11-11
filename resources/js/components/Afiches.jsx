@@ -55,7 +55,7 @@ export default function Afiches() {
           titulo="Afiches oficiales"
           descripcion="Compártelos en tus redes, grupos y con tu institución. Selecciona uno para verlo en grande y descargarlo."
         />
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <ul className="flex flex-wrap justify-center gap-5 *:w-full sm:*:w-[calc((100%-1.25rem)/2)] lg:gap-6 lg:*:w-[calc((100%-3rem)/3)]">
           {afiches.map((a, i) => (
             <Reveal as="li" key={a.id} delay={(i % 2) * 100}>
               <MiniaturaAfiche afiche={a} onAbrir={setAbierto} />

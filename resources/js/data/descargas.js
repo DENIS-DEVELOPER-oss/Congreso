@@ -1,4 +1,4 @@
-// Documentos oficiales descargables (archivos en /public/descargas/ y /public/media/afiches/).
+// Documentos oficiales descargables (archivos en /public/descargas/ y /public/media/flyers/).
 // detalle: páginas o medidas y peso, para que se sepa qué se descarga. disponible: false = «Disponible próximamente».
 export const descargas = [
   {
@@ -23,9 +23,9 @@ export const descargas = [
     id: 'afiche',
     titulo: 'Afiche oficial',
     descripcion: 'Afiche del congreso con las seis instituciones organizadoras, para difusión en redes.',
-    archivo: '/media/afiches/afiche-organizadores-hd.jpg',
+    archivo: '/media/flyers/organizadores-hd.jpg',
     formato: 'JPG',
-    detalle: '2400 × 1350 px · 355 KB',
+    detalle: '2400 × 1350 px · 427 KB',
     disponible: true,
   },
   {

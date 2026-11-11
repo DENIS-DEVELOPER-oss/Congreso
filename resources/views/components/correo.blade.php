@@ -13,7 +13,7 @@
                   <tr>
                     <td style="vertical-align:middle;">
                       <p style="margin:0;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#1d4ed8;font-weight:bold;">I Congreso Internacional</p>
-                      <p style="margin:2px 0 0;font-size:18px;font-weight:bold;color:#1e3a8a;">Saberes Andinoamazónicos</p>
+                      <p style="margin:2px 0 0;font-size:18px;font-weight:bold;color:#1e3a8a;">Saberes Andinos y Amazónicos</p>
                     </td>
                     <td style="vertical-align:middle;text-align:right;font-size:11px;line-height:1.5;color:#64748b;">
                       Escuela Profesional de Sociología · IIDSA<br />Universidad Nacional del Altiplano
@@ -38,6 +38,9 @@
               <td style="padding:18px 4px;border-top:1px solid #e2e8f0;font-size:12px;line-height:1.5;color:#64748b;">
                 {{ config('congreso.nombre') }} · {{ config('congreso.fechas_texto') }} · {{ config('congreso.modalidad') }}<br />
                 Consultas: <a href="mailto:{{ config('congreso.correo_contacto') }}" style="color:#1e3a8a;">{{ config('congreso.correo_contacto') }}</a>
+                @if (config('congreso.telefono'))
+                  · Celular y WhatsApp: {{ config('congreso.telefono') }}
+                @endif
               </td>
             </tr>
           </table>

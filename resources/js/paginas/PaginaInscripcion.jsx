@@ -13,7 +13,7 @@ export default function PaginaInscripcion() {
         descripcion={
           evento.inscripcionesAbiertas
             ? 'Regístrate con tu nombre, DNI, celular y correo. La inscripción es gratuita: al instante te llegará tu acceso al Aula virtual, con el programa del congreso.'
-            : 'La inscripción es gratuita. Solicítala por WhatsApp o correo electrónico y te enviaremos tu acceso al Aula virtual, con el programa del congreso.'
+            : 'La inscripción es gratuita. Llena tus datos como asistente o ponente (con tu resumen) y te enviaremos tu acceso al Aula virtual, con el programa del congreso.'
         }
       >
         <a href="#inscripcion" className="btn-primario">

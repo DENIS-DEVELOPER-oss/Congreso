@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Inscripcions\Pages;
 
 use App\Filament\Resources\Inscripcions\InscripcionResource;
 use App\Models\Inscripcion;
+use App\Support\Ajustes;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
@@ -15,9 +16,19 @@ class ListInscripcions extends ListRecords
 {
     protected static string $resource = InscripcionResource::class;
 
-    // Pestañas rápidas. "Pendiente" se divide en: registrados que aún no suben voucher y vouchers por revisar.
+    // Pestañas rápidas: asistentes y ponentes por separado. Con inscripción gratuita, «Por confirmar» reúne las
+    // solicitudes de la web; con pago, «Pendiente» se divide en vouchers por revisar y registrados que aún no pagan.
     public function getTabs(): array
     {
+        $ponentes = Inscripcion::where('tipo_participante', 'ponente')->count();
+        $asistentes = Inscripcion::where('tipo_participante', '!=', 'ponente')->count();
+        $porTipo = [
+            'asistentes' => Tab::make('Asistentes')->badge($asistentes)->badgeColor('gray')->icon(Heroicon::OutlinedUser)
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('tipo_participante', '!=', 'ponente')),
+            'ponentes' => Tab::make('Ponentes')->badge($ponentes)->badgeColor('info')->icon(Heroicon::OutlinedMicrophone)
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('tipo_participante', 'ponente')),
+        ];
+
         $conteo = Inscripcion::selectRaw('estado, count(*) as n')->groupBy('estado')->pluck('n', 'estado');
         $porRevisar = Inscripcion::where('estado', 'pendiente')->whereNotNull('voucher')->count();
         $sinPago = ($conteo['pendiente'] ?? 0) - $porRevisar;
@@ -25,8 +36,20 @@ class ListInscripcions extends ListRecords
             ->badge($conteo[$e] ?? 0)->badgeColor(InscripcionResource::colorEstado($e))
             ->modifyQueryUsing(fn (Builder $query) => $query->where('estado', $e));
 
+        if (Ajustes::gratuita()) {
+            return [
+                'todas' => Tab::make('Todas')->badge($conteo->sum()),
+                'por_confirmar' => Tab::make('Por confirmar')->badge($conteo['pendiente'] ?? 0)->badgeColor('warning')
+                    ->modifyQueryUsing(fn (Builder $query) => $query->where('estado', 'pendiente')),
+                ...$porTipo,
+                'validada' => $estado('validada')->label('Confirmadas'),
+                'anulada' => $estado('anulada'),
+            ];
+        }
+
         return [
             'todas' => Tab::make('Todas')->badge($conteo->sum()),
+            ...$porTipo,
             'por_revisar' => Tab::make('Por revisar')->badge($porRevisar)->badgeColor('warning')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('estado', 'pendiente')->whereNotNull('voucher')),
             'sin_pago' => Tab::make('Sin pago')->badge($sinPago)->badgeColor('gray')
@@ -46,12 +69,13 @@ class ListInscripcions extends ListRecords
                 ->action(fn () => response()->streamDownload(function () {
                     $f = fopen('php://output', 'w');
                     fwrite($f, "\xEF\xBB\xBF");
-                    fputcsv($f, ['Código', 'Estado', 'Tipo', 'Monto', 'Medio de pago', 'N.° operación', 'DNI/Pasaporte', 'Nombres', 'Apellidos', 'Correo', 'Correo confirmado', 'Acceso al aula', 'Celular', 'Institución', 'Fecha de registro', 'Asistencias'], ';');
-                    Inscripcion::with('participante')->withCount('asistencias')->orderBy('id')->chunk(200, function ($lote) use ($f) {
+                    fputcsv($f, ['Código', 'Estado', 'Tipo', 'Resumen', 'Título de la ponencia', 'Eje', 'Monto', 'Medio de pago', 'N.° operación', 'DNI/Pasaporte', 'Nombres', 'Apellidos', 'Correo', 'Correo confirmado', 'Acceso al aula', 'Celular', 'Institución', 'Fecha de registro', 'Asistencias'], ';');
+                    Inscripcion::with(['participante', 'resumen.eje'])->withCount('asistencias')->orderBy('id')->chunk(200, function ($lote) use ($f) {
                         foreach ($lote as $i) {
                             fputcsv($f, [
-                                $i->codigo, Inscripcion::ESTADOS[$i->estado] ?? $i->estado,
-                                config("congreso.tarifas.{$i->tipo_participante}.nombre"), $i->monto,
+                                $i->codigo, InscripcionResource::nombreEstado($i->estado),
+                                config("congreso.tarifas.{$i->tipo_participante}.nombre"),
+                                $i->resumen?->codigo, $i->resumen?->titulo, $i->resumen?->eje?->orden, $i->monto,
                                 InscripcionResource::medios()[$i->medio_pago] ?? $i->medio_pago, $i->numero_operacion,
                                 $i->participante->documento, $i->participante->nombres, $i->participante->apellidos,
                                 $i->participante->correo, $i->participante->correoConfirmado() ? 'Sí' : 'No', $i->participante->tieneAcceso() ? 'Enviado' : 'No', $i->participante->telefono, $i->participante->institucion,

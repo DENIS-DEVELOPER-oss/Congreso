@@ -6,10 +6,8 @@ use App\Filament\Concerns\SoloAdminBorra;
 use App\Filament\Resources\Inscripcions\InscripcionResource;
 use App\Filament\Resources\Participantes\Pages\EditParticipante;
 use App\Filament\Resources\Participantes\Pages\ListParticipantes;
-use App\Models\Inscripcion;
 use App\Models\Participante;
 use App\Support\Accesos;
-use App\Support\Correo;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -23,8 +21,10 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 // Datos personales: aquí se corrigen nombres y correos antes de emitir los certificados
@@ -85,13 +85,23 @@ class ParticipanteResource extends Resource
                     ->color(fn (Participante $p) => $p->tieneAcceso() ? 'success' : 'gray'),
                 TextColumn::make('telefono')->label('Celular')->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('institucion')->label('Institución')->searchable()->limit(30)->toggleable(),
+                TextColumn::make('inscripcion.tipo_participante')->label('Participa como')->badge()
+                    ->color(fn ($state) => $state === 'ponente' ? 'info' : 'gray')
+                    ->formatStateUsing(fn ($state) => config("congreso.tarifas.$state.nombre", $state)),
                 TextColumn::make('inscripcion.estado')->label('Inscripción')->badge()
-                    ->formatStateUsing(fn ($state) => Inscripcion::ESTADOS[$state] ?? $state)
+                    ->formatStateUsing(fn ($state) => InscripcionResource::nombreEstado($state))
                     ->color(fn ($state) => InscripcionResource::colorEstado($state))
                     ->placeholder('Sin inscripción'),
                 TextColumn::make('ponencias_count')->label('Ponencias')->counts('ponencias')->alignCenter(),
             ])
             ->filters([
+                SelectFilter::make('participa_como')->label('Participa como')
+                    ->options(['asistente' => 'Asistentes', 'ponente' => 'Ponentes'])
+                    ->query(fn (Builder $query, array $data) => match ($data['value'] ?? null) {
+                        'ponente' => $query->whereHas('inscripcion', fn ($i) => $i->where('tipo_participante', 'ponente')),
+                        'asistente' => $query->whereHas('inscripcion', fn ($i) => $i->where('tipo_participante', '!=', 'ponente')),
+                        default => $query,
+                    }),
                 TernaryFilter::make('correo_verificado_en')->label('Correo confirmado')->nullable()
                     ->trueLabel('Confirmado')->falseLabel('Sin confirmar'),
             ])

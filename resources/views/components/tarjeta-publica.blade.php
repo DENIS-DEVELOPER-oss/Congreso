@@ -6,8 +6,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>{{ $titulo }} | Congreso Saberes Andinoamazónicos</title>
-  <link rel="icon" type="image/png" href="/favicon.png" />
+  <title>{{ $titulo }} | Congreso Saberes Andinos y Amazónicos</title>
+  <link rel="icon" type="image/png" href="/favicon.png?v=2" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; }
@@ -32,7 +32,7 @@
   <main class="tarjeta">
     <div class="cabecera">
       <small>I Congreso Internacional</small>
-      <p>Saberes Andinoamazónicos</p>
+      <p>Saberes Andinos y Amazónicos</p>
     </div>
     <div class="cuerpo">
       {{ $slot }}

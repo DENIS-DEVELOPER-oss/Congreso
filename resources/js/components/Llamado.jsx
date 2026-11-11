@@ -23,7 +23,7 @@ export default function Llamado() {
             <p className="mt-3 text-white/75">
               {evento.inscripcionesAbiertas
                 ? 'La inscripción es gratuita: regístrate en dos minutos y recibe al instante tu acceso al Aula virtual, con el programa del congreso.'
-                : 'La inscripción es gratuita: solicítala por WhatsApp o correo y te enviaremos tu acceso al Aula virtual, con el programa del congreso.'}
+                : 'La inscripción es gratuita: llena tus datos en la web y te enviaremos tu acceso al Aula virtual, con el programa del congreso.'}
             </p>
           </div>
           <div className="mt-8 flex shrink-0 flex-col gap-3 sm:flex-row lg:mt-0">

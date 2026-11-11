@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             // Cada usuario cambia su nombre, correo y contraseña desde el menú de su cuenta (arriba a la derecha)
             ->profile(isSimple: false)
             ->brandName('Congreso · Panel de organización')
-            ->favicon('/favicon.png')
+            ->favicon('/favicon.png?v=2')
             ->colors([
                 'primary' => Color::hex('#1e3a8a'),
                 'warning' => Color::Amber,

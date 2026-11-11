@@ -43,8 +43,8 @@ export default function Footer({ pagina = 'inicio' }) {
           <div className="flex items-center gap-4">
             <Logo className="h-16 w-16" />
             <div>
-              <p className="font-display text-xl font-extrabold">{evento.nombre}</p>
-              <p className="text-sm text-white/65">{evento.edicion}</p>
+              <p className="text-left font-display text-xl leading-tight font-extrabold">{evento.nombre}</p>
+              <p className="mt-0.5 text-left text-sm text-white/65">{evento.edicion}</p>
             </div>
           </div>
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/70">

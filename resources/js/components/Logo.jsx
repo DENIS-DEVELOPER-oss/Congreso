@@ -1,11 +1,11 @@
-// Escudo de la Escuela (a color, sin fondo). Si la imagen no existe o falla, muestra una chakana en su lugar
+// Insignia del congreso (chakana dorada sobre azul, sin fondo). Si la imagen no existe o falla, muestra una chakana en su lugar
 // (así nunca aparece el ícono de imagen rota).
 import { useState } from 'react'
 import { Chakana } from './Andino.jsx'
 
-const ALT = 'Escudo de la Escuela Profesional de Sociología – UNA Puno'
+const ALT = 'Insignia del I Congreso Internacional Saberes Andinos y Amazónicos'
 
-export default function Logo({ className = 'h-10 w-10', alt = ALT, src = '/insignias/web/sociologia.png' }) {
+export default function Logo({ className = 'h-10 w-10', alt = ALT, src = '/insignias/web/congreso.png' }) {
   const [fallo, setFallo] = useState(false)
 
   if (fallo) {

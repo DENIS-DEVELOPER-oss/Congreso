@@ -90,7 +90,7 @@ export default function Comites() {
             {comiteOrganizador.length > 0 && (
               <Reveal>
                 <h3 className="mb-5 text-sm font-bold tracking-wide text-rojizo-oscuro uppercase">Comisión organizadora</h3>
-                <ul className={comiteCientifico.length > 0 ? 'space-y-3' : 'grid gap-3 sm:grid-cols-2 lg:grid-cols-3'}>
+                <ul className={comiteCientifico.length > 0 ? 'space-y-3' : 'flex flex-wrap justify-center gap-3 *:w-full sm:*:w-[calc((100%-0.75rem)/2)] lg:*:w-[calc((100%-1.5rem)/3)]'}>
                   {comiteOrganizador.map((p) => (
                     <Persona key={p.nombre} nombre={p.nombre} detalle={p.cargo} color="bg-rojizo-oscuro/10 text-rojizo-oscuro" />
                   ))}

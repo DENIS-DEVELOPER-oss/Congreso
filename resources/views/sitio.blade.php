@@ -7,20 +7,20 @@
     <meta name="description" content="{{ $descripcion }}" />
     <link rel="canonical" href="{{ $url }}" />
     <meta name="theme-color" content="#0b1f5c" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
 
     {{-- Vista previa al compartir (Facebook, WhatsApp, LinkedIn, X) --}}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_PE" />
-    <meta property="og:site_name" content="Congreso Saberes Andinoamazónicos" />
+    <meta property="og:site_name" content="Congreso Saberes Andinos y Amazónicos" />
     <meta property="og:url" content="{{ $url }}" />
     <meta property="og:title" content="{{ $tituloSocial }}" />
     <meta property="og:description" content="{{ $descripcionSocial }}" />
     <meta property="og:image" content="{{ url('/og-image.jpg') }}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Afiche del Congreso Saberes Andinoamazónicos 2026" />
+    <meta property="og:image:alt" content="Afiche del Congreso Saberes Andinos y Amazónicos 2026" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ $tituloSocial }}" />
     <meta name="twitter:description" content="{{ $descripcionSocial }}" />
@@ -32,7 +32,7 @@
         {!! json_encode([
           '@context' => 'https://schema.org',
           '@type' => 'EducationEvent',
-          'name' => 'I Congreso Internacional: Saberes Andinoamazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
+          'name' => 'I Congreso Internacional: Saberes Andinos y Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
           'description' => 'Formación universitaria con pertinencia intercultural e interepistémica.',
           'startDate' => config('congreso.fecha_inicio'),
           'endDate' => config('congreso.fecha_fin'),
@@ -78,7 +78,7 @@
     @vite($entrada)
   </head>
   <body>
-    <noscript>Activa JavaScript para ver el sitio del Congreso Saberes Andinoamazónicos.</noscript>
+    <noscript>Activa JavaScript para ver el sitio del Congreso Saberes Andinos y Amazónicos.</noscript>
     <div id="root"></div>
   </body>
 </html>

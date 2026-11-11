@@ -8,6 +8,7 @@ use App\Filament\Resources\Inscripcions\Pages\EditInscripcion;
 use App\Filament\Resources\Inscripcions\Pages\ListInscripcions;
 use App\Mail\InscripcionValidada;
 use App\Models\Inscripcion;
+use App\Models\Ponencia;
 use App\Support\Accesos;
 use App\Support\Ajustes;
 use App\Support\Correo;
@@ -56,11 +57,12 @@ class InscripcionResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'codigo';
 
-    // Número de pagos por revisar junto al menú
+    // Junto al menú: solicitudes por confirmar (inscripción gratuita) o vouchers por revisar (con pago)
     public static function getNavigationBadge(): ?string
     {
-        // Vouchers subidos que esperan revisión
-        $n = Inscripcion::where('estado', 'pendiente')->whereNotNull('voucher')->count();
+        $n = Inscripcion::where('estado', 'pendiente')
+            ->when(! Ajustes::gratuita(), fn (Builder $q) => $q->whereNotNull('voucher'))
+            ->count();
 
         return $n ? (string) $n : null;
     }
@@ -91,6 +93,24 @@ class InscripcionResource extends Resource
             ->action(fn (Inscripcion $record) => Accesos::enviar($record->participante)
                 ? Notification::make()->title('Acceso enviado')->body($record->participante->correo)->success()->send()
                 : Notification::make()->title('No se pudo enviar el correo')->body('Revisa la configuración de correo del servidor.')->danger()->send());
+    }
+
+    // Con inscripción gratuita no hay pago que validar: «Validada» se muestra como «Confirmada»
+    public static function nombreEstado(?string $estado): string
+    {
+        if ($estado === 'validada' && Ajustes::gratuita()) {
+            return 'Confirmada';
+        }
+
+        return Inscripcion::ESTADOS[$estado] ?? (string) $estado;
+    }
+
+    // 951 913 416 → 51951913416 (los números peruanos de 9 dígitos llevan el código del país)
+    public static function numeroWhatsApp(?string $telefono): string
+    {
+        $n = preg_replace('/\D/', '', (string) $telefono);
+
+        return strlen($n) === 9 ? '51'.$n : $n;
     }
 
     public static function colorEstado(?string $estado): string
@@ -134,15 +154,32 @@ class InscripcionResource extends Resource
                     TextEntry::make('participante.correo_verificado_en')->label('Correo confirmado')
                         ->dateTime('d/m/Y H:i')->placeholder('Aún no confirma su correo'),
                 ]),
-            Section::make('Pago')
+            Section::make('Resumen del ponente')
+                ->columns(3)
+                ->visible(fn (?Inscripcion $record) => (bool) $record?->resumen)
+                ->schema([
+                    TextEntry::make('resumen.codigo')->label('Código'),
+                    TextEntry::make('resumen.titulo')->label('Título')->columnSpan(2),
+                    TextEntry::make('resumen.eje.titulo')->label('Mesa temática')
+                        ->formatStateUsing(fn ($state, Inscripcion $record) => 'Eje '.$record->resumen->eje?->orden.'. '.$state)->columnSpan(2),
+                    TextEntry::make('resumen.estado')->label('Evaluación')->badge()
+                        ->formatStateUsing(fn ($state) => Ponencia::ESTADOS[$state] ?? $state),
+                    TextEntry::make('resumen.palabras_clave')->label('Palabras clave')->columnSpan(2),
+                    TextEntry::make('resumen.archivo')->label('Archivo')
+                        ->formatStateUsing(fn () => 'Abrir resumen')
+                        ->url(fn (Inscripcion $record) => route('archivos.ponencia', $record->resumen))
+                        ->openUrlInNewTab()
+                        ->color('primary'),
+                ]),
+            Section::make(fn () => Ajustes::gratuita() ? 'Categoría' : 'Pago')
                 ->columns(2)
                 ->schema([
                     Select::make('tipo_participante')->label('Tipo de participante')->required()
                         ->options(collect(config('congreso.tarifas'))->map(fn ($t) => $t['nombre'])),
-                    TextInput::make('monto')->label('Monto')->prefix('S/')->numeric()->required(),
-                    Select::make('medio_pago')->label('Medio de pago')->options(self::medios())->placeholder('Aún no paga'),
-                    TextInput::make('numero_operacion')->label('N.° de operación')->maxLength(30),
-                    TextEntry::make('voucher')->label('Voucher')
+                    TextInput::make('monto')->label('Monto')->prefix('S/')->numeric()->required()->hidden(fn () => Ajustes::gratuita()),
+                    Select::make('medio_pago')->label('Medio de pago')->options(self::medios())->placeholder('Aún no paga')->hidden(fn () => Ajustes::gratuita()),
+                    TextInput::make('numero_operacion')->label('N.° de operación')->maxLength(30)->hidden(fn () => Ajustes::gratuita()),
+                    TextEntry::make('voucher')->label('Voucher')->hidden(fn () => Ajustes::gratuita())
                         ->placeholder('Sin voucher')
                         ->formatStateUsing(fn () => 'Abrir voucher')
                         ->url(fn (Inscripcion $record) => route('archivos.voucher', $record))
@@ -163,6 +200,7 @@ class InscripcionResource extends Resource
     {
         return $table
             ->defaultSort('created_at', 'desc')
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['participante', 'resumen.eje']))
             ->columns([
                 TextColumn::make('codigo')->label('Código')->searchable()->sortable()->weight('bold'),
                 TextColumn::make('participante.nombre_completo')->label('Participante')
@@ -180,15 +218,25 @@ class InscripcionResource extends Resource
                     ->state(fn (Inscripcion $r) => $r->participante->tieneAcceso() ? 'Enviado' : 'Sin enviar')
                     ->color(fn (Inscripcion $r) => $r->participante->tieneAcceso() ? 'success' : 'gray')
                     ->tooltip(fn (Inscripcion $r) => $r->participante->acceso_enviado_en?->format('d/m/Y H:i')),
+                TextColumn::make('participante.telefono')->label('Celular')->copyable()->copyMessage('Celular copiado')
+                    ->url(fn (Inscripcion $r) => 'https://wa.me/'.self::numeroWhatsApp($r->participante->telefono))->openUrlInNewTab()
+                    ->toggleable(),
                 TextColumn::make('participante.institucion')->label('Institución')->limit(30)->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('tipo_participante')->label('Tipo')->badge()->color('gray')
+                TextColumn::make('tipo_participante')->label('Tipo')->badge()
+                    ->color(fn ($state) => $state === 'ponente' ? 'info' : 'gray')
                     ->formatStateUsing(fn ($state) => config("congreso.tarifas.$state.nombre", $state)),
-                TextColumn::make('monto')->formatStateUsing(fn ($state) => 'S/ '.number_format((float) $state, 2))->sortable(),
-                TextColumn::make('medio_pago')->label('Pago')->placeholder('Sin pago aún')
+                TextColumn::make('resumen.codigo')->label('Resumen')->placeholder('—')
+                    ->icon(Heroicon::OutlinedDocumentText)->color('primary')
+                    ->description(fn (Inscripcion $r) => $r->resumen?->eje ? 'Eje '.$r->resumen->eje->orden : null)
+                    ->tooltip(fn (Inscripcion $r) => $r->resumen?->titulo)
+                    ->url(fn (Inscripcion $r) => $r->resumen ? route('archivos.ponencia', $r->resumen) : null)->openUrlInNewTab(),
+                TextColumn::make('monto')->formatStateUsing(fn ($state) => 'S/ '.number_format((float) $state, 2))->sortable()
+                    ->hidden(fn () => Ajustes::gratuita()),
+                TextColumn::make('medio_pago')->label('Pago')->placeholder('Sin pago aún')->hidden(fn () => Ajustes::gratuita())
                     ->formatStateUsing(fn ($state) => self::medios()[$state] ?? $state)
                     ->description(fn (Inscripcion $r) => $r->numero_operacion ? 'Op. '.$r->numero_operacion : ($r->origen === 'panel' ? 'Registrado por la organización' : null)),
                 TextColumn::make('estado')->badge()
-                    ->formatStateUsing(fn ($state) => Inscripcion::ESTADOS[$state] ?? $state)
+                    ->formatStateUsing(fn ($state) => self::nombreEstado($state))
                     ->color(fn ($state) => self::colorEstado($state)),
                 TextColumn::make('created_at')->label('Recibida')->since()->sortable()
                     ->tooltip(fn (Inscripcion $r) => $r->created_at->format('d/m/Y H:i')),
@@ -197,7 +245,7 @@ class InscripcionResource extends Resource
                 SelectFilter::make('estado')->options(Inscripcion::ESTADOS),
                 SelectFilter::make('tipo_participante')->label('Tipo')
                     ->options(collect(config('congreso.tarifas'))->map(fn ($t) => $t['nombre'])),
-                SelectFilter::make('medio_pago')->label('Medio de pago')->options(self::medios()),
+                SelectFilter::make('medio_pago')->label('Medio de pago')->options(self::medios())->hidden(fn () => Ajustes::gratuita()),
                 TernaryFilter::make('correo_confirmado')->label('Correo confirmado')
                     ->queries(
                         true: fn (Builder $query) => $query->whereHas('participante', fn ($p) => $p->whereNotNull('correo_verificado_en')),
@@ -211,11 +259,17 @@ class InscripcionResource extends Resource
                     ->openUrlInNewTab(),
                 // Mientras no tenga acceso, el botón queda a la vista; después pasa al menú como "Reenviar acceso"
                 self::accionEnviarAcceso()->visible(fn (Inscripcion $record) => ! $record->participante->tieneAcceso()),
-                Action::make('validar')->label('Validar')->icon(Heroicon::OutlinedCheckCircle)->color('success')
+                Action::make('resumen')->label('Resumen')->icon(Heroicon::OutlinedDocumentArrowDown)->color('gray')
+                    ->visible(fn (Inscripcion $record) => (bool) $record->resumen)
+                    ->url(fn (Inscripcion $record) => route('archivos.ponencia', $record->resumen))
+                    ->openUrlInNewTab(),
+                Action::make('validar')->label(fn () => Ajustes::gratuita() ? 'Confirmar' : 'Validar')->icon(Heroicon::OutlinedCheckCircle)->color('success')
                     ->visible(fn (Inscripcion $record) => $record->estado !== 'validada')
                     ->requiresConfirmation()
-                    ->modalHeading('Validar pago')
-                    ->modalDescription(fn (Inscripcion $record) => "Confirma que recibiste S/ {$record->monto}"
+                    ->modalHeading(fn () => Ajustes::gratuita() ? 'Confirmar inscripción' : 'Validar pago')
+                    ->modalDescription(fn (Inscripcion $record) => Ajustes::gratuita()
+                        ? "Confirma la inscripción de {$record->participante->nombre_completo}. Luego usa «Enviar acceso» para que reciba su usuario del Aula virtual."
+                        : "Confirma que recibiste S/ {$record->monto}"
                         .($record->medio_pago ? ' por '.(self::medios()[$record->medio_pago] ?? $record->medio_pago) : '')
                         .($record->numero_operacion ? " (operación {$record->numero_operacion})" : '').'. '
                         .'Se avisará al participante por correo.')

@@ -118,10 +118,22 @@
     }
   }
 
+  /* fotografía que se acerca y se desplaza lentamente (efecto Ken Burns) */
+  --animate-acercar: acercar 22s ease-in-out infinite alternate;
+  @keyframes acercar {
+    from {
+      transform: scale(1.02) translate(0, 0);
+    }
+    to {
+      transform: scale(1.14) translate(-2%, -3%);
+    }
+  }
+
   /* Tipografía animada del título principal */
   --animate-letra: letra 0.7s cubic-bezier(0.2, 0.7, 0.2, 1.1) both;
   --animate-desplegar: desplegar 1.3s cubic-bezier(0.7, 0, 0.2, 1) both;
   --animate-hilo: hilo 1.3s cubic-bezier(0.7, 0, 0.2, 1) both;
+  --animate-cursor: cursor 1s steps(2, start) infinite;
   --animate-subir: subir 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   /* paisaje de la portada: estrellas y reflejos del sol en el lago */
   --animate-parpadeo: parpadeo 4s ease-in-out infinite;
@@ -172,6 +184,11 @@
     }
     to {
       clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes cursor {
+    to {
+      opacity: 0;
     }
   }
   @keyframes hilo {
@@ -258,6 +275,14 @@
     text-align: justify;
     hyphens: auto;
     overflow-wrap: break-word;
+  }
+  /* En celulares la columna es angosta: justificado abriría huecos grandes entre palabras, así que va alineado a la izquierda */
+  @media (width < 640px) {
+    main p,
+    main li,
+    footer p {
+      text-align: start;
+    }
   }
   /* La portada (carrusel) tiene letra grande y pocas palabras por línea: justificada dejaría huecos */
   #inicio :is(p, li) {
@@ -362,6 +387,14 @@
 }
 @utility texto-degradado-claro {
   background-image: linear-gradient(90deg, #f18a21, #ffd29a 50%, #f18a21);
+  background-size: 200% auto;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-brillo-texto);
+}
+/* Palabras clave del lema de la portada: azul que se ilumina con un brillo dorado que lo recorre */
+@utility texto-lema {
+  background-image: linear-gradient(90deg, #1e3a8a, #2563eb 30%, #b45309 50%, #2563eb 70%, #1e3a8a);
   background-size: 200% auto;
   background-clip: text;
   color: transparent;

@@ -1,4 +1,4 @@
-# Congreso Saberes Andino-Amazónicos — sistema web
+# Congreso Saberes Andinos y Amazónicos — sistema web
 
 Laravel 12 + Filament 5 (panel de organización) + React/Vite (diseño de la página) + MySQL.
 

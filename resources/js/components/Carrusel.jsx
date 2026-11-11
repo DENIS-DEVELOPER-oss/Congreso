@@ -6,6 +6,7 @@ import { Children, useCallback, useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 // detenido: pausa pedida con el botón de pausa (se mantiene hasta que la persona la quite)
+// intervalo: ms por diapositiva, o una función (índice) => ms para que alguna dure más que las otras
 export function useCarrusel({ total, intervalo = 7000, detenido = false }) {
   const [actual, setActual] = useState(0)
   const [pausado, setPausado] = useState(false)
@@ -26,13 +27,14 @@ export function useCarrusel({ total, intervalo = 7000, detenido = false }) {
 
   // Avance automático (se reinicia cada vez que cambia la diapositiva, así un clic manual da el tiempo completo)
   const corriendo = !pausado && !reducir && !detenido
+  const duracion = typeof intervalo === 'function' ? intervalo(actual) : intervalo
   useEffect(() => {
     if (!corriendo) return
     const t = setTimeout(() => {
       if (document.visibilityState === 'visible') siguiente()
-    }, intervalo)
+    }, duracion)
     return () => clearTimeout(t)
-  }, [actual, corriendo, intervalo, siguiente])
+  }, [actual, corriendo, duracion, siguiente])
 
   const contenedor = {
     onMouseEnter: () => setPausado(true),

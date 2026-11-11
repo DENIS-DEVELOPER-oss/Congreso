@@ -79,7 +79,7 @@ export function ResumenErrores({ errores, idDe = (k) => k }) {
       <ul className="mt-2 list-disc space-y-1 pl-12 marker:text-amber-400">
         {lista.map(([id, m]) => (
           <li key={id}>
-            <button type="button" onClick={() => irACampo(idDe(id))} className="text-left underline decoration-amber-400 underline-offset-2 hover:text-amber-700">
+            <button type="button" onClick={() => irACampo(idDe(id))} className="text-left align-top underline decoration-amber-400 underline-offset-2 hover:text-amber-700">
               {m}
             </button>
           </li>

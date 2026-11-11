@@ -15,6 +15,7 @@ class Ajustes
     public const EDITABLES = [
         'tarifas', 'medios_pago_detalle', 'fecha_preventa_fin', 'correo_contacto', 'telefono', 'whatsapp',
         'fechas_importantes', 'firmantes', 'porcentaje_asistencia', 'horas', 'zoom_solo_con_pago', 'inscripcion_gratuita', 'inscripciones_abiertas',
+        'aviso_correo', 'aviso_whatsapp', 'aviso_whatsapp_clave',
     ];
 
     public static function inscripcionesAbiertas(): bool

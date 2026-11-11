@@ -8,6 +8,7 @@ use App\Models\Inscripcion;
 use App\Models\Participante;
 use App\Support\Accesos;
 use App\Support\Ajustes;
+use App\Support\Avisos;
 use App\Support\Turnstile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +61,11 @@ class InscripcionController extends Controller
 
         $inscripcion->refresh()->load('participante');
         // El correo sale después de responder: la persona no espera al servidor de correo
-        defer(fn () => Accesos::enviar($inscripcion->participante));
+        // y la comisión recibe el aviso de la nueva inscripción por correo y WhatsApp
+        defer(function () use ($inscripcion) {
+            Accesos::enviar($inscripcion->participante);
+            Avisos::nuevaInscripcion($inscripcion);
+        });
 
         return response()->json(['codigo' => $inscripcion->codigo], 201);
     }

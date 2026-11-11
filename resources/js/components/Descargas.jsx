@@ -101,7 +101,7 @@ export default function Descargas() {
           titulo="Documentos oficiales"
           descripcion="Bases de la convocatoria, plantilla del resumen y material de difusión del congreso."
         />
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="flex flex-wrap justify-center gap-5 *:w-full sm:*:w-[calc((100%-1.25rem)/2)] lg:*:w-[calc((100%-2.5rem)/3)]">
           {descargas.map((d, i) => (
             <Reveal as="li" key={d.id} delay={(i % 3) * 90}>
               <Ficha d={d} />

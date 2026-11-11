@@ -2,9 +2,9 @@
 // lo marcado como "por confirmar" sigue siendo de ejemplo.
 // Si cambias fechas, sede o precios, actualiza también los metadatos de index.html.
 const eventoBase = {
-  nombre: 'Congreso Saberes Andinoamazónicos',
+  nombre: 'Congreso Saberes Andinos y Amazónicos',
   nombreCompleto:
-    'I Congreso Internacional: Saberes Andinoamazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
+    'I Congreso Internacional: Saberes Andinos y Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
   edicion: 'I Congreso Internacional',
   lema: 'Formación universitaria con pertinencia intercultural e interepistémica',
   descripcionCorta:

@@ -54,7 +54,7 @@ export default function AnuncioInicio() {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Afiche del I Congreso Internacional Saberes Andinoamazónicos"
+      aria-label="Afiche del I Congreso Internacional Saberes Andinos y Amazónicos"
       className="fixed inset-0 z-[70] flex animate-aparecer items-center justify-center bg-black/55 p-4"
       onClick={(e) => e.target === e.currentTarget && cerrar()}
     >
@@ -71,10 +71,10 @@ export default function AnuncioInicio() {
         {/* Marco blanco alrededor del afiche, como los avisos de las webs universitarias */}
         <a href={RUTAS.inscripcion} onClick={cerrar} className="block rounded-sm bg-white p-2.5 shadow-[0_25px_60px_-15px_rgb(0_0_0/0.6)] sm:p-4">
           <img
-            src="/media/afiches/afiche-vertical.jpg"
+            src="/media/flyers/historia.jpg"
             width="900"
-            height="1314"
-            alt="I Congreso Internacional Saberes Andinoamazónicos: 26 y 27 de noviembre de 2026 en Educación Continua UNA Puno, evento presencial. Cierre de resúmenes el 20 de noviembre. ¡Inscríbete gratis!"
+            height="1600"
+            alt="I Congreso Internacional Saberes Andinos y Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria: 11 ponentes centrales, 26 y 27 de noviembre de 2026, evento presencial en Educación Continua UNA Puno (Av. El Sol 300). Resúmenes hasta el 20 de noviembre, 6 ejes temáticos. ¡Inscríbete gratis! Informes: +51 930 805 537."
             className="block h-auto max-h-[calc(85dvh-2rem)] w-auto max-w-[calc(100vw-3.5rem)]"
           />
           <span className="sr-only">Ir a la inscripción</span>

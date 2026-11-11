@@ -11,7 +11,9 @@ import { FranjaTejida } from './Andino.jsx'
 import { useCarrusel } from './Carrusel.jsx'
 import PaisajeHero from './PaisajeHero.jsx'
 
-const INTERVALO = 7000
+const INTERVALO = 12000
+// La primera diapositiva (El congreso) se queda el triple de tiempo que las demás
+const duracion = (i) => (i === 0 ? INTERVALO * 3 : INTERVALO)
 
 // Video o foto de Puno detrás del hero (si está configurado en evento.heroMedia)
 function MediaHero() {
@@ -162,7 +164,7 @@ function TarjetaPasos() {
   const pasos = [
     evento.inscripcionesAbiertas
       ? { Icono: UserPlus, titulo: 'Regístrate', texto: 'Completa el formulario con tus datos y tu categoría.' }
-      : { Icono: UserPlus, titulo: 'Solicita tu inscripción', texto: 'Escríbenos por WhatsApp o correo con tus datos.' },
+      : { Icono: UserPlus, titulo: 'Solicita tu inscripción', texto: 'Llena tus datos en la web en dos minutos.' },
     evento.inscripcionesAbiertas
       ? { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Al instante te llega tu usuario, tu contraseña y el programa.' }
       : { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Te enviamos tu usuario, tu contraseña y el programa.' },
@@ -242,8 +244,8 @@ const DIAPOSITIVAS = [
     id: 'ponentes',
     etiqueta: 'Ponentes',
     antetitulo: 'Ponentes centrales',
-    titulo: 'Investigadores y sabios originarios en diálogo',
-    texto: 'Conferencias de especialistas de Argentina, México y el Perú sobre saberes andinoamazónicos, interculturalidad y universidad.',
+    titulo: 'Investigadores dialogando sobre saberes andinos y amazónicos',
+    texto: 'Conferencias de especialistas de Argentina, México y el Perú sobre interculturalidad, diálogo de saberes y universidad.',
     botones: [
       { texto: 'Conocer a los ponentes', href: '#ponentes', principal: true },
       { texto: 'Ver el programa', href: '#programa' },
@@ -267,7 +269,7 @@ const DIAPOSITIVAS = [
     etiqueta: 'Convocatoria',
     antetitulo: 'Convocatoria de ponencias',
     titulo: 'Presenta tu investigación',
-    texto: 'Envía tu resumen por WhatsApp o correo electrónico hasta el 20 de noviembre. El Comité organizador evaluará cada trabajo.',
+    texto: 'Inscríbete como ponente y sube tu resumen hasta el 20 de noviembre. El Comité organizador evaluará cada trabajo.',
     botones: [
       { texto: 'Enviar mi resumen', href: '#convocatoria', principal: true },
       { texto: 'Inscribirme', href: RUTAS.inscripcion },
@@ -293,7 +295,7 @@ const DIAPOSITIVAS = [
     titulo: 'Asegura tu participación',
     texto: evento.inscripcionesAbiertas
       ? 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno. Al instante te llega tu acceso al Aula virtual.'
-      : 'Solicita tu inscripción gratuita por WhatsApp o correo y participa en Educación Continua de la UNA Puno.',
+      : 'Llena tu solicitud de inscripción gratuita en la web y participa en Educación Continua de la UNA Puno.',
     botones: [
       { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
       { texto: 'Ingresar al aula', href: RUTAS.cuenta },
@@ -304,6 +306,101 @@ const DIAPOSITIVAS = [
 
 // Entrada escalonada de la primera carga
 const entrada = (ms) => ({ className: 'animate-aparecer', style: { animationDelay: `${ms}ms` } })
+
+// Lema del congreso escrito letra por letra, como en una máquina de escribir. Las palabras clave van con color y
+// brillo, y se subrayan en dorado al terminar de escribirse. Con «reducir movimiento» se muestra completo.
+// El texto completo queda invisible debajo, así el espacio está reservado y nada salta mientras se escribe.
+const LEMA = [
+  { texto: 'Formación universitaria con ' },
+  { texto: 'pertinencia intercultural', clave: true },
+  { texto: ' e ' },
+  { texto: 'interepistémica', clave: true },
+]
+const LARGO_LEMA = LEMA.reduce((n, s) => n + s.texto.length, 0)
+const PAUSA_LEMA = 650 // ms antes de empezar a escribir (deja entrar el título)
+const RITMO_LEMA = 42 // ms por letra
+
+function Lema() {
+  const [escritas, setEscritas] = useState(0)
+  const [cursor, setCursor] = useState(true)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setEscritas(LARGO_LEMA)
+      setCursor(false)
+      return
+    }
+    let n = 0
+    let intervalo
+    const inicio = setTimeout(() => {
+      intervalo = setInterval(() => {
+        n += 1
+        setEscritas(n)
+        if (n >= LARGO_LEMA) clearInterval(intervalo)
+      }, RITMO_LEMA)
+    }, PAUSA_LEMA)
+    return () => {
+      clearTimeout(inicio)
+      clearInterval(intervalo)
+    }
+  }, [])
+
+  // Al terminar, el cursor parpadea un momento y se retira
+  useEffect(() => {
+    if (escritas < LARGO_LEMA) return
+    const t = setTimeout(() => setCursor(false), 2600)
+    return () => clearTimeout(t)
+  }, [escritas])
+
+  let antes = 0
+  const partes = LEMA.map((s) => {
+    const visible = s.texto.slice(0, Math.max(0, escritas - antes))
+    const completa = escritas >= antes + s.texto.length
+    antes += s.texto.length
+    return { ...s, visible, completa }
+  })
+
+  const linea = (conCursor) => (
+    <>
+      <span className="text-naranja">«</span>
+      {partes.map((s) =>
+        s.clave ? (
+          <span key={s.texto} className="relative whitespace-nowrap">
+            <span className="relative z-10 texto-lema">{conCursor ? s.visible : s.texto}</span>
+            {conCursor && (
+              <span
+                className={`absolute inset-x-0 bottom-[0.04em] h-[0.3em] origin-left rounded-sm bg-naranja/50 transition-transform duration-700 ease-out ${
+                  s.completa ? 'scale-x-100' : 'scale-x-0'
+                }`}
+                aria-hidden="true"
+              />
+            )}
+          </span>
+        ) : (
+          <span key={s.texto}>{conCursor ? s.visible : s.texto}</span>
+        ),
+      )}
+      {(!conCursor || escritas >= LARGO_LEMA) && <span className="text-naranja">»</span>}
+      {conCursor && cursor && (
+        <span className="ml-0.5 inline-block h-[0.95em] w-[3px] translate-y-[0.12em] animate-cursor rounded-full bg-naranja" aria-hidden="true" />
+      )}
+    </>
+  )
+
+  return (
+    <p
+      className="mt-5 grid max-w-xl font-display text-[1.3rem] leading-snug font-extrabold tracking-tight text-[#1e3a8a] sm:text-[1.65rem] lg:text-[1.55rem] xl:text-[1.75rem]"
+    >
+      <span className="sr-only">«{LEMA.map((s) => s.texto).join('')}»</span>
+      <span className="invisible col-start-1 row-start-1" aria-hidden="true">
+        {linea(false)}
+      </span>
+      <span className="col-start-1 row-start-1" aria-hidden="true">
+        {linea(true)}
+      </span>
+    </p>
+  )
+}
 
 // Botones de la portada, con el mismo lenguaje que el botón del menú:
 // principal en azul noche con la flecha en un bloque dorado; secundario blanco con borde fino. Misma altura y esquinas.
@@ -331,7 +428,7 @@ function TextoCongreso() {
         </span>
       </p>
       <h1 aria-label={evento.nombreCompleto} className="mt-4 text-[min(2.6rem,9.3vw)] leading-[1.02] font-extrabold text-oscuro min-[400px]:text-[min(3rem,9.3vw)] sm:text-6xl lg:text-[3.3rem] xl:text-[3.85rem]">
-        {['Saberes', 'Andinoamazónicos'].map((linea, i) => (
+        {['Saberes Andinos', 'y Amazónicos'].map((linea, i) => (
           <span key={linea} className="block overflow-hidden pb-[0.08em]" aria-hidden="true">
             <span
               className={`block animate-subir ${i === 1 ? 'bg-linear-to-r from-[#1d4ed8] via-[#3b82f6] to-[#1d4ed8] bg-clip-text text-transparent' : ''}`}
@@ -346,7 +443,7 @@ function TextoCongreso() {
         <p className="mt-5 max-w-xl font-display text-xl leading-snug font-semibold text-slate-700 sm:text-2xl">
           y Diálogo Intercultural en la Educación Superior Universitaria
         </p>
-        <p className="mt-4 max-w-xl text-lg leading-relaxed text-slate-600">«{evento.lema}»</p>
+        <Lema />
         <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-base font-medium text-slate-700">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-rojizo-oscuro px-3 py-1 text-sm font-semibold text-white">
             <MapPin className="h-4 w-4" aria-hidden="true" /> Presencial
@@ -409,7 +506,7 @@ export default function Hero() {
   // Botón de pausa además de la pausa automática con el mouse encima (pauta de accesibilidad WCAG 2.2.2)
   const [detenido, setDetenido] = useState(false)
   const [verAfiche, setVerAfiche] = useState(null)
-  const { actual, ir, siguiente, anterior, corriendo, contenedor } = useCarrusel({ total: DIAPOSITIVAS.length, intervalo: INTERVALO, detenido: detenido || !!verAfiche })
+  const { actual, ir, siguiente, anterior, corriendo, contenedor } = useCarrusel({ total: DIAPOSITIVAS.length, intervalo: duracion, detenido: detenido || !!verAfiche })
   // Diapositivas cuyo afiche ya se puede descargar: la actual y la siguiente (así está listo al llegar)
   const [cargadas, setCargadas] = useState(() => new Set([0, 1]))
   useEffect(() => {
@@ -488,7 +585,7 @@ export default function Hero() {
                     <span
                       key={`${actual}-${corriendo}`}
                       className="absolute inset-0 origin-left rounded-full bg-rojizo-oscuro"
-                      style={corriendo ? { animation: `progreso ${INTERVALO}ms linear forwards` } : undefined}
+                      style={corriendo ? { animation: `progreso ${duracion(i)}ms linear forwards` } : undefined}
                     />
                   ) : (
                     i < actual && <span className="absolute inset-0 rounded-full bg-rojizo-oscuro/35" />

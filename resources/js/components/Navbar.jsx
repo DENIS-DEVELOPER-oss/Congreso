@@ -27,15 +27,24 @@ const SECUNDARIOS = [
 
 const TODOS = [...PRINCIPALES, ...SECUNDARIOS]
 
-// Barra dorada bajo la pestaña activa; al pasar el mouse se dibuja a medias
+// Pestaña activa: fondo azul claro detrás del texto y barra azul en el borde inferior.
+// Al pasar el mouse por otra pestaña se insinúan a medias.
 function Indicador({ visible }) {
   return (
-    <span
-      aria-hidden="true"
-      className={`absolute inset-x-[11px] bottom-0 h-[3px] origin-left rounded-t-sm transition-transform duration-300 ${
-        visible ? 'scale-x-100 bg-naranja' : 'scale-x-0 bg-naranja/60 group-hover/enlace:scale-x-100'
-      }`}
-    />
+    <>
+      <span
+        aria-hidden="true"
+        className={`absolute inset-x-1 top-1/2 -z-10 h-9 -translate-y-1/2 rounded-lg transition duration-300 ${
+          visible ? 'scale-100 bg-[#1d4ed8]/10 opacity-100' : 'scale-90 bg-slate-900/5 opacity-0 group-hover/enlace:scale-100 group-hover/enlace:opacity-100'
+        }`}
+      />
+      <span
+        aria-hidden="true"
+        className={`absolute inset-x-[11px] bottom-0 h-[3px] origin-left rounded-t-sm transition-transform duration-300 ${
+          visible ? 'scale-x-100 bg-[#1d4ed8]' : 'scale-x-0 bg-[#1d4ed8]/40 group-hover/enlace:scale-x-100'
+        }`}
+      />
+    </>
   )
 }
 
@@ -50,11 +59,11 @@ function EnlaceMovil({ e, i, abierto, activo, onCerrar, destino }) {
         aria-current={activo === e.href ? 'true' : undefined}
         onClick={onCerrar}
         className={`flex items-center justify-between rounded-md px-4 py-2.5 text-base font-medium transition ${
-          activo === e.href ? 'bg-rojizo/8 text-rojizo-oscuro' : 'text-slate-700 hover:bg-slate-100'
+          activo === e.href ? 'bg-[#1d4ed8]/10 font-semibold text-[#1d4ed8]' : 'text-slate-700 hover:bg-slate-100'
         }`}
       >
         {e.texto}
-        {activo === e.href && <span className="h-1.5 w-1.5 rounded-full bg-rojizo" aria-hidden="true" />}
+        {activo === e.href && <span className="h-1.5 w-1.5 rounded-full bg-[#1d4ed8]" aria-hidden="true" />}
       </a>
     </li>
   )
@@ -173,12 +182,14 @@ export default function Navbar({ pagina = 'inicio' }) {
   // Arriba la barra es transparente; al hacer scroll (o abrir el menú) se vuelve sólida
   const solido = conScroll || abierto
   const nombreCorto = evento.nombre.replace(/^Congreso\s+/i, '')
+  // «Saberes Andinos | y Amazónicos»: en pantallas de 1280 a 1439 px el nombre va en dos líneas para que quepa el menú
+  const [nombreA, nombreB] = nombreCorto.includes(' y ') ? [nombreCorto.slice(0, nombreCorto.indexOf(' y ')), nombreCorto.slice(nombreCorto.indexOf(' y '))] : [nombreCorto, '']
   const masActivo = SECUNDARIOS.some((s) => s.href === activo)
 
   // Menú tipo pestañas (estilo institucional): texto limpio y una barra dorada en el borde inferior de la barra
   const claseEnlace = (esActivo) =>
-    `group/enlace relative flex h-full items-center px-[11px] text-[0.875rem] font-semibold whitespace-nowrap transition-colors duration-200 ${
-      esActivo ? 'text-[#0b1f5c]' : 'text-slate-600 hover:text-[#0b1f5c]'
+    `group/enlace relative isolate flex h-full items-center px-[11px] text-[0.875rem] font-semibold whitespace-nowrap transition-colors duration-200 ${
+      esActivo ? 'text-[#1d4ed8]' : 'text-slate-600 hover:text-[#0b1f5c]'
     }`
 
   const movil = { abierto, activo, destino, onCerrar: () => setAbierto(false) }
@@ -204,11 +215,14 @@ export default function Navbar({ pagina = 'inicio' }) {
         aria-label="Navegación principal"
       >
         <div className="flex h-full items-center">
-          <a href={destino('#inicio')} className="group flex items-center gap-3" onClick={() => setAbierto(false)}>
-            <Logo className="h-11 w-9 transition-transform duration-500 group-hover:scale-105" />
+          <a href={destino('#inicio')} className="group flex items-center gap-2.5 min-[360px]:gap-3" onClick={() => setAbierto(false)}>
+            <Logo className="h-9 w-9 transition-transform duration-500 group-hover:scale-105 min-[360px]:h-11 min-[360px]:w-11" />
             <span className="flex flex-col leading-none text-oscuro">
-              <span className="text-[10px] font-bold tracking-[0.18em] text-[#1d4ed8] uppercase">I Congreso Internacional</span>
-              <span className="mt-1.5 font-display text-[15px] font-extrabold tracking-tight whitespace-nowrap min-[360px]:text-base min-[400px]:text-lg">{nombreCorto}</span>
+              <span className="text-[9px] font-bold tracking-[0.16em] text-[#1d4ed8] uppercase min-[360px]:text-[10px] min-[360px]:tracking-[0.18em]">I Congreso Internacional</span>
+              <span className="mt-1.5 font-display text-[13.5px] font-extrabold tracking-tight whitespace-nowrap min-[360px]:text-[15px] min-[400px]:text-lg xl:max-[1439px]:leading-[1.1]">
+                {nombreA}
+                <span className="xl:max-[1439px]:block">{nombreB}</span>
+              </span>
             </span>
           </a>
           <span className="ml-5 hidden h-9 w-px bg-slate-300/80 xl:block" aria-hidden="true" />
@@ -250,7 +264,7 @@ export default function Navbar({ pagina = 'inicio' }) {
                       onClick={() => setMasAbierto(false)}
                       aria-current={activo === e.href ? 'true' : undefined}
                       className={`block rounded-md border-l-2 px-4 py-2.5 text-sm font-semibold transition ${
-                        activo === e.href ? 'border-naranja bg-[#0b1f5c]/5 text-[#0b1f5c]' : 'border-transparent text-slate-700 hover:border-naranja/60 hover:bg-slate-50'
+                        activo === e.href ? 'border-[#1d4ed8] bg-[#1d4ed8]/10 text-[#1d4ed8]' : 'border-transparent text-slate-700 hover:border-naranja/60 hover:bg-slate-50'
                       }`}
                     >
                       {e.texto}
@@ -306,7 +320,7 @@ export default function Navbar({ pagina = 'inicio' }) {
         className={`grid transition-[grid-template-rows] duration-500 ease-out xl:hidden ${abierto ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
       >
         <div className="overflow-hidden">
-          <div className="contenedor max-h-[calc(100svh-5rem)] overflow-y-auto px-4 pt-2 pb-6 sm:px-6">
+          <div className="contenedor max-h-[calc(100svh-8rem)] overflow-y-auto overscroll-contain px-4 pt-2 pb-6 sm:px-6">
             <ul className="flex flex-col gap-0.5">
               {PRINCIPALES.map((e, i) => (
                 <EnlaceMovil key={e.href} e={e} i={i} {...movil} />

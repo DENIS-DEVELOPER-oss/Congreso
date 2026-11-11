@@ -4,8 +4,8 @@
 // estos valores solo se usan mientras no se haya guardado nada ahí. Ver App\Support\Ajustes.
 return [
 
-    'nombre' => 'I Congreso Internacional: Saberes Andinoamazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
-    'nombre_corto' => 'Congreso Saberes Andinoamazónicos',
+    'nombre' => 'I Congreso Internacional: Saberes Andinos y Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria',
+    'nombre_corto' => 'Congreso Saberes Andinos y Amazónicos',
     'fechas_texto' => '26 y 27 de noviembre de 2026',
     'fecha_inicio' => '2026-11-26T08:00:00-05:00',
     'fecha_fin' => '2026-11-27T19:00:00-05:00',
@@ -65,6 +65,13 @@ return [
     'correo_contacto' => env('CONGRESO_CORREO', 'p.enriquez@unap.edu.pe'),
     'telefono' => '+51 930 805 537',
     'whatsapp' => '51930805537', // solo dígitos, con código de país
+
+    // EDITABLE. Avisos a la comisión por cada nueva inscripción (panel → Datos del congreso → Avisos).
+    // Correo: si está vacío, se usa el correo de contacto. WhatsApp: con CallMeBot (callmebot.com),
+    // que envía mensajes gratis al número que lo activó; sin la clave, no se envía por WhatsApp.
+    'aviso_correo' => env('AVISO_CORREO'),
+    'aviso_whatsapp' => env('AVISO_WHATSAPP', '51930805537'),
+    'aviso_whatsapp_clave' => env('AVISO_WHATSAPP_CLAVE'),
 
     // EDITABLE. Fechas importantes de la portada (fecha AAAA-MM-DD, en orden)
     'fechas_importantes' => [

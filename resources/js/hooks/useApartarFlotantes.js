@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
-// Devuelve true cuando un botón de envío de formulario (o cualquier elemento con data-apartar-flotantes)
-// queda en la franja inferior de la pantalla, donde están los botones flotantes (WhatsApp, volver arriba).
-// Así esos botones se apartan y nunca tapan "Registrarme", "Enviar voucher", etc.
+// Cuando un botón de envío de formulario (o cualquier elemento con data-apartar-flotantes) queda en la franja
+// inferior de la pantalla, donde están los botones flotantes (WhatsApp, volver arriba), devuelve cuántos px
+// hay que subirlos para dejarlo libre (0 si no estorban). Así nunca tapan "Registrarme", "Enviar voucher", etc.
 const ZONA = 140 // px desde el borde inferior que ocupan los botones flotantes
 
 export function useApartarFlotantes() {
-  const [apartar, setApartar] = useState(false)
+  const [subir, setSubir] = useState(0)
 
   useEffect(() => {
     let raf = 0
@@ -14,12 +14,13 @@ export function useApartarFlotantes() {
       raf = 0
       const alto = window.innerHeight
       const ancho = window.innerWidth
-      const choca = [...document.querySelectorAll('form button[type=submit], [data-apartar-flotantes]')].some((el) => {
+      const necesario = [...document.querySelectorAll('form button[type=submit], [data-apartar-flotantes]')].reduce((max, el) => {
         const r = el.getBoundingClientRect()
         // Visible, dentro de la franja inferior y llegando a la mitad derecha (donde están los flotantes)
-        return r.width > 0 && r.bottom > alto - ZONA && r.top < alto && r.right > ancho / 2
-      })
-      setApartar(choca)
+        const choca = r.width > 0 && r.bottom > alto - ZONA && r.top < alto && r.right > ancho / 2
+        return choca ? Math.max(max, Math.ceil(alto - r.top)) : max
+      }, 0)
+      setSubir(necesario)
     }
     const programar = () => {
       if (!raf) raf = requestAnimationFrame(revisar)
@@ -38,5 +39,5 @@ export function useApartarFlotantes() {
     }
   }, [])
 
-  return apartar
+  return subir
 }

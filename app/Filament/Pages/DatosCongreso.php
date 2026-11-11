@@ -2,13 +2,18 @@
 
 namespace App\Filament\Pages;
 
+use App\Mail\AvisoPrueba;
 use App\Support\Ajustes;
+use App\Support\Avisos;
+use App\Support\Correo;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Grid;
@@ -17,6 +22,7 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\HtmlString;
 use UnitEnum;
 
 // Datos reales del congreso que se muestran en la página, los correos y los certificados.
@@ -102,6 +108,29 @@ class DatosCongreso extends Page
                             ]),
                     ]),
 
+                    Tab::make('Avisos')->icon(Heroicon::OutlinedBellAlert)->schema([
+                        Section::make('Aviso de cada nueva inscripción')
+                            ->description('Cada vez que alguien se inscribe (asistente o ponente), la comisión recibe un correo con sus datos —y el resumen adjunto si es ponente— y un mensaje de WhatsApp. Guarda los cambios y usa «Enviar aviso de prueba» (arriba) para comprobarlo.')
+                            ->columns(3)
+                            ->schema([
+                                TextInput::make('aviso_correo')->label('Correo que recibe los avisos')->email()
+                                    ->placeholder(fn () => config('congreso.correo_contacto'))
+                                    ->helperText('Vacío: se usa el correo de contacto.'),
+                                TextInput::make('aviso_whatsapp')->label('WhatsApp que recibe los avisos')->placeholder('51930805537')
+                                    ->helperText('Solo números, con el 51 de Perú adelante.')->regex('/^\d{9,15}$/'),
+                                TextInput::make('aviso_whatsapp_clave')->label('Clave de CallMeBot (apikey)')
+                                    ->password()->revealable()->maxLength(40)
+                                    ->helperText('Sin la clave, el aviso solo llega por correo.'),
+                                TextEntry::make('como_activar')->hiddenLabel()->columnSpanFull()
+                                    ->state(new HtmlString(
+                                        '<strong>Cómo obtener la clave (una sola vez, desde el celular que recibirá los avisos):</strong><br>'
+                                        .'1. Abre <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank" rel="noopener" style="text-decoration:underline">callmebot.com</a> y guarda en tus contactos el número de WhatsApp que indica la página.<br>'
+                                        .'2. Envíale por WhatsApp el mensaje: <code>I allow callmebot to send me messages</code><br>'
+                                        .'3. En unos minutos te responde con tu <em>apikey</em>: cópiala aquí, pulsa «Guardar cambios» y luego «Enviar aviso de prueba».'
+                                    )),
+                            ]),
+                    ]),
+
                     Tab::make('Aula virtual')->icon(Heroicon::OutlinedVideoCamera)->schema([
                         Toggle::make('zoom_solo_con_pago')->label('Mostrar los enlaces de las sesiones solo a quienes tienen el pago validado')
                             ->helperText('Los enlaces y horarios de cada sesión se cargan en Asistencia → Sesiones.'),
@@ -129,6 +158,35 @@ class DatosCongreso extends Page
                     ]),
                 ]),
             ]);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('probarAvisos')->label('Enviar aviso de prueba')->icon(Heroicon::OutlinedBellAlert)->color('gray')
+                ->requiresConfirmation()
+                ->modalHeading('Enviar aviso de prueba')
+                ->modalDescription(fn () => 'Se enviará un correo a '.Avisos::correoDestino()
+                    .(Avisos::whatsappActivo() ? ' y un WhatsApp al +'.config('congreso.aviso_whatsapp') : ' (WhatsApp sin configurar: falta la clave de CallMeBot)')
+                    .'. Usa los datos guardados: si acabas de cambiarlos, primero pulsa «Guardar cambios».')
+                ->action(function () {
+                    $correo = Correo::enviar(Avisos::correoDestino(), new AvisoPrueba);
+                    $whatsapp = Avisos::whatsappActivo()
+                        ? Avisos::whatsapp('*Aviso de prueba* · '.config('congreso.nombre_corto')."\nAsí llegarán los avisos de cada nueva inscripción.")
+                        : null;
+
+                    $lineas = [
+                        $correo ? '✔ Correo enviado a '.Avisos::correoDestino() : '✘ No se pudo enviar el correo: revisa la configuración de correo del servidor.',
+                        match ($whatsapp) {
+                            true => '✔ WhatsApp enviado al +'.config('congreso.aviso_whatsapp'),
+                            false => '✘ No se pudo enviar el WhatsApp: revisa el número y la clave de CallMeBot.',
+                            null => '• WhatsApp sin configurar: falta la clave de CallMeBot (pestaña Avisos).',
+                        },
+                    ];
+                    Notification::make()->title('Aviso de prueba')->body(new HtmlString(implode('<br>', array_map('e', $lineas))))
+                        ->{$correo && $whatsapp !== false ? 'success' : 'warning'}()->persistent()->send();
+                }),
+        ];
     }
 
     public function guardar(): void

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 class Inscripcion extends Model
 {
@@ -45,6 +47,12 @@ class Inscripcion extends Model
         return $this->belongsTo(Participante::class);
     }
 
+    // Último resumen que envió la persona inscrita (los ponentes lo adjuntan al inscribirse)
+    public function resumen(): HasOne
+    {
+        return $this->hasOne(Ponencia::class, 'autor_id', 'participante_id')->latestOfMany();
+    }
+
     public function validador(): BelongsTo
     {
         return $this->belongsTo(User::class, 'validado_por');
@@ -80,6 +88,6 @@ class Inscripcion extends Model
         }
         $fin = config('congreso.fecha_preventa_fin');
 
-        return $fin && now()->lte(\Illuminate\Support\Carbon::parse($fin)->endOfDay()) ? $tarifa['preventa'] : $tarifa['regular'];
+        return $fin && now()->lte(Carbon::parse($fin)->endOfDay()) ? $tarifa['preventa'] : $tarifa['regular'];
     }
 }

@@ -20,7 +20,7 @@ export function descargarIcs() {
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Congreso Saberes Andinoamazonicos//ES',
+    'PRODID:-//Congreso Saberes Andinos y Amazonicos//ES',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',

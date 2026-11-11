@@ -7,10 +7,10 @@ import { TituloSeccion } from './Andino.jsx'
 import { Inclinable } from './Efectos.jsx'
 import Reveal from './Reveal.jsx'
 
-// Con el formulario en línea cerrado, la inscripción se solicita por WhatsApp o correo
+// Con el registro inmediato cerrado, la inscripción se solicita con el formulario y la comisión la confirma
 const PASOS = evento.inscripcionesAbiertas
   ? ['Regístrate con tus datos', 'Recibe al instante tu acceso al aula', 'Asiste a las sesiones en Puno']
-  : ['Solicita tu inscripción por WhatsApp o correo', 'Recibe por correo tu acceso al aula', 'Asiste a las sesiones en Puno']
+  : ['Llena tu solicitud de inscripción en la web', 'Recibe por correo tu acceso al aula', 'Asiste a las sesiones en Puno']
 
 export default function Accesos() {
   return (
@@ -22,7 +22,7 @@ export default function Accesos() {
           descripcion={
             evento.inscripcionesAbiertas
               ? 'Regístrese en la página y recibirá al instante, por correo, su acceso al Aula virtual: ahí verá el programa y descargará su certificado.'
-              : 'Solicite su inscripción por WhatsApp o correo electrónico y le enviaremos su acceso al Aula virtual, donde verá el programa y descargará su certificado.'
+              : 'Llene su solicitud de inscripción en la web (los ponentes adjuntan su resumen) y le enviaremos su acceso al Aula virtual, donde verá el programa y descargará su certificado.'
           }
         />
 
