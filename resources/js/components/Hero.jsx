@@ -219,10 +219,10 @@ const DIAPOSITIVAS = [
     etiqueta: 'Afiche oficial',
     antetitulo: 'Afiche oficial',
     titulo: 'I Congreso Internacional',
-    texto: '26 y 27 de noviembre de 2026 en el campus de la UNA Puno, presencial y virtual. Lo organizan seis instituciones académicas del Perú.',
+    texto: '26 y 27 de noviembre de 2026 en Educación Continua de la UNA Puno, presencial y virtual. Lo organizan seis instituciones académicas del Perú.',
     botones: [
       { texto: 'Ver el afiche', afiche: afiche('congreso'), principal: true },
-      { texto: 'Ver los organizadores', href: '#organizan' },
+      { texto: 'Ver los organizadores', href: '#comites' },
     ],
     afiche: afiche('congreso'),
   },
@@ -279,7 +279,7 @@ const DIAPOSITIVAS = [
     etiqueta: 'Inscripciones',
     antetitulo: evento.inscripcionesAbiertas ? 'Inscripción gratuita' : 'Inscripción gratuita · muy pronto',
     titulo: 'Asegura tu participación',
-    texto: 'Regístrate en dos minutos y participa en el campus UNA Puno o por Google Meet. Al instante te llega tu acceso al Aula virtual.',
+    texto: 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno o por Google Meet. Al instante te llega tu acceso al Aula virtual.',
     botones: [
       { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
       { texto: 'Ingresar al aula', href: RUTAS.cuenta },
@@ -329,7 +329,7 @@ function TextoCongreso() {
           </span>
           <span>{evento.fechasTexto}</span>
           <span className="h-1 w-1 rounded-full bg-naranja" aria-hidden="true" />
-          <span>Campus UNA Puno</span>
+          <span>{evento.sede}</span>
         </p>
       </div>
       <div data-apartar-flotantes className="mt-9 flex animate-aparecer flex-col gap-3 sm:flex-row" style={{ animationDelay: '460ms' }}>

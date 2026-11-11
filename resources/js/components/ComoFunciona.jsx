@@ -7,8 +7,8 @@ import Reveal from './Reveal.jsx'
 const PASOS = [
   {
     Icono: Landmark,
-    titulo: 'Presencial en el campus',
-    texto: 'Conferencias y mesas temáticas en el campus de la UNA Puno. Tu asistencia se registra con tu código o tu DNI.',
+    titulo: 'Presencial en Puno',
+    texto: 'Conferencias y mesas temáticas en Educación Continua de la UNA Puno. Tu asistencia se registra con tu código o tu DNI.',
   },
   {
     Icono: Video,
@@ -43,7 +43,7 @@ export default function ComoFunciona() {
             claro
             etiqueta="Presencial y virtual"
             titulo="Así funciona el congreso"
-            descripcion="Asiste al campus de la Universidad Nacional del Altiplano o participa en línea desde cualquier lugar. La inscripción es gratuita y todo lo que necesitas está en el Aula virtual."
+            descripcion="Asiste a Educación Continua de la Universidad Nacional del Altiplano, en Puno, o participa en línea desde cualquier lugar. La inscripción es gratuita y todo lo que necesitas está en el Aula virtual."
           />
 
           <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

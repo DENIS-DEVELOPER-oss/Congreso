@@ -1,6 +1,6 @@
-import { ArrowUp } from 'lucide-react'
+import { ArrowUp, Mail, MapPin, MessageCircle } from 'lucide-react'
 import { aliados } from '../data/aliados.js'
-import { evento } from '../data/evento.js'
+import { canales, enlaceWhatsApp, evento } from '../data/evento.js'
 import { enlace, RUTAS } from '../lib/rutas.js'
 import { FranjaTejida, PatronRombos } from './Andino.jsx'
 import { abrirPrivacidad } from './Privacidad.jsx'
@@ -72,13 +72,25 @@ export default function Footer({ pagina = 'inicio' }) {
         <div className="md:col-span-4">
           <h2 className="text-xs font-bold tracking-wide text-white/40 uppercase">Contacto</h2>
           <ul className="mt-5 space-y-3 text-sm text-white/70">
+            {canales.correos.map((c) => (
+              <li key={c}>
+                <a href={`mailto:${c}`} className="inline-flex items-center gap-2 [overflow-wrap:anywhere] transition hover:text-naranja">
+                  <Mail className="h-4 w-4 shrink-0 text-white/40" aria-hidden="true" /> {c}
+                </a>
+              </li>
+            ))}
+            {canales.whatsapp.map((w) => (
+              <li key={w.numero}>
+                <a href={enlaceWhatsApp(w.numero)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 transition hover:text-naranja">
+                  <MessageCircle className="h-4 w-4 shrink-0 text-white/40" aria-hidden="true" /> {w.texto}
+                </a>
+              </li>
+            ))}
             <li>
-              <a href={`mailto:${evento.correo}`} className="transition hover:text-naranja">
-                {evento.correo}
+              <a href={evento.mapa.enlace} target="_blank" rel="noopener noreferrer" className="inline-flex items-start gap-2 transition hover:text-naranja">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/40" aria-hidden="true" /> Sede: {evento.sede}, {evento.ciudad}
               </a>
             </li>
-            <li>{evento.telefono}</li>
-            <li>{evento.direccion}</li>
           </ul>
           <a href={RUTAS.inscripcion} className="btn-primario mt-6">
             Inscríbete ahora

@@ -22,7 +22,7 @@ const eventoBase = {
   fechaFin: '2026-11-27T19:00:00-05:00',
   fechaPreventaFin: null, // fecha límite de la tarifa de preventa; null = solo tarifa regular
   fechasTexto: '26 y 27 de noviembre de 2026',
-  sede: 'Campus UNA Puno',
+  sede: 'Educación Continua UNA Puno',
   modalidad: 'Presencial y virtual',
   inscripcionGratuita: true,
   inscripcionesAbiertas: false, // se abren desde el panel (Datos del congreso)
@@ -31,8 +31,14 @@ const eventoBase = {
   correo: 'p.enriquez@unap.edu.pe',
   telefono: '+51 930 805 537',
   whatsapp: '51930805537', // solo dígitos, con código de país
+  // Segundo canal de consultas (se muestra junto al principal)
+  contactoAlterno: { correo: 'contacto@congresosaberes.net', telefono: '+51 951 913 416', whatsapp: '51951913416' },
   direccion: 'Av. Floral 1153, Ciudad Universitaria, Puno, Perú',
-  mapaUrl: 'https://maps.google.com/maps?q=Universidad%20Nacional%20del%20Altiplano%20Puno&z=15&output=embed',
+  // Sede presencial: Educación Continua de la UNA Puno (ubicación exacta en Google Maps)
+  mapa: {
+    enlace: 'https://maps.app.goo.gl/SMHZJWjXdK15YHa49',
+    embed: 'https://maps.google.com/maps?q=-15.834101,-70.023628&z=17&output=embed',
+  },
   // URL "embed" de YouTube para mostrar la sección En vivo, p. ej. 'https://www.youtube.com/embed/ID_DEL_VIDEO'
   transmisionUrl: null,
   // Fondo del hero: coloca los archivos en /public/media/ (ver LEEME.txt). Con null se usa el fondo textil.
@@ -43,10 +49,11 @@ const eventoBase = {
   },
   // Imagen del mosaico de Presentación (lago, Taquile, tejedoras…). null = tela de aguayo.
   presentacionImagen: { src: '/media/campus-una-puno.jpg', alt: 'Ingreso al campus de la Universidad Nacional del Altiplano, Puno', credito: null }, // p. ej. { src: '/media/taquile.jpg', alt: 'Tejedores de Taquile', credito: 'Foto: …' }
+  // Redes del congreso: pon la dirección de cada página cuando exista. Las que queden en null no se muestran.
   redes: {
-    facebook: 'https://www.facebook.com/',
-    instagram: 'https://www.instagram.com/',
-    youtube: 'https://www.youtube.com/',
+    facebook: null,
+    instagram: null,
+    youtube: null,
   },
   saludos: [
     { texto: 'Imaynallan', idioma: 'quechua' },
@@ -55,7 +62,7 @@ const eventoBase = {
   ],
   beneficios: [
     'Inscripción gratuita',
-    'Participación presencial en el campus UNA Puno o virtual por Google Meet',
+    'Participación presencial en Educación Continua de la UNA Puno o virtual por Google Meet',
     'Certificado digital con código de verificación',
     'Acceso al Aula virtual con el programa, los enlaces y el material',
   ],
@@ -74,6 +81,22 @@ export const evento = {
   ...eventoBase,
   ...Object.fromEntries(Object.entries(servidor).filter(([, v]) => v !== null && v !== '' && !(Array.isArray(v) && !v.length))),
 }
+
+// Los dos canales de consulta (principal y alterno), sin repetir si coinciden
+const unicos = (lista, clave) => lista.filter((x, i) => x[clave] && lista.findIndex((y) => y[clave] === x[clave]) === i)
+export const canales = {
+  correos: unicos([{ correo: evento.correo }, { correo: evento.contactoAlterno?.correo }], 'correo').map((c) => c.correo),
+  whatsapp: unicos(
+    [
+      { numero: evento.whatsapp, texto: evento.telefono },
+      { numero: evento.contactoAlterno?.whatsapp, texto: evento.contactoAlterno?.telefono },
+    ],
+    'numero',
+  ),
+}
+
+// Enlace de WhatsApp con un mensaje ya escrito
+export const enlaceWhatsApp = (numero, mensaje) => `https://wa.me/${numero}${mensaje ? `?text=${encodeURIComponent(mensaje)}` : ''}`
 if (globalThis.__CONGRESO__?.evento && 'fechaPreventaFin' in globalThis.__CONGRESO__.evento) {
   evento.fechaPreventaFin = globalThis.__CONGRESO__.evento.fechaPreventaFin
 }

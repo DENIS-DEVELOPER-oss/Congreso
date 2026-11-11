@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import Cifras from './components/Cifras.jsx'
@@ -13,7 +14,6 @@ import Convocatoria from './components/Convocatoria.jsx'
 import Accesos from './components/Accesos.jsx'
 import Descargas from './components/Descargas.jsx'
 import Afiches from './components/Afiches.jsx'
-import FranjaOrganizan from './components/Organizan.jsx'
 import Preguntas from './components/Preguntas.jsx'
 import Contacto from './components/Contacto.jsx'
 import Footer from './components/Footer.jsx'
@@ -22,7 +22,25 @@ import WhatsApp from './components/WhatsApp.jsx'
 import Arriba from './components/Arriba.jsx'
 import AnuncioInicio from './components/AnuncioInicio.jsx'
 
+// Al llegar desde otra página con una sección en la dirección (/#programa), la portada aún no estaba dibujada
+// cuando el navegador buscó la sección: se baja a ella al montar, y otra vez cuando terminan de acomodarse las imágenes.
+function useIrASeccionInicial() {
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1))
+    if (!id) return
+    const ir = () => document.getElementById(id)?.scrollIntoView({ block: 'start' })
+    const cuadro = requestAnimationFrame(ir)
+    const t = setTimeout(ir, 600)
+    return () => {
+      cancelAnimationFrame(cuadro)
+      clearTimeout(t)
+    }
+  }, [])
+}
+
 export default function App() {
+  useIrASeccionInicial()
+
   return (
     <>
       <a
@@ -42,7 +60,6 @@ export default function App() {
         <Programa />
         <Ponentes />
         <Comites />
-        <FranjaOrganizan />
         <Convocatoria />
         <Accesos />
         <Descargas />

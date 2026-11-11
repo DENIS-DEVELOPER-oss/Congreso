@@ -1,9 +1,10 @@
-import { ArrowRight, Briefcase, Building2, CalendarClock, Check, GraduationCap, IdCard, Mail, Mic, Phone, School, User } from 'lucide-react'
+import { ArrowRight, Briefcase, Building2, CalendarClock, Check, GraduationCap, IdCard, Mail, MessageCircle, Mic, Phone, School, User } from 'lucide-react'
 import { evento } from '../data/evento.js'
 import { useFormulario } from '../hooks/useFormulario.js'
 import { aFormData, enviar } from '../lib/api.js'
 import { RUTAS } from '../lib/rutas.js'
 import { ChakanaContorno, TituloSeccion } from './Andino.jsx'
+import { BotonesWhatsApp } from './Canales.jsx'
 import Reveal from './Reveal.jsx'
 import {
   AlertaError,
@@ -108,6 +109,8 @@ function PanelInformativo() {
 }
 
 // Mientras la organización no abra las inscripciones (panel → Datos del congreso)
+const ASESORIA = 'Hola, quisiera asesoría para inscribirme en el Congreso Saberes Andino-Amazónicos.'
+
 function InscripcionesCerradas() {
   return (
     <div className="flex h-full flex-col items-center justify-center py-10 text-center">
@@ -117,11 +120,19 @@ function InscripcionesCerradas() {
       <h3 className="mt-6 font-display text-2xl font-extrabold text-oscuro sm:text-3xl">Inscripciones muy pronto</h3>
       <p className="mt-3 max-w-md leading-relaxed text-slate-600">
         Estamos preparando el registro. La inscripción será <strong className="text-oscuro">gratuita</strong>; anunciaremos la apertura en
-        nuestras redes y en esta página.
+        esta página.
       </p>
-      <a href={`https://wa.me/${evento.whatsapp}`} target="_blank" rel="noopener noreferrer" className="btn-secundario mt-8">
-        Consultas por WhatsApp
+      <p className="mt-8 flex items-center gap-2 font-bold text-oscuro">
+        <MessageCircle className="h-5 w-5 text-[#128C7E]" aria-hidden="true" /> Solicita asesoría para tu inscripción
+      </p>
+      <p className="mt-1 text-sm text-slate-500">Escríbenos por WhatsApp a cualquiera de los dos números</p>
+      <BotonesWhatsApp mensaje={ASESORIA} className="mt-4 w-full max-w-md justify-center sm:max-w-none" />
+      <a href="/#convocatoria" className="btn-secundario mt-6">
+        <Mic className="h-4 w-4" aria-hidden="true" /> Presenta tu ponencia
       </a>
+      <p className="mt-4 max-w-md text-sm text-slate-500">
+        ¿Vas a exponer? Revisa las bases: el resumen se envía desde el Aula virtual o por WhatsApp o correo.
+      </p>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { cierreResumenes, estructura, modalidades, normas } from '../data/convoc
 import { descargas } from '../data/descargas.js'
 import { RUTAS } from '../lib/rutas.js'
 import { Chakana, TituloSeccion } from './Andino.jsx'
+import { BotonesWhatsApp, EnlacesCorreo } from './Canales.jsx'
 import Reveal from './Reveal.jsx'
 
 function Bases() {
@@ -71,7 +72,10 @@ function Bases() {
   )
 }
 
-// Cómo se envía un resumen: desde el Aula virtual, con el usuario que envía la organización
+const MENSAJE_RESUMEN =
+  'Hola, envío mi resumen para el Congreso Saberes Andino-Amazónicos.\nNombre completo:\nDNI:\nEje temático:\nModalidad (presencial o virtual):'
+
+// Dos formas de enviar un resumen: desde el Aula virtual o directamente por WhatsApp o correo
 function EnvioResumen() {
   const pasos = [
     'Regístrate en la página como participante',
@@ -84,19 +88,44 @@ function EnvioResumen() {
         <Send className="h-6 w-6" aria-hidden="true" />
       </span>
       <h3 className="mt-5 font-display text-3xl font-semibold text-oscuro sm:text-5xl">Envío de resúmenes</h3>
-      <p className="mt-3 max-w-lg leading-relaxed text-slate-600">
-        Los resúmenes se envían desde <strong className="font-semibold text-oscuro">Aula virtual</strong>, con el usuario y la contraseña que la organización envía a cada participante registrado.
-      </p>
-      <ol className="mt-6 space-y-3">
-        {pasos.map((t, i) => (
-          <li key={t} className="flex items-start gap-3 text-slate-700">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-rojizo-oscuro font-display text-sm font-semibold text-white">
-              {i + 1}
-            </span>
-            <span className="pt-0.5">{t}</span>
-          </li>
-        ))}
-      </ol>
+      <p className="mt-3 max-w-lg leading-relaxed text-slate-600">Elige la forma que te resulte más cómoda: las dos son válidas.</p>
+
+      <div className="mt-6 rounded-xl border border-black/5 bg-slate-50/70 p-5">
+        <p className="text-xs font-bold tracking-wide text-rojizo-oscuro uppercase">Opción 1 · Desde el Aula virtual</p>
+        <ol className="mt-4 space-y-3">
+          {pasos.map((t, i) => (
+            <li key={t} className="flex items-start gap-3 text-slate-700">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-rojizo-oscuro font-display text-sm font-semibold text-white">
+                {i + 1}
+              </span>
+              <span className="pt-0.5">{t}</span>
+            </li>
+          ))}
+        </ol>
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+          <a href={RUTAS.inscripcion} className="group btn-primario">
+            Registrarme
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+          </a>
+          <a href={RUTAS.cuenta} className="btn-secundario">
+            <KeyRound className="h-4 w-4" aria-hidden="true" /> Ya tengo usuario
+          </a>
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-[#25D366]/30 bg-[#25D366]/5 p-5">
+        <p className="text-xs font-bold tracking-wide text-[#128C7E] uppercase">Opción 2 · Por WhatsApp o correo</p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+          Adjunta tu resumen en PDF o Word e indica tu <strong className="text-oscuro">nombre completo, DNI, eje temático y modalidad</strong>.
+        </p>
+        <BotonesWhatsApp mensaje={MENSAJE_RESUMEN} className="mt-4" />
+        <EnlacesCorreo
+          className="mt-4"
+          asunto="Envío de resumen – Congreso Saberes Andino-Amazónicos"
+          cuerpo={MENSAJE_RESUMEN.replace('Hola, envío', 'Hola, adjunto')}
+        />
+      </div>
+
       {/* Fecha límite destacada, como en el afiche */}
       <p className="mt-6 flex items-center gap-3 rounded-xl bg-[#0b1f5c] px-4 py-3 text-sm text-white">
         <CalendarClock className="h-5 w-5 shrink-0 text-naranja" aria-hidden="true" />
@@ -104,15 +133,6 @@ function EnvioResumen() {
           Recepción de resúmenes hasta el <strong className="text-naranja">{cierreResumenes}</strong>
         </span>
       </p>
-      <div className="mt-auto flex flex-col gap-3 pt-8 sm:flex-row">
-        <a href={RUTAS.inscripcion} className="group btn-primario">
-          Registrarme
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-        </a>
-        <a href={RUTAS.cuenta} className="btn-secundario">
-          <KeyRound className="h-4 w-4" aria-hidden="true" /> Ya tengo usuario
-        </a>
-      </div>
     </div>
   )
 }

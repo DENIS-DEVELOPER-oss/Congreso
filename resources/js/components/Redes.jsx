@@ -25,11 +25,14 @@ function IconoYoutube(props) {
   )
 }
 
+// Solo las redes que tienen dirección propia del congreso
 const REDES = [
   { nombre: 'Facebook', url: evento.redes.facebook, Icono: IconoFacebook },
   { nombre: 'Instagram', url: evento.redes.instagram, Icono: IconoInstagram },
   { nombre: 'YouTube', url: evento.redes.youtube, Icono: IconoYoutube },
-]
+].filter((r) => r.url)
+
+export const hayRedes = REDES.length > 0
 
 // variante: "claro" (sobre fondo blanco) | "oscuro" (sobre fondo oscuro)
 export default function ListaRedes({ variante = 'claro', className = '' }) {
@@ -37,6 +40,7 @@ export default function ListaRedes({ variante = 'claro', className = '' }) {
     variante === 'oscuro'
       ? 'border-white/15 text-white/70 hover:border-naranja hover:bg-naranja hover:text-tierra'
       : 'border-slate-200 bg-white text-slate-600 hover:border-rojizo-oscuro hover:bg-rojizo-oscuro hover:text-white'
+  if (!hayRedes) return null
   return (
     <ul className={`flex gap-3 ${className}`}>
       {REDES.map(({ nombre, url, Icono }) => (

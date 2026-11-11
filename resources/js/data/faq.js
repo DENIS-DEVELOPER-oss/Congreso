@@ -3,7 +3,7 @@ export const preguntas = [
   {
     pregunta: '¿El congreso es presencial o virtual?',
     respuesta:
-      'Es presencial y virtual: puedes asistir al campus de la Universidad Nacional del Altiplano, en Puno, o seguir las sesiones en vivo por Google Meet. Los enlaces están en el Aula virtual.',
+      'Es presencial y virtual: puedes asistir a Educación Continua de la Universidad Nacional del Altiplano, en Puno, o seguir las sesiones en vivo por Google Meet. Los enlaces están en el Aula virtual.',
   },
   {
     pregunta: '¿Cuánto cuesta la inscripción?',
@@ -21,12 +21,12 @@ export const preguntas = [
   },
   {
     pregunta: '¿Puedo presentar mi ponencia de forma virtual?',
-    respuesta: 'Sí. Al enviar tu resumen eliges si la presentarás de forma presencial en el campus o virtual por Google Meet.',
+    respuesta: 'Sí. Al enviar tu resumen eliges si la presentarás de forma presencial en Educación Continua o virtual por Google Meet.',
   },
   {
     pregunta: '¿Cómo se registra mi asistencia?',
     respuesta:
-      'En el campus, con tu código o tu DNI. En línea, a partir del reporte de participantes de Google Meet: ingresa con tu nombre completo o con el correo de tu inscripción.',
+      'En la sede, con tu código o tu DNI. En línea, a partir del reporte de participantes de Google Meet: ingresa con tu nombre completo o con el correo de tu inscripción.',
   },
   {
     pregunta: '¿Entregan certificado? ¿Cuántas horas?',

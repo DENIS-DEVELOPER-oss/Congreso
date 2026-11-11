@@ -1,6 +1,6 @@
 // Bases de la convocatoria de ponencias (según el afiche oficial)
 export const modalidades = [
-  { valor: 'presencial', texto: 'Ponencia presencial', detalle: 'En el campus de la UNA Puno' },
+  { valor: 'presencial', texto: 'Ponencia presencial', detalle: 'En Educación Continua de la UNA Puno' },
   { valor: 'virtual', texto: 'Ponencia virtual', detalle: 'En vivo por Google Meet' },
 ]
 

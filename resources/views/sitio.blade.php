@@ -44,10 +44,11 @@
           'location' => [
             [
               '@type' => 'Place',
-              'name' => 'Campus de la Universidad Nacional del Altiplano',
+              'name' => 'Educación Continua – Universidad Nacional del Altiplano',
+              'geo' => ['@type' => 'GeoCoordinates', 'latitude' => -15.834101, 'longitude' => -70.023628],
+              'hasMap' => 'https://maps.app.goo.gl/SMHZJWjXdK15YHa49',
               'address' => [
                 '@type' => 'PostalAddress',
-                'streetAddress' => 'Av. Floral 1153, Ciudad Universitaria',
                 'addressLocality' => 'Puno',
                 'addressCountry' => 'PE',
               ],

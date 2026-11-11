@@ -20,7 +20,8 @@ export default function AnuncioInicio() {
   const cerrarRef = useRef(null)
 
   useEffect(() => {
-    if (yaVisto()) return
+    // No aparece si la persona llegó buscando una sección concreta (/#programa)
+    if (yaVisto() || window.location.hash.length > 1) return
     const t = setTimeout(() => setAbierto(true), RETRASO)
     return () => clearTimeout(t)
   }, [])

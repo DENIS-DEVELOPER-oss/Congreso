@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, ChevronDown, KeyRound, Mail, Menu, MessageCircle, X } from 'lucide-react'
+import { aliados } from '../data/aliados.js'
 import { evento } from '../data/evento.js'
 import { enlace, RUTAS } from '../lib/rutas.js'
 import Logo from './Logo.jsx'
@@ -27,16 +28,6 @@ const SECUNDARIOS = [
 
 const TODOS = [...PRINCIPALES, ...SECUNDARIOS]
 
-function Subrayado({ visible }) {
-  return (
-    <span
-      className={`absolute inset-x-2.5 -bottom-0.5 h-0.5 origin-left rounded-full bg-linear-to-r from-rojizo to-naranja transition-transform duration-300 ${
-        visible ? 'scale-x-100' : 'scale-x-0'
-      }`}
-    />
-  )
-}
-
 function EnlaceMovil({ e, i, abierto, activo, onCerrar, destino }) {
   return (
     <li
@@ -58,6 +49,27 @@ function EnlaceMovil({ e, i, abierto, activo, onCerrar, destino }) {
   )
 }
 
+// Cinta con los organizadores (en el orden del afiche) que pasa de derecha a izquierda; se detiene con el mouse encima.
+// Cada mitad repite la lista dos veces para que no queden huecos en pantallas anchas.
+function CintaOrganizadores() {
+  const vuelta = [...aliados, ...aliados]
+  return (
+    <div className="group relative min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)]">
+      <ul className="flex w-max animate-carrusel items-center [animation-duration:75s] group-hover:[animation-play-state:paused]">
+        {[...vuelta, ...vuelta].map((a, i) => (
+          <li key={i} aria-hidden={i >= aliados.length ? true : undefined} className="flex items-center gap-2 uppercase">
+            <img src={a.emblema ?? a.logo} alt="" className="h-7 w-auto shrink-0 object-contain drop-shadow-[0_1px_2px_rgb(0_0_0/0.35)]" />
+            <span className="whitespace-nowrap">{a.nombre}</span>
+            <span className="mx-5 text-naranja" aria-hidden="true">
+              ·
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 // Franja institucional sobre el menú (como la cabecera de los afiches). Se oculta al bajar la página.
 function FranjaInstitucional({ oculta }) {
   return (
@@ -66,18 +78,7 @@ function FranjaInstitucional({ oculta }) {
       aria-hidden={oculta || undefined}
     >
       <div className="contenedor flex h-9 items-center justify-between gap-4 px-4 text-[11px] font-semibold tracking-wide sm:px-6 sm:text-xs">
-        <p className="flex min-w-0 items-center gap-2 truncate uppercase">
-          <img src="/insignias/unap.png" alt="" className="h-6 w-auto shrink-0" />
-          <span className="truncate min-[400px]:hidden">Universidad Nacional del Altiplano</span>
-          <span className="hidden truncate min-[400px]:inline lg:hidden">Universidad Nacional del Altiplano · Puno</span>
-          <span className="hidden truncate lg:inline">
-            Universidad Nacional del Altiplano
-            <span className="mx-2 text-naranja" aria-hidden="true">·</span>
-            IIDSA
-            <span className="mx-2 text-naranja" aria-hidden="true">·</span>
-            Facultad de Ciencias Sociales – Escuela Profesional de Sociología
-          </span>
-        </p>
+        <CintaOrganizadores />
         <div className="hidden shrink-0 items-center gap-5 font-medium normal-case sm:flex">
           <a href={`mailto:${evento.correo}`} tabIndex={oculta ? -1 : undefined} className="inline-flex items-center gap-1.5 text-white/85 transition hover:text-naranja">
             <Mail className="h-3.5 w-3.5" aria-hidden="true" /> {evento.correo}
@@ -160,12 +161,15 @@ export default function Navbar({ pagina = 'inicio' }) {
 
   // Arriba la barra es transparente; al hacer scroll (o abrir el menú) se vuelve sólida
   const solido = conScroll || abierto
-  const nombreCorto = evento.nombre.replace(/^Congreso\s+/i, '')
+  // En la marca, sin guion: «Saberes Andinoamazónicos» (forma válida en una sola palabra)
+  const nombreCorto = evento.nombre.replace(/^Congreso\s+/i, '').replace('Andino-Amazónicos', 'Andinoamazónicos')
   const masActivo = SECUNDARIOS.some((s) => s.href === activo)
 
-  // La portada y las cabeceras son claras: el texto de la barra es oscuro siempre
+  // Enlaces dentro de una cápsula; la sección activa queda como pastilla azul marino
   const claseEnlace = (esActivo) =>
-    `relative px-2.5 py-2 text-sm font-medium transition-colors ${esActivo ? 'text-rojizo-oscuro' : 'text-slate-600 hover:text-oscuro'}`
+    `relative rounded-full px-2.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
+      esActivo ? 'bg-[#0b1f5c] text-white shadow-[0_4px_12px_-4px_rgb(11_31_92/0.55)]' : 'text-slate-600 hover:bg-slate-900/5 hover:text-oscuro'
+    }`
 
   const movil = { abierto, activo, destino, onCerrar: () => setAbierto(false) }
 
@@ -197,12 +201,11 @@ export default function Navbar({ pagina = 'inicio' }) {
           </span>
         </a>
 
-        <ul className="hidden items-center xl:flex">
+        <ul className="hidden items-center gap-0.5 rounded-full bg-white/75 p-1 xl:mx-2 shadow-[0_1px_3px_rgb(15_23_42/0.06)] ring-1 ring-black/5 backdrop-blur xl:flex">
           {PRINCIPALES.map((e) => (
             <li key={e.href}>
               <a href={destino(e.href)} aria-current={activo === e.href ? 'true' : undefined} className={claseEnlace(activo === e.href)}>
                 {e.texto}
-                <Subrayado visible={activo === e.href} />
               </a>
             </li>
           ))}
@@ -216,12 +219,11 @@ export default function Navbar({ pagina = 'inicio' }) {
             >
               Más
               <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${masAbierto ? 'rotate-180' : ''}`} aria-hidden="true" />
-              <Subrayado visible={masActivo} />
             </button>
             <div
               id="menu-mas"
               inert={!masAbierto}
-              className={`absolute top-full right-0 mt-3 w-60 origin-top-right rounded-lg border border-black/5 bg-white p-2 shadow-elevada transition duration-200 ${
+              className={`absolute top-full right-0 mt-3 w-60 origin-top-right rounded-2xl border border-black/5 bg-white p-2 shadow-elevada transition duration-200 ${
                 masAbierto ? 'scale-100 opacity-100' : 'pointer-events-none scale-95 opacity-0'
               }`}
             >
@@ -232,7 +234,7 @@ export default function Navbar({ pagina = 'inicio' }) {
                       href={destino(e.href)}
                       onClick={() => setMasAbierto(false)}
                       aria-current={activo === e.href ? 'true' : undefined}
-                      className={`block rounded-md px-4 py-2.5 text-sm font-medium transition ${
+                      className={`block rounded-xl px-4 py-2.5 text-sm font-medium transition ${
                         activo === e.href ? 'bg-rojizo/8 text-rojizo-oscuro' : 'text-slate-700 hover:bg-slate-100'
                       }`}
                     >
@@ -249,7 +251,7 @@ export default function Navbar({ pagina = 'inicio' }) {
           <a
             href={RUTAS.cuenta}
             aria-current={pagina === 'cuenta' ? 'page' : undefined}
-            className="hidden items-center gap-1.5 rounded-md px-3 py-2.5 text-sm font-semibold text-oscuro transition hover:bg-slate-100 md:inline-flex"
+            className="hidden items-center gap-1.5 rounded-full bg-white/75 px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-oscuro ring-1 ring-slate-200 backdrop-blur transition hover:bg-white hover:ring-slate-300 md:inline-flex"
           >
             <KeyRound className="h-4 w-4" aria-hidden="true" /> Aula virtual
           </a>

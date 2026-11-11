@@ -11,7 +11,7 @@ return [
     'fecha_fin' => '2026-11-27T19:00:00-05:00',
     'ciudad' => 'Puno, Perú', // sede de la organización
     'modalidad' => 'Presencial y virtual',
-    'sede' => 'Campus UNA Puno',
+    'sede' => 'Educación Continua UNA Puno',
     'organiza' => 'Escuela Profesional de Sociología · Instituto de Investigaciones para el Desarrollo Social Andino (IIDSA) · Universidad Nacional del Altiplano',
 
     // Prefijo de los códigos de inscripción: SA-2026-0001
