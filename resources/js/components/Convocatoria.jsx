@@ -1,10 +1,8 @@
-import { ArrowRight, CalendarClock, Download, KeyRound, Send } from 'lucide-react'
-import { evento } from '../data/evento.js'
+import { CalendarClock, Download, Mail, MessageCircle, Send } from 'lucide-react'
+import { canales, enlaceWhatsApp, evento } from '../data/evento.js'
 import { cierreResumenes, estructura, modalidades, normas } from '../data/convocatoria.js'
 import { descargas } from '../data/descargas.js'
-import { RUTAS } from '../lib/rutas.js'
 import { Chakana, TituloSeccion } from './Andino.jsx'
-import { BotonesWhatsApp, EnlacesCorreo } from './Canales.jsx'
 import Reveal from './Reveal.jsx'
 
 function Bases() {
@@ -75,64 +73,57 @@ function Bases() {
 const MENSAJE_RESUMEN =
   'Hola, envío mi resumen para el Congreso Saberes Andino-Amazónicos.\nNombre completo:\nDNI:\nEje temático:\nModalidad (presencial o virtual):'
 
-// Dos formas de enviar un resumen: desde el Aula virtual o directamente por WhatsApp o correo
+// Por ahora los resúmenes se reciben por WhatsApp o correo (la comisión los registra en el panel)
 function EnvioResumen() {
+  const whatsapp = canales.whatsapp[0]
+  const correo = canales.correos[0]
   const pasos = [
-    'Regístrate en la página como participante',
-    'Recibe por correo tu usuario (tu DNI) y tu contraseña',
-    'Ingresa al Aula virtual y sube tu resumen con la plantilla oficial',
+    'Redacta tu resumen (250 palabras) con la plantilla oficial',
+    'Envíalo en PDF o Word por WhatsApp o correo, con tu nombre completo, DNI, eje temático y modalidad',
+    'Te confirmaremos la recepción y el comité científico te comunicará el resultado por correo',
   ]
   return (
-    <div className="tarjeta flex h-full flex-col p-6 sm:p-10">
+    <div className="tarjeta flex flex-col p-6 sm:p-10">
       <span className="tarjeta-icono">
         <Send className="h-6 w-6" aria-hidden="true" />
       </span>
       <h3 className="mt-5 font-display text-3xl font-semibold text-oscuro sm:text-5xl">Envío de resúmenes</h3>
-      <p className="mt-3 max-w-lg leading-relaxed text-slate-600">Elige la forma que te resulte más cómoda: las dos son válidas.</p>
+      <p className="mt-3 max-w-lg leading-relaxed text-slate-600">Los resúmenes se reciben por WhatsApp o correo electrónico.</p>
+      <ol className="mt-6 space-y-3">
+        {pasos.map((t, i) => (
+          <li key={t} className="flex items-start gap-3 text-slate-700">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-rojizo-oscuro font-display text-sm font-semibold text-white">
+              {i + 1}
+            </span>
+            <span className="pt-0.5">{t}</span>
+          </li>
+        ))}
+      </ol>
 
-      <div className="mt-6 rounded-xl border border-black/5 bg-slate-50/70 p-5">
-        <p className="text-xs font-bold tracking-wide text-rojizo-oscuro uppercase">Opción 1 · Desde el Aula virtual</p>
-        <ol className="mt-4 space-y-3">
-          {pasos.map((t, i) => (
-            <li key={t} className="flex items-start gap-3 text-slate-700">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-rojizo-oscuro font-display text-sm font-semibold text-white">
-                {i + 1}
-              </span>
-              <span className="pt-0.5">{t}</span>
-            </li>
-          ))}
-        </ol>
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-          <a href={RUTAS.inscripcion} className="group btn-primario">
-            Registrarme
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-          </a>
-          <a href={RUTAS.cuenta} className="btn-secundario">
-            <KeyRound className="h-4 w-4" aria-hidden="true" /> Ya tengo usuario
-          </a>
-        </div>
+      <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+        <a href={enlaceWhatsApp(whatsapp.numero, MENSAJE_RESUMEN)} target="_blank" rel="noopener noreferrer" className="btn bg-[#25D366] text-[#0b1f5c] hover:bg-[#3ee07c]">
+          <MessageCircle className="h-4 w-4" aria-hidden="true" /> Enviar por WhatsApp
+        </a>
+        <a
+          href={`mailto:${correo}?subject=${encodeURIComponent('Envío de resumen – Congreso Saberes Andino-Amazónicos')}&body=${encodeURIComponent(MENSAJE_RESUMEN.replace('Hola, envío', 'Hola, adjunto'))}`}
+          className="btn-secundario"
+        >
+          <Mail className="h-4 w-4" aria-hidden="true" /> Enviar por correo
+        </a>
       </div>
-
-      <div className="mt-4 rounded-xl border border-[#25D366]/30 bg-[#25D366]/5 p-5">
-        <p className="text-xs font-bold tracking-wide text-[#128C7E] uppercase">Opción 2 · Por WhatsApp o correo</p>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
-          Adjunta tu resumen en PDF o Word e indica tu <strong className="text-oscuro">nombre completo, DNI, eje temático y modalidad</strong>.
-        </p>
-        <BotonesWhatsApp mensaje={MENSAJE_RESUMEN} className="mt-4" />
-        <EnlacesCorreo
-          className="mt-4"
-          asunto="Envío de resumen – Congreso Saberes Andino-Amazónicos"
-          cuerpo={MENSAJE_RESUMEN.replace('Hola, envío', 'Hola, adjunto')}
-        />
-      </div>
+      <p className="mt-3 text-sm [overflow-wrap:anywhere] text-slate-500">
+        WhatsApp {whatsapp.texto} · {correo}
+      </p>
 
       {/* Fecha límite destacada, como en el afiche */}
-      <p className="mt-6 flex items-center gap-3 rounded-xl bg-[#0b1f5c] px-4 py-3 text-sm text-white">
-        <CalendarClock className="h-5 w-5 shrink-0 text-naranja" aria-hidden="true" />
-        <span>
-          Recepción de resúmenes hasta el <strong className="text-naranja">{cierreResumenes}</strong>
-        </span>
-      </p>
+      <div className="pt-7">
+        <p className="flex items-center gap-3 rounded-xl bg-[#0b1f5c] px-4 py-3 text-sm text-white">
+          <CalendarClock className="h-5 w-5 shrink-0 text-naranja" aria-hidden="true" />
+          <span>
+            Recepción de resúmenes hasta el <strong className="text-naranja">{cierreResumenes}</strong>
+          </span>
+        </p>
+      </div>
     </div>
   )
 }

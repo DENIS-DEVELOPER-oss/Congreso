@@ -7,7 +7,10 @@ import { TituloSeccion } from './Andino.jsx'
 import { Inclinable } from './Efectos.jsx'
 import Reveal from './Reveal.jsx'
 
-const PASOS = ['Regístrate con tus datos', 'Recibe al instante tu acceso al aula', 'Únete por Google Meet desde donde estés']
+// Con el formulario en línea cerrado, la inscripción se solicita por WhatsApp o correo
+const PASOS = evento.inscripcionesAbiertas
+  ? ['Regístrate con tus datos', 'Recibe al instante tu acceso al aula', 'Únete por Google Meet desde donde estés']
+  : ['Solicita tu inscripción por WhatsApp o correo', 'Recibe por correo tu acceso al aula', 'Únete por Google Meet desde donde estés']
 
 export default function Accesos() {
   return (
@@ -16,7 +19,11 @@ export default function Accesos() {
         <TituloSeccion
           etiqueta="Participa"
           titulo="Inscripción y Aula virtual"
-          descripcion="Regístrese en la página y recibirá al instante, por correo, su acceso al Aula virtual: ahí realizará el resto de trámites y se unirá a las sesiones por Google Meet."
+          descripcion={
+            evento.inscripcionesAbiertas
+              ? 'Regístrese en la página y recibirá al instante, por correo, su acceso al Aula virtual: ahí realizará el resto de trámites y se unirá a las sesiones por Google Meet.'
+              : 'Solicite su inscripción por WhatsApp o correo electrónico y le enviaremos su acceso al Aula virtual, donde verá el programa y se unirá a las sesiones por Google Meet.'
+          }
         />
 
         <div className="grid gap-6 lg:grid-cols-5">

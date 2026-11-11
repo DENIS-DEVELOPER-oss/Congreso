@@ -47,16 +47,16 @@ export default function Cifras() {
           </span>
         </div>
 
-        <ul className="grid grid-cols-1 gap-3 py-8 min-[360px]:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-3 py-8 min-[380px]:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {cifras.map(({ Icono, numero, texto }, i) => (
             <Reveal as="li" key={texto} delay={i * 80}>
-              <div className="tarjeta-oscura group flex h-full items-center gap-4 p-4 sm:p-5">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-naranja/15 text-naranja ring-1 ring-naranja/25 transition group-hover:bg-naranja group-hover:text-[#0b1f5c] sm:h-12 sm:w-12">
+              <div className="tarjeta-oscura group flex h-full items-center gap-3 p-3.5 sm:gap-4 sm:p-5">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-naranja/15 text-naranja ring-1 ring-naranja/25 transition group-hover:bg-naranja group-hover:text-[#0b1f5c] sm:h-12 sm:w-12">
                   <Icono className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <span className="min-w-0">
                   <span className="block font-display text-3xl leading-none font-extrabold text-white sm:text-4xl">{numero}</span>
-                  <span className="mt-1 block text-xs leading-snug text-white/65 sm:text-sm">{texto}</span>
+                  <span className="mt-1 block text-xs leading-snug text-white/75 sm:text-sm">{texto}</span>
                 </span>
               </div>
             </Reveal>

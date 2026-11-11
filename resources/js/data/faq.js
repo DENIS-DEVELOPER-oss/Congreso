@@ -1,4 +1,6 @@
 // Preguntas frecuentes
+import { evento } from './evento.js'
+
 export const preguntas = [
   {
     pregunta: '¿El congreso es presencial o virtual?',
@@ -12,12 +14,14 @@ export const preguntas = [
   {
     pregunta: '¿Cómo me inscribo?',
     respuesta:
-      'Completa el formulario de inscripción. Al instante te llega un correo con tu usuario (tu DNI), una contraseña temporal para el Aula virtual y el programa. Al ingresar por primera vez creas tu propia contraseña.',
+      evento.inscripcionesAbiertas
+        ? 'Completa el formulario de inscripción. Al instante te llega un correo con tu usuario (tu DNI), una contraseña temporal para el Aula virtual y el programa. Al ingresar por primera vez creas tu propia contraseña.'
+        : `Solicita tu inscripción por WhatsApp al ${evento.telefono} o al correo ${evento.correo} con tu nombre completo, DNI, celular y correo. Te enviaremos tu usuario y una contraseña temporal para el Aula virtual; al ingresar por primera vez creas tu propia contraseña.`,
   },
   {
     pregunta: '¿Cómo envío mi ponencia?',
     respuesta:
-      'Regístrate e ingresa al Aula virtual con el usuario que te enviamos. Ahí subes tu resumen (250 palabras, con la plantilla oficial) hasta el 20 de noviembre de 2026. El comité científico comunicará los resultados por correo.',
+      `Envía tu resumen (250 palabras, con la plantilla oficial) en PDF o Word por WhatsApp al ${evento.telefono} o al correo ${evento.correo}, hasta el 20 de noviembre de 2026. Indica tu nombre completo, DNI, eje temático y modalidad. El comité científico comunicará los resultados por correo.`,
   },
   {
     pregunta: '¿Puedo presentar mi ponencia de forma virtual?',

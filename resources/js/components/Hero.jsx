@@ -161,8 +161,12 @@ function TarjetaConvocatoria() {
 // Pasos para participar (inscripción gratuita)
 function TarjetaPasos() {
   const pasos = [
-    { Icono: UserPlus, titulo: 'Regístrate', texto: 'Completa el formulario con tus datos y tu categoría.' },
-    { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Al instante te llega tu usuario, tu contraseña y el programa con Google Meet.' },
+    evento.inscripcionesAbiertas
+      ? { Icono: UserPlus, titulo: 'Regístrate', texto: 'Completa el formulario con tus datos y tu categoría.' }
+      : { Icono: UserPlus, titulo: 'Solicita tu inscripción', texto: 'Escríbenos por WhatsApp o correo con tus datos.' },
+    evento.inscripcionesAbiertas
+      ? { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Al instante te llega tu usuario, tu contraseña y el programa con Google Meet.' }
+      : { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Te enviamos tu usuario, tu contraseña y el programa con Google Meet.' },
     { Icono: KeyRound, titulo: 'Ingresa al Aula virtual', texto: 'Únete por Google Meet, envía tu resumen y descarga tu certificado.' },
   ]
   return (
@@ -255,10 +259,10 @@ const DIAPOSITIVAS = [
     etiqueta: 'Convocatoria',
     antetitulo: 'Convocatoria de ponencias',
     titulo: 'Presenta tu investigación',
-    texto: 'Regístrate y envía tu resumen desde el Aula virtual con el usuario que te enviaremos por correo. El comité científico evaluará cada trabajo.',
+    texto: 'Envía tu resumen por WhatsApp o correo electrónico hasta el 20 de noviembre. El comité científico evaluará cada trabajo.',
     botones: [
-      { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
-      { texto: 'Leer las bases', href: '#convocatoria' },
+      { texto: 'Enviar mi resumen', href: '#convocatoria', principal: true },
+      { texto: 'Inscribirme', href: RUTAS.inscripcion },
     ],
     Visual: TarjetaConvocatoria,
   },
@@ -277,9 +281,11 @@ const DIAPOSITIVAS = [
   {
     id: 'inscripcion',
     etiqueta: 'Inscripciones',
-    antetitulo: evento.inscripcionesAbiertas ? 'Inscripción gratuita' : 'Inscripción gratuita · muy pronto',
+    antetitulo: 'Inscripción gratuita',
     titulo: 'Asegura tu participación',
-    texto: 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno o por Google Meet. Al instante te llega tu acceso al Aula virtual.',
+    texto: evento.inscripcionesAbiertas
+      ? 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno o por Google Meet. Al instante te llega tu acceso al Aula virtual.'
+      : 'Solicita tu inscripción gratuita por WhatsApp o correo y participa en Educación Continua de la UNA Puno o por Google Meet.',
     botones: [
       { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
       { texto: 'Ingresar al aula', href: RUTAS.cuenta },
@@ -333,12 +339,12 @@ function TextoCongreso() {
         </p>
       </div>
       <div data-apartar-flotantes className="mt-9 flex animate-aparecer flex-col gap-3 sm:flex-row" style={{ animationDelay: '460ms' }}>
-        <Magnetico href={RUTAS.inscripcion} className={claseBoton(true)}>
-          Inscríbete ahora
+        <Magnetico href="#convocatoria" className={claseBoton(true)}>
+          Presenta tu ponencia
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
         </Magnetico>
-        <Magnetico href={RUTAS.cuenta} className={claseBoton(false)}>
-          Aula virtual
+        <Magnetico href={RUTAS.inscripcion} className={claseBoton(false)}>
+          Inscríbete
         </Magnetico>
       </div>
     </>

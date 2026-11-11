@@ -1,7 +1,7 @@
 import { ArrowUp, Mail, MapPin, MessageCircle } from 'lucide-react'
 import { aliados } from '../data/aliados.js'
 import { canales, enlaceWhatsApp, evento } from '../data/evento.js'
-import { enlace, RUTAS } from '../lib/rutas.js'
+import { enlace } from '../lib/rutas.js'
 import { FranjaTejida, PatronRombos } from './Andino.jsx'
 import { abrirPrivacidad } from './Privacidad.jsx'
 import ListaRedes from './Redes.jsx'
@@ -44,10 +44,10 @@ export default function Footer({ pagina = 'inicio' }) {
             <Logo className="h-16 w-16" />
             <div>
               <p className="font-display text-xl font-extrabold">{evento.nombre}</p>
-              <p className="text-sm text-white/50">{evento.edicion}</p>
+              <p className="text-sm text-white/65">{evento.edicion}</p>
             </div>
           </div>
-          <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/60">
+          <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/70">
             Organizado por la Universidad Nacional del Altiplano – {evento.ciudad} (Vicerrectorado Académico, Facultad de
             Ciencias Sociales, Escuela Profesional de Sociología e IIDSA) y el Colegio de Sociólogos del Perú.
           </p>
@@ -56,11 +56,11 @@ export default function Footer({ pagina = 'inicio' }) {
 
         {GRUPOS.map((g) => (
           <nav key={g.titulo} className="md:col-span-2" aria-label={g.titulo}>
-            <h2 className="text-xs font-bold tracking-wide text-white/40 uppercase">{g.titulo}</h2>
+            <h2 className="text-xs font-bold tracking-wide text-white/55 uppercase">{g.titulo}</h2>
             <ul className="mt-5 space-y-3">
               {g.enlaces.map((e) => (
                 <li key={e.href}>
-                  <a href={enlace(e.href, pagina)} className="text-sm text-white/70 transition hover:text-naranja">
+                  <a href={enlace(e.href, pagina)} className="text-sm text-white/80 transition hover:text-naranja">
                     {e.texto}
                   </a>
                 </li>
@@ -70,30 +70,30 @@ export default function Footer({ pagina = 'inicio' }) {
         ))}
 
         <div className="md:col-span-4">
-          <h2 className="text-xs font-bold tracking-wide text-white/40 uppercase">Contacto</h2>
-          <ul className="mt-5 space-y-3 text-sm text-white/70">
+          <h2 className="text-xs font-bold tracking-wide text-white/55 uppercase">Contacto</h2>
+          <ul className="mt-5 space-y-3 text-sm text-white/80">
             {canales.correos.map((c) => (
               <li key={c}>
                 <a href={`mailto:${c}`} className="inline-flex items-center gap-2 [overflow-wrap:anywhere] transition hover:text-naranja">
-                  <Mail className="h-4 w-4 shrink-0 text-white/40" aria-hidden="true" /> {c}
+                  <Mail className="h-4 w-4 shrink-0 text-white/55" aria-hidden="true" /> {c}
                 </a>
               </li>
             ))}
             {canales.whatsapp.map((w) => (
               <li key={w.numero}>
                 <a href={enlaceWhatsApp(w.numero)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 transition hover:text-naranja">
-                  <MessageCircle className="h-4 w-4 shrink-0 text-white/40" aria-hidden="true" /> {w.texto}
+                  <MessageCircle className="h-4 w-4 shrink-0 text-white/55" aria-hidden="true" /> {w.texto}
                 </a>
               </li>
             ))}
             <li>
               <a href={evento.mapa.enlace} target="_blank" rel="noopener noreferrer" className="inline-flex items-start gap-2 transition hover:text-naranja">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/40" aria-hidden="true" /> Sede: {evento.sede}, {evento.ciudad}
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/55" aria-hidden="true" /> {evento.sede} · {evento.sedeDireccion}
               </a>
             </li>
           </ul>
-          <a href={RUTAS.inscripcion} className="btn-primario mt-6">
-            Inscríbete ahora
+          <a href={enlace('#convocatoria', pagina)} className="btn-primario mt-6">
+            Presenta tu ponencia
           </a>
         </div>
       </div>
@@ -101,13 +101,17 @@ export default function Footer({ pagina = 'inicio' }) {
       {/* Sello institucional: las insignias de quienes organizan, en todas las páginas */}
       <div className="border-t border-white/10">
         <div className="contenedor flex flex-col items-center gap-4 px-4 py-7 sm:px-6 lg:flex-row lg:justify-center lg:gap-8">
-          <p className="text-xs font-bold tracking-wide text-white/40 uppercase">Organizan</p>
-          <ul className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
+          <p className="text-xs font-bold tracking-wide text-white/55 uppercase">Organizan</p>
+          {/* Insignias directamente sobre el fondo oscuro (sin círculo blanco); la del VRA, sin su texto oscuro */}
+          <ul className="grid grid-cols-3 items-center justify-items-center gap-x-6 gap-y-5 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-9">
             {aliados.map((a) => (
               <li key={a.nombre} title={a.nombre === 'IIDSA' ? a.corto : a.nombre}>
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white p-1.5 shadow-sm ring-1 ring-white/20 sm:h-16 sm:w-16">
-                  <img src={a.logo} alt={a.nombre} loading="lazy" className="max-h-full max-w-full object-contain" />
-                </span>
+                <img
+                  src={a.emblema ?? a.logo}
+                  alt={a.nombre}
+                  loading="lazy"
+                  className="h-12 w-auto max-w-[5.5rem] object-contain drop-shadow-[0_2px_6px_rgb(0_0_0/0.45)] transition duration-300 hover:-translate-y-0.5 sm:h-14"
+                />
               </li>
             ))}
           </ul>
@@ -115,11 +119,11 @@ export default function Footer({ pagina = 'inicio' }) {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="contenedor flex flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-white/45 sm:flex-row sm:px-6">
+        <div className="contenedor flex flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-white/60 sm:flex-row sm:px-6">
           <div className="space-y-1 text-center sm:text-left">
             <p>
               © {anio} Facultad de Ciencias Sociales – Universidad Nacional del Altiplano.{' '}
-              <button type="button" onClick={abrirPrivacidad} className="font-semibold text-white/70 underline-offset-4 hover:text-white hover:underline">
+              <button type="button" onClick={abrirPrivacidad} className="font-semibold text-white/80 underline-offset-4 hover:text-white hover:underline">
                 Política de privacidad
               </button>
             </p>
@@ -128,7 +132,7 @@ export default function Footer({ pagina = 'inicio' }) {
               tejedoras y tejedores de Taquile, Amantaní y las comunidades quechuas y aimaras.
             </p>
           </div>
-          <a href="#inicio" className="group inline-flex items-center gap-2 font-semibold text-white/70 transition hover:text-white">
+          <a href="#inicio" className="group inline-flex items-center gap-2 font-semibold text-white/80 transition hover:text-white">
             Volver arriba
             <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 transition group-hover:-translate-y-0.5 group-hover:border-naranja group-hover:bg-naranja group-hover:text-tierra">
               <ArrowUp className="h-4 w-4" aria-hidden="true" />

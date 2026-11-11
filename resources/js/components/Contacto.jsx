@@ -29,13 +29,13 @@ export default function Contacto() {
     <section id="contacto" className="seccion">
       <div className="contenedor">
         <TituloSeccion etiqueta="Escríbenos" titulo="Contacto"
-          descripcion="Para consultas sobre inscripciones, el Aula virtual o el envío de ponencias, escribe a cualquiera de nuestros números de WhatsApp o correos."
+          descripcion="Para inscripciones, envío de resúmenes o cualquier consulta, escríbenos por WhatsApp o correo electrónico."
         />
 
         <div className="grid gap-6 lg:grid-cols-5">
           <div className="flex min-w-0 flex-col gap-4 lg:col-span-2">
             <Reveal>
-              <Dato Icono={MessageCircle} titulo="WhatsApp" nota="Escríbenos a cualquiera de los dos números">
+              <Dato Icono={MessageCircle} titulo="WhatsApp" nota="Inscripciones, resúmenes y consultas">
                 <ul className="space-y-1.5">
                   {canales.whatsapp.map((w) => (
                     <li key={w.numero}>
@@ -49,7 +49,7 @@ export default function Contacto() {
               </Dato>
             </Reveal>
             <Reveal delay={100}>
-              <Dato Icono={Mail} titulo="Correo electrónico" nota="Responde cualquiera de los dos">
+              <Dato Icono={Mail} titulo="Correo electrónico">
                 <EnlacesCorreo asunto="Consulta – Congreso Saberes Andino-Amazónicos" />
               </Dato>
             </Reveal>
@@ -57,9 +57,10 @@ export default function Contacto() {
               <a href={evento.mapa.enlace} target="_blank" rel="noopener noreferrer" className="group block">
                 <Dato Icono={MapPin} titulo="Sede presencial">
                   <span className="inline-flex items-center gap-2 font-semibold text-oscuro transition group-hover:text-rojizo-oscuro">
-                    {evento.sede} · {evento.ciudad}
+                    {evento.sede}
                     <ArrowUpRight className="h-4 w-4 text-slate-300 transition group-hover:text-rojizo-oscuro" aria-hidden="true" />
                   </span>
+                  <span className="mt-0.5 block text-sm text-slate-600">{evento.sedeDireccion}</span>
                 </Dato>
               </a>
             </Reveal>
@@ -123,7 +124,7 @@ export default function Contacto() {
                 <span>
                   <span className="block text-xs font-semibold tracking-wide text-slate-500 uppercase">Sede presencial</span>
                   <span className="block font-bold text-oscuro">{evento.sede}</span>
-                  <span className="block text-sm text-slate-600">{evento.ciudad}</span>
+                  <span className="block text-sm text-slate-600">{evento.sedeDireccion}</span>
                 </span>
               </p>
               <a href={evento.mapa.enlace} target="_blank" rel="noopener noreferrer" className="btn-primario self-start">

@@ -1,4 +1,4 @@
-// Escudo de la Escuela (a color). Si la imagen no existe o falla, muestra una chakana en su lugar
+// Escudo de la Escuela (a color, sin fondo). Si la imagen no existe o falla, muestra una chakana en su lugar
 // (así nunca aparece el ícono de imagen rota).
 import { useState } from 'react'
 import { Chakana } from './Andino.jsx'
@@ -25,7 +25,7 @@ export default function Logo({ className = 'h-10 w-10', alt = ALT, src = '/insig
       src={src}
       alt={alt}
       onError={() => setFallo(true)}
-      className={`shrink-0 rounded-full bg-white object-contain p-1 shadow-sm ${className}`}
+      className={`shrink-0 object-contain drop-shadow-[0_2px_4px_rgb(0_0_0/0.25)] ${className}`}
     />
   )
 }

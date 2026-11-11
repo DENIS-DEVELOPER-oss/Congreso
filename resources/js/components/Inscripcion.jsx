@@ -1,10 +1,10 @@
-import { ArrowRight, Briefcase, Building2, CalendarClock, Check, GraduationCap, IdCard, Mail, MessageCircle, Mic, Phone, School, User } from 'lucide-react'
+import { ArrowRight, Briefcase, Building2, Check, GraduationCap, IdCard, Mail, Mic, Phone, School, User, UserPlus } from 'lucide-react'
 import { evento } from '../data/evento.js'
 import { useFormulario } from '../hooks/useFormulario.js'
 import { aFormData, enviar } from '../lib/api.js'
 import { RUTAS } from '../lib/rutas.js'
 import { ChakanaContorno, TituloSeccion } from './Andino.jsx'
-import { BotonesWhatsApp } from './Canales.jsx'
+import { BotonesWhatsApp, EnlacesCorreo } from './Canales.jsx'
 import Reveal from './Reveal.jsx'
 import {
   AlertaError,
@@ -42,9 +42,13 @@ const INICIAL = {
 
 // Registro → llega al instante el correo de acceso al Aula virtual → todo lo demás se hace en el aula
 const PASOS = [
-  { titulo: 'Regístrate', texto: 'Tu nombre, DNI, celular y correo: menos de dos minutos.' },
-  { titulo: 'Recibe tu acceso al instante', texto: 'Te llega un correo con tu usuario, una contraseña temporal y el programa.' },
-  { titulo: 'Ingresa al Aula virtual', texto: 'Únete a las sesiones por Google Meet y, si presentas una ponencia, envía tu resumen.' },
+  evento.inscripcionesAbiertas
+    ? { titulo: 'Regístrate', texto: 'Tu nombre, DNI, celular y correo: menos de dos minutos.' }
+    : { titulo: 'Solicita tu inscripción', texto: 'Escríbenos por WhatsApp o correo con tu nombre, DNI, celular y correo.' },
+  evento.inscripcionesAbiertas
+    ? { titulo: 'Recibe tu acceso al instante', texto: 'Te llega un correo con tu usuario, una contraseña temporal y el programa.' }
+    : { titulo: 'Recibe tu acceso', texto: 'Te enviamos por correo tu usuario, una contraseña temporal y el programa.' },
+  { titulo: 'Ingresa al Aula virtual', texto: 'Únete a las sesiones por Google Meet y descarga tu certificado.' },
 ]
 
 // El orden de las claves define qué campo recibe el foco primero
@@ -109,30 +113,37 @@ function PanelInformativo() {
 }
 
 // Mientras la organización no abra las inscripciones (panel → Datos del congreso)
-const ASESORIA = 'Hola, quisiera asesoría para inscribirme en el Congreso Saberes Andino-Amazónicos.'
+const SOLICITUD =
+  'Hola, deseo inscribirme en el I Congreso Internacional Saberes Andino-Amazónicos.\nNombres y apellidos:\nDNI:\nCelular:\nCorreo:\nInstitución:\nParticipo como (estudiante, docente, profesional o ponente):'
 
+// Mientras el formulario en línea está cerrado, la inscripción se solicita a la comisión por WhatsApp o correo
 function InscripcionesCerradas() {
   return (
     <div className="flex h-full flex-col items-center justify-center py-10 text-center">
       <span className="flex h-16 w-16 items-center justify-center rounded-full bg-crema text-rojizo-oscuro ring-1 ring-naranja/40">
-        <CalendarClock className="h-8 w-8" aria-hidden="true" />
+        <UserPlus className="h-8 w-8" aria-hidden="true" />
       </span>
-      <h3 className="mt-6 font-display text-2xl font-extrabold text-oscuro sm:text-3xl">Inscripciones muy pronto</h3>
-      <p className="mt-3 max-w-md leading-relaxed text-slate-600">
-        Estamos preparando el registro. La inscripción será <strong className="text-oscuro">gratuita</strong>; anunciaremos la apertura en
-        esta página.
+      <h3 className="mt-6 font-display text-2xl font-extrabold text-oscuro sm:text-3xl">Inscríbete ahora</h3>
+      <p className="mt-3 max-w-lg leading-relaxed text-slate-600">
+        La inscripción es <strong className="text-oscuro">gratuita</strong>. Solicítala a la comisión organizadora por WhatsApp o correo
+        electrónico con tus datos: te confirmaremos el registro y te enviaremos tu acceso al Aula virtual.
       </p>
-      <p className="mt-8 flex items-center gap-2 font-bold text-oscuro">
-        <MessageCircle className="h-5 w-5 text-[#128C7E]" aria-hidden="true" /> Solicita asesoría para tu inscripción
-      </p>
-      <p className="mt-1 text-sm text-slate-500">Escríbenos por WhatsApp a cualquiera de los dos números</p>
-      <BotonesWhatsApp mensaje={ASESORIA} className="mt-4 w-full max-w-md justify-center sm:max-w-none" />
-      <a href="/#convocatoria" className="btn-secundario mt-6">
+
+      <div className="mt-8 w-full max-w-lg rounded-2xl border border-black/5 bg-slate-50/70 px-3 py-5 min-[360px]:px-5 sm:p-6">
+        <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">Solicita tu inscripción</p>
+        <BotonesWhatsApp mensaje={SOLICITUD} className="mt-4 justify-center" />
+        <EnlacesCorreo
+          className="mt-4 flex flex-col items-center"
+          asunto="Solicitud de inscripción – Congreso Saberes Andino-Amazónicos"
+          cuerpo={SOLICITUD}
+          claseEnlace="text-[13px] text-oscuro hover:text-rojizo-oscuro min-[360px]:text-sm sm:text-base"
+        />
+      </div>
+
+      <p className="mt-8 text-sm text-slate-500">¿Presentarás una ponencia?</p>
+      <a href="/#convocatoria" className="btn-secundario mt-3">
         <Mic className="h-4 w-4" aria-hidden="true" /> Presenta tu ponencia
       </a>
-      <p className="mt-4 max-w-md text-sm text-slate-500">
-        ¿Vas a exponer? Revisa las bases: el resumen se envía desde el Aula virtual o por WhatsApp o correo.
-      </p>
     </div>
   )
 }

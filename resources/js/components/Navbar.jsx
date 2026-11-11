@@ -4,7 +4,6 @@ import { aliados } from '../data/aliados.js'
 import { evento } from '../data/evento.js'
 import { enlace, RUTAS } from '../lib/rutas.js'
 import Logo from './Logo.jsx'
-import { Magnetico } from './Efectos.jsx'
 
 const PRINCIPALES = [
   { href: '#inicio', texto: 'Inicio' },
@@ -27,6 +26,18 @@ const SECUNDARIOS = [
 ]
 
 const TODOS = [...PRINCIPALES, ...SECUNDARIOS]
+
+// Barra dorada bajo la pestaña activa; al pasar el mouse se dibuja a medias
+function Indicador({ visible }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`absolute inset-x-[11px] bottom-0 h-[3px] origin-left rounded-t-sm transition-transform duration-300 ${
+        visible ? 'scale-x-100 bg-naranja' : 'scale-x-0 bg-naranja/60 group-hover/enlace:scale-x-100'
+      }`}
+    />
+  )
+}
 
 function EnlaceMovil({ e, i, abierto, activo, onCerrar, destino }) {
   return (
@@ -165,10 +176,10 @@ export default function Navbar({ pagina = 'inicio' }) {
   const nombreCorto = evento.nombre.replace(/^Congreso\s+/i, '').replace('Andino-Amazónicos', 'Andinoamazónicos')
   const masActivo = SECUNDARIOS.some((s) => s.href === activo)
 
-  // Enlaces dentro de una cápsula; la sección activa queda como pastilla azul marino
+  // Menú tipo pestañas (estilo institucional): texto limpio y una barra dorada en el borde inferior de la barra
   const claseEnlace = (esActivo) =>
-    `relative rounded-full px-2.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
-      esActivo ? 'bg-[#0b1f5c] text-white shadow-[0_4px_12px_-4px_rgb(11_31_92/0.55)]' : 'text-slate-600 hover:bg-slate-900/5 hover:text-oscuro'
+    `group/enlace relative flex h-full items-center px-[11px] text-[0.875rem] font-semibold whitespace-nowrap transition-colors duration-200 ${
+      esActivo ? 'text-[#0b1f5c]' : 'text-slate-600 hover:text-[#0b1f5c]'
     }`
 
   const movil = { abierto, activo, destino, onCerrar: () => setAbierto(false) }
@@ -193,19 +204,23 @@ export default function Navbar({ pagina = 'inicio' }) {
         className={`contenedor flex items-center justify-between px-4 transition-[height] duration-500 sm:px-6 ${conScroll ? 'h-16' : 'h-20'}`}
         aria-label="Navegación principal"
       >
-        <a href={destino('#inicio')} className="group flex items-center gap-3" onClick={() => setAbierto(false)}>
-          <Logo className="h-10 w-10 transition-transform duration-500 group-hover:rotate-[8deg]" />
-          <span className={`flex flex-col leading-none transition-colors text-oscuro`}>
-            <span className={`text-[10px] font-bold tracking-wide uppercase text-[#1d4ed8]`}>Congreso</span>
-            <span className="mt-1 font-display text-[14px] font-extrabold tracking-tight whitespace-nowrap min-[360px]:text-base min-[400px]:text-lg">{nombreCorto}</span>
-          </span>
-        </a>
+        <div className="flex h-full items-center">
+          <a href={destino('#inicio')} className="group flex items-center gap-3" onClick={() => setAbierto(false)}>
+            <Logo className="h-11 w-9 transition-transform duration-500 group-hover:scale-105" />
+            <span className="flex flex-col leading-none text-oscuro">
+              <span className="text-[10px] font-bold tracking-[0.18em] text-[#1d4ed8] uppercase">I Congreso Internacional</span>
+              <span className="mt-1.5 font-display text-[15px] font-extrabold tracking-tight whitespace-nowrap min-[360px]:text-base min-[400px]:text-lg">{nombreCorto}</span>
+            </span>
+          </a>
+          <span className="ml-6 hidden h-9 w-px bg-slate-300/80 xl:block" aria-hidden="true" />
+        </div>
 
-        <ul className="hidden items-center gap-0.5 rounded-full bg-white/75 p-1 xl:mx-2 shadow-[0_1px_3px_rgb(15_23_42/0.06)] ring-1 ring-black/5 backdrop-blur xl:flex">
+        <ul className="hidden h-full items-stretch xl:ml-2 xl:flex">
           {PRINCIPALES.map((e) => (
             <li key={e.href}>
               <a href={destino(e.href)} aria-current={activo === e.href ? 'true' : undefined} className={claseEnlace(activo === e.href)}>
                 {e.texto}
+                <Indicador visible={activo === e.href} />
               </a>
             </li>
           ))}
@@ -215,15 +230,16 @@ export default function Navbar({ pagina = 'inicio' }) {
               aria-expanded={masAbierto}
               aria-controls="menu-mas"
               onClick={() => setMasAbierto((v) => !v)}
-              className={`${claseEnlace(masActivo)} inline-flex items-center gap-1`}
+              className={`${claseEnlace(masActivo || masAbierto)} gap-1`}
             >
               Más
               <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${masAbierto ? 'rotate-180' : ''}`} aria-hidden="true" />
+              <Indicador visible={masActivo} />
             </button>
             <div
               id="menu-mas"
               inert={!masAbierto}
-              className={`absolute top-full right-0 mt-3 w-60 origin-top-right rounded-2xl border border-black/5 bg-white p-2 shadow-elevada transition duration-200 ${
+              className={`absolute top-full right-0 w-60 origin-top-right rounded-b-lg border border-t-2 border-black/5 border-t-naranja bg-white p-2 shadow-elevada transition duration-200 ${
                 masAbierto ? 'scale-100 opacity-100' : 'pointer-events-none scale-95 opacity-0'
               }`}
             >
@@ -234,8 +250,8 @@ export default function Navbar({ pagina = 'inicio' }) {
                       href={destino(e.href)}
                       onClick={() => setMasAbierto(false)}
                       aria-current={activo === e.href ? 'true' : undefined}
-                      className={`block rounded-xl px-4 py-2.5 text-sm font-medium transition ${
-                        activo === e.href ? 'bg-rojizo/8 text-rojizo-oscuro' : 'text-slate-700 hover:bg-slate-100'
+                      className={`block rounded-md border-l-2 px-4 py-2.5 text-sm font-semibold transition ${
+                        activo === e.href ? 'border-naranja bg-[#0b1f5c]/5 text-[#0b1f5c]' : 'border-transparent text-slate-700 hover:border-naranja/60 hover:bg-slate-50'
                       }`}
                     >
                       {e.texto}
@@ -247,17 +263,25 @@ export default function Navbar({ pagina = 'inicio' }) {
           </li>
         </ul>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4 xl:gap-2">
           <a
             href={RUTAS.cuenta}
             aria-current={pagina === 'cuenta' ? 'page' : undefined}
-            className="hidden items-center gap-1.5 rounded-full bg-white/75 px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-oscuro ring-1 ring-slate-200 backdrop-blur transition hover:bg-white hover:ring-slate-300 md:inline-flex"
+            title="Aula virtual"
+            className="hidden items-center gap-1.5 text-[0.875rem] font-semibold whitespace-nowrap text-slate-700 transition hover:text-[#0b1f5c] md:inline-flex xl:h-10 xl:w-10 xl:justify-center xl:rounded-md xl:hover:bg-slate-900/5"
           >
-            <KeyRound className="h-4 w-4" aria-hidden="true" /> Aula virtual
+            {/* Con el menú completo (xl) solo cabe el ícono; el nombre queda para lectores de pantalla y al pasar el mouse */}
+            <KeyRound className="h-4 w-4 text-[#1d4ed8] xl:h-[18px] xl:w-[18px]" aria-hidden="true" /> <span className="xl:sr-only">Aula virtual</span>
           </a>
-          <Magnetico href={RUTAS.inscripcion} className="btn-primario hidden px-5 py-2.5 sm:inline-flex">
-            Inscríbete <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Magnetico>
+          <a
+            href={destino('#convocatoria')}
+            className="group hidden items-stretch overflow-hidden rounded-md bg-[#0b1f5c] text-[0.875rem] font-semibold whitespace-nowrap text-white shadow-[0_10px_24px_-12px_rgb(11_31_92/0.7)] transition hover:bg-[#163a9e] sm:inline-flex"
+          >
+            <span className="py-2.5 pr-3.5 pl-4">Presenta tu ponencia</span>
+            <span className="flex items-center bg-naranja px-2.5 text-[#0b1f5c]">
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
+            </span>
+          </a>
           <button
             type="button"
             className={`rounded-md p-2.5 transition xl:hidden text-oscuro hover:bg-slate-100`}
@@ -290,8 +314,8 @@ export default function Navbar({ pagina = 'inicio' }) {
                 <EnlaceMovil key={e.href} e={e} i={i + PRINCIPALES.length} {...movil} />
               ))}
             </ul>
-            <a href={RUTAS.inscripcion} className="btn-primario mt-4 w-full sm:hidden" onClick={() => setAbierto(false)}>
-              Inscríbete ahora <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <a href={destino('#convocatoria')} className="btn-primario mt-4 w-full sm:hidden" onClick={() => setAbierto(false)}>
+              Presenta tu ponencia <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
           </div>
         </div>

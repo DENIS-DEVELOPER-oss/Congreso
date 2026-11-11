@@ -23,6 +23,7 @@ const eventoBase = {
   fechaPreventaFin: null, // fecha límite de la tarifa de preventa; null = solo tarifa regular
   fechasTexto: '26 y 27 de noviembre de 2026',
   sede: 'Educación Continua UNA Puno',
+  sedeDireccion: 'Av. El Sol 300, Puno 21001',
   modalidad: 'Presencial y virtual',
   inscripcionGratuita: true,
   inscripcionesAbiertas: false, // se abren desde el panel (Datos del congreso)
@@ -31,8 +32,8 @@ const eventoBase = {
   correo: 'p.enriquez@unap.edu.pe',
   telefono: '+51 930 805 537',
   whatsapp: '51930805537', // solo dígitos, con código de país
-  // Segundo canal de consultas (se muestra junto al principal)
-  contactoAlterno: { correo: 'contacto@congresosaberes.net', telefono: '+51 951 913 416', whatsapp: '51951913416' },
+  // Segundo canal de consultas, opcional: { correo, telefono, whatsapp }. Con null solo se muestra el principal.
+  contactoAlterno: null,
   direccion: 'Av. Floral 1153, Ciudad Universitaria, Puno, Perú',
   // Sede presencial: Educación Continua de la UNA Puno (ubicación exacta en Google Maps)
   mapa: {

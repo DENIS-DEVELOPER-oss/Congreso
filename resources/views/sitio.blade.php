@@ -49,6 +49,8 @@
               'hasMap' => 'https://maps.app.goo.gl/SMHZJWjXdK15YHa49',
               'address' => [
                 '@type' => 'PostalAddress',
+                'streetAddress' => 'Av. El Sol 300',
+                'postalCode' => '21001',
                 'addressLocality' => 'Puno',
                 'addressCountry' => 'PE',
               ],
