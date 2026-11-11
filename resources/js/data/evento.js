@@ -28,9 +28,9 @@ const eventoBase = {
   inscripcionesAbiertas: false, // se abren desde el panel (Datos del congreso)
   puedeProbarInscripcion: false,
   ciudad: 'Puno, Perú',
-  correo: 'contacto@congresosaberes.net',
-  telefono: '+51 951 913 416',
-  whatsapp: '51951913416', // solo dígitos, con código de país
+  correo: 'p.enriquez@unap.edu.pe',
+  telefono: '+51 930 805 537',
+  whatsapp: '51930805537', // solo dígitos, con código de país
   direccion: 'Av. Floral 1153, Ciudad Universitaria, Puno, Perú',
   mapaUrl: 'https://maps.google.com/maps?q=Universidad%20Nacional%20del%20Altiplano%20Puno&z=15&output=embed',
   // URL "embed" de YouTube para mostrar la sección En vivo, p. ej. 'https://www.youtube.com/embed/ID_DEL_VIDEO'

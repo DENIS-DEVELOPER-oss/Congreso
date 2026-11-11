@@ -52,6 +52,11 @@ class Ajustes
         config(['congreso.tarifas' => array_replace_recursive($porDefecto, array_intersect_key(config('congreso.tarifas'), $porDefecto))]);
 
         config(['congreso.medios_pago' => collect(config('congreso.medios_pago_detalle'))->pluck('nombre', 'id')->all()]);
+
+        // Los correos salen de la cuenta del servidor, pero las respuestas llegan al correo de contacto
+        if (filled(config('congreso.correo_contacto'))) {
+            config(['mail.reply_to' => ['address' => config('congreso.correo_contacto'), 'name' => config('mail.from.name')]]);
+        }
     }
 
     // Valor original de config/congreso.php (sin lo guardado en el panel)

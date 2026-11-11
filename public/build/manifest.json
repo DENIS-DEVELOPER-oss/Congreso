@@ -1,67 +1,67 @@
 {
-  "_Arriba-CRkpdlnA.js": {
-    "file": "assets/Arriba-CRkpdlnA.js",
+  "_Arriba-CpoyVQjG.css": {
+    "file": "assets/Arriba-CpoyVQjG.css",
+    "src": "_Arriba-CpoyVQjG.css"
+  },
+  "_Arriba-Dpu2rb0f.js": {
+    "file": "assets/Arriba-Dpu2rb0f.js",
     "name": "Arriba",
     "css": [
       "assets/Arriba-CpoyVQjG.css"
     ]
   },
-  "_Arriba-CpoyVQjG.css": {
-    "file": "assets/Arriba-CpoyVQjG.css",
-    "src": "_Arriba-CpoyVQjG.css"
-  },
-  "_Plantilla-BY4kjh05.js": {
-    "file": "assets/Plantilla-BY4kjh05.js",
+  "_Plantilla-DeEGHiqS.js": {
+    "file": "assets/Plantilla-DeEGHiqS.js",
     "name": "Plantilla",
     "imports": [
-      "_Arriba-CRkpdlnA.js"
+      "_Arriba-Dpu2rb0f.js"
     ]
   },
-  "_descargas-nVEuoN_I.js": {
-    "file": "assets/descargas-nVEuoN_I.js",
+  "_descargas-dkdc0do2.js": {
+    "file": "assets/descargas-dkdc0do2.js",
     "name": "descargas",
     "imports": [
-      "_Arriba-CRkpdlnA.js"
+      "_Arriba-Dpu2rb0f.js"
     ]
   },
-  "_phone-rG17JbTZ.js": {
-    "file": "assets/phone-rG17JbTZ.js",
+  "_phone-HoCUa6Dl.js": {
+    "file": "assets/phone-HoCUa6Dl.js",
     "name": "phone",
     "imports": [
-      "_Arriba-CRkpdlnA.js"
+      "_Arriba-Dpu2rb0f.js"
     ]
   },
   "resources/js/main.jsx": {
-    "file": "assets/main-Ci0ASY1w.js",
+    "file": "assets/main-DYDHZRm5.js",
     "name": "main",
     "src": "resources/js/main.jsx",
     "isEntry": true,
     "imports": [
-      "_Arriba-CRkpdlnA.js",
-      "_descargas-nVEuoN_I.js",
-      "_phone-rG17JbTZ.js"
+      "_Arriba-Dpu2rb0f.js",
+      "_descargas-dkdc0do2.js",
+      "_phone-HoCUa6Dl.js"
     ]
   },
   "resources/js/paginas/cuenta.jsx": {
-    "file": "assets/cuenta-Cuw5TUZR.js",
+    "file": "assets/cuenta-aehj9YES.js",
     "name": "cuenta",
     "src": "resources/js/paginas/cuenta.jsx",
     "isEntry": true,
     "imports": [
-      "_Arriba-CRkpdlnA.js",
-      "_Plantilla-BY4kjh05.js",
-      "_descargas-nVEuoN_I.js"
+      "_Arriba-Dpu2rb0f.js",
+      "_Plantilla-DeEGHiqS.js",
+      "_descargas-dkdc0do2.js"
     ]
   },
   "resources/js/paginas/inscripcion.jsx": {
-    "file": "assets/inscripcion-CwKy0YdD.js",
+    "file": "assets/inscripcion-DsyzL674.js",
     "name": "inscripcion",
     "src": "resources/js/paginas/inscripcion.jsx",
     "isEntry": true,
     "imports": [
-      "_Arriba-CRkpdlnA.js",
-      "_Plantilla-BY4kjh05.js",
-      "_phone-rG17JbTZ.js"
+      "_Arriba-Dpu2rb0f.js",
+      "_Plantilla-DeEGHiqS.js",
+      "_phone-HoCUa6Dl.js"
     ]
   }
 }

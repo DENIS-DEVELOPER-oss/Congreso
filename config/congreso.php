@@ -63,9 +63,9 @@ return [
     ],
 
     // EDITABLE. Contacto que se muestra en la página y en los correos
-    'correo_contacto' => env('CONGRESO_CORREO', 'contacto@congresosaberes.net'),
-    'telefono' => '+51 951 913 416',
-    'whatsapp' => '51951913416', // solo dígitos, con código de país
+    'correo_contacto' => env('CONGRESO_CORREO', 'p.enriquez@unap.edu.pe'),
+    'telefono' => '+51 930 805 537',
+    'whatsapp' => '51930805537', // solo dígitos, con código de país
 
     // EDITABLE. Fechas importantes de la portada (fecha AAAA-MM-DD, en orden)
     'fechas_importantes' => [
