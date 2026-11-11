@@ -35,10 +35,25 @@ export default function Ejes() {
                   </span>
                   <div className="min-w-0">
                     <p className="flex items-center gap-2 font-etiqueta text-xs font-bold tracking-[0.14em] text-[#1d4ed8] uppercase">
-                      <Icono className="h-4 w-4" aria-hidden="true" /> Eje {i + 1}
+                      <Icono className="h-4 w-4" aria-hidden="true" /> Eje {i + 1} · Mesa de trabajo {i + 1}
                     </p>
                     <h3 className="mt-1.5 font-display text-lg leading-snug font-bold text-oscuro">{eje.titulo}</h3>
-                    {eje.descripcion && <p className="mt-2 text-sm leading-relaxed text-slate-600">{eje.descripcion}</p>}
+                    {eje.descripcion && (
+                      <div className="mt-3 border-t border-slate-200/80 pt-3">
+                        <p className="text-[11px] font-bold tracking-[0.14em] text-slate-500 uppercase">Subtemas clave</p>
+                        <ul className="mt-2 space-y-1.5">
+                          {eje.descripcion
+                            .split('\n')
+                            .filter((x) => x.trim())
+                            .map((x) => (
+                              <li key={x} className="flex gap-2 text-sm leading-relaxed text-slate-600">
+                                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-naranja" aria-hidden="true" />
+                                {x}
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </article>
               </Reveal>

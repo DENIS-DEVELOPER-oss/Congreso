@@ -18,7 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use UnitEnum;
 
-// Sesiones del congreso virtual: forman el programa del Aula y del correo de acceso, y en ellas se toma asistencia
+// Sesiones del congreso: forman el programa del Aula y del correo de acceso, y en ellas se toma asistencia
 // (el % para el certificado se calcula sobre estas sesiones)
 class SesionResource extends Resource
 {
@@ -47,7 +47,7 @@ class SesionResource extends Resource
             TextInput::make('ponente')->label('Ponente o responsable')->maxLength(200)->columnSpanFull(),
             TimePicker::make('hora_inicio')->label('Hora de inicio (Perú)')->seconds(false),
             TimePicker::make('hora_fin')->label('Hora de fin (Perú)')->seconds(false),
-            TextInput::make('enlace')->label('Enlace de Google Meet')->url()->maxLength(500)->placeholder('https://meet.google.com/abc-defg-hij')->columnSpanFull(),
+            TextInput::make('enlace')->label('Enlace (opcional)')->url()->maxLength(500)->placeholder('https://…')->columnSpanFull(),
             TextInput::make('material')->label('Material (opcional)')->url()->maxLength(500)
                 ->helperText('Enlace a diapositivas o lecturas (Drive, OneDrive…).')->columnSpanFull(),
         ]);
@@ -60,7 +60,7 @@ class SesionResource extends Resource
             ->columns([
                 TextColumn::make('nombre')->description(fn (Sesion $s) => $s->titulo),
                 TextColumn::make('fecha')->date('l d/m/Y')->description(fn (Sesion $s) => $s->horarioTexto()),
-                TextColumn::make('enlace')->label('Meet')->badge()
+                TextColumn::make('enlace')->label('Enlace')->badge()
                     ->state(fn (Sesion $s) => $s->enlace ? 'Listo' : 'Falta')
                     ->color(fn (Sesion $s) => $s->enlace ? 'success' : 'warning'),
                 TextColumn::make('asistencias_count')->label('Asistentes')->counts('asistencias')->alignCenter()->badge(),

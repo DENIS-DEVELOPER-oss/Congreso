@@ -30,3 +30,6 @@ Thumbs.db
 
 # Copias locales de la configuración (tienen claves): nunca se suben
 .env.respaldo*
+
+# Paquetes de afiches originales (pesados): se quedan en la computadora, la web usa las versiones optimizadas
+imagenes/*.zip

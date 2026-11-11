@@ -1,5 +1,5 @@
 // Banda oscura de llamada a la acción, antes de las preguntas frecuentes
-import { ArrowRight, Video } from 'lucide-react'
+import { ArrowRight, MapPin } from 'lucide-react'
 import { evento } from '../data/evento.js'
 import { RUTAS } from '../lib/rutas.js'
 import Reveal from './Reveal.jsx'
@@ -15,15 +15,15 @@ export default function Llamado() {
           </div>
           <div className="max-w-2xl">
             <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold tracking-wide text-naranja uppercase ring-1 ring-white/15">
-              <Video className="h-3.5 w-3.5" aria-hidden="true" /> {evento.modalidad} · {evento.fechasTexto}
+              <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> {evento.modalidad} · {evento.fechasTexto}
             </p>
             <h2 id="titulo-llamado" className="mt-4 text-3xl leading-tight font-extrabold sm:text-4xl">
-              Participa en Puno o desde cualquier lugar del mundo
+              Te esperamos en Puno
             </h2>
             <p className="mt-3 text-white/75">
               {evento.inscripcionesAbiertas
-                ? 'La inscripción es gratuita: regístrate en dos minutos y recibe al instante tu acceso al Aula virtual, con el programa y los enlaces de Google Meet.'
-                : 'La inscripción es gratuita: solicítala por WhatsApp o correo y te enviaremos tu acceso al Aula virtual, con el programa y los enlaces de Google Meet.'}
+                ? 'La inscripción es gratuita: regístrate en dos minutos y recibe al instante tu acceso al Aula virtual, con el programa del congreso.'
+                : 'La inscripción es gratuita: solicítala por WhatsApp o correo y te enviaremos tu acceso al Aula virtual, con el programa del congreso.'}
             </p>
           </div>
           <div className="mt-8 flex shrink-0 flex-col gap-3 sm:flex-row lg:mt-0">

@@ -1,4 +1,4 @@
-// Afiches oficiales del congreso (public/media/afiches). Se muestran en la galería y se pueden descargar.
+// Afiches oficiales del congreso (public/media/afiches), versión presencial. Se muestran en la galería y se pueden descargar.
 export const afiches = [
   {
     id: 'congreso',
@@ -15,8 +15,20 @@ export const afiches = [
   {
     id: 'ejes',
     titulo: 'Ejes temáticos',
-    texto: 'Los seis ejes en los que se reciben las ponencias.',
+    texto: 'Las seis mesas de trabajo en las que se reciben las ponencias.',
     src: '/media/afiches/afiche-ejes.jpg',
+  },
+  {
+    id: 'inscripciones',
+    titulo: 'Inscripciones abiertas',
+    texto: 'Inscripción gratuita al congreso presencial del 26 y 27 de noviembre.',
+    src: '/media/afiches/afiche-inscripciones.jpg',
+  },
+  {
+    id: 'internacionales',
+    titulo: 'Ponentes internacionales',
+    texto: 'Desde Argentina y México, junto a nueve ponentes del Perú.',
+    src: '/media/afiches/afiche-internacionales.jpg',
   },
 ]
 

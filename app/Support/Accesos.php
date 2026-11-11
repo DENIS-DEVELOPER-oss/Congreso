@@ -5,7 +5,7 @@ namespace App\Support;
 use App\Mail\AccesoAula;
 use App\Models\Participante;
 
-// Acceso al Aula virtual: usuario (DNI o correo) + contraseña temporal, programa con Google Meet y, si falta, los datos de pago
+// Acceso al Aula virtual: usuario (DNI o correo) + contraseña temporal, programa del congreso y, si falta, los datos de pago
 class Accesos
 {
     // Contraseña fácil de dictar: sin letras ni números que se confunden (l, 1, O, 0…)

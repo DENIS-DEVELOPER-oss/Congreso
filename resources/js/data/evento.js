@@ -24,7 +24,7 @@ const eventoBase = {
   fechasTexto: '26 y 27 de noviembre de 2026',
   sede: 'Educación Continua UNA Puno',
   sedeDireccion: 'Av. El Sol 300, Puno 21001',
-  modalidad: 'Presencial y virtual',
+  modalidad: 'Presencial',
   inscripcionGratuita: true,
   inscripcionesAbiertas: false, // se abren desde el panel (Datos del congreso)
   puedeProbarInscripcion: false,
@@ -63,14 +63,14 @@ const eventoBase = {
   ],
   beneficios: [
     'Inscripción gratuita',
-    'Participación presencial en Educación Continua de la UNA Puno o virtual por Google Meet',
-    'Certificado digital con código de verificación',
-    'Acceso al Aula virtual con el programa, los enlaces y el material',
+    'Participación presencial en Educación Continua de la UNA Puno (Av. El Sol 300)',
+    'Certificado digital otorgado por las instituciones organizadoras, con código de verificación',
+    'Acceso al Aula virtual con el programa, el material y tu certificado',
   ],
   // Agregar aquí el cierre de envío de resúmenes y de inscripciones cuando estén definidos
   // (formato '15 nov 2026', en orden cronológico)
   fechasImportantes: [
-    { fecha: '20 nov 2026', texto: 'Cierre de recepción de resúmenes' },
+    { fecha: '15 nov 2026', texto: 'Cierre de recepción de resúmenes' },
     { fecha: '26 nov 2026', texto: 'Inauguración y primer día del congreso' },
     { fecha: '27 nov 2026', texto: 'Segundo día y clausura' },
   ],

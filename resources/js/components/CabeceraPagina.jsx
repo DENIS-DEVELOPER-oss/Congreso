@@ -1,5 +1,5 @@
 // Encabezado oscuro de las páginas internas: ruta de navegación, título, descripción y acciones.
-import { CalendarDays, ChevronRight, Video } from 'lucide-react'
+import { CalendarDays, ChevronRight, MapPin } from 'lucide-react'
 import { evento } from '../data/evento.js'
 import { FranjaTejida, PatronRombos } from './Andino.jsx'
 
@@ -41,7 +41,7 @@ export default function CabeceraPagina({ titulo, descripcion, children }) {
             <CalendarDays className="h-4 w-4 text-rojizo-oscuro" aria-hidden="true" /> {evento.fechasTexto}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <Video className="h-4 w-4 text-rojizo-oscuro" aria-hidden="true" /> {evento.modalidad}
+            <MapPin className="h-4 w-4 text-rojizo-oscuro" aria-hidden="true" /> {evento.modalidad} · {evento.sede}
           </span>
         </p>
 

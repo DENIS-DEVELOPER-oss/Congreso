@@ -9,5 +9,5 @@
     </td></tr>
   </table>
 
-  <p style="margin:0;">El comité científico te comunicará el resultado por este medio.</p>
+  <p style="margin:0;">El Comité organizador evaluará tu trabajo y te comunicará el resultado por este medio.</p>
 </x-correo>

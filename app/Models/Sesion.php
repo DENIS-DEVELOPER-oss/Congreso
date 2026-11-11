@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
-// Sesión del congreso virtual: aparece en el Aula y en el correo de acceso, y en ella se registra la asistencia
+// Sesión del congreso: aparece en el Aula y en el correo de acceso, y en ella se registra la asistencia
 class Sesion extends Model
 {
     protected $table = 'sesiones';

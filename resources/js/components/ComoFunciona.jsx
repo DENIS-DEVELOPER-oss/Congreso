@@ -1,5 +1,5 @@
-// "Así funciona el congreso": sección oscura que explica la modalidad presencial y virtual
-import { ArrowRight, BadgeCheck, Landmark, MonitorPlay, Video } from 'lucide-react'
+// "Así funciona el congreso": sección oscura que explica cómo se participa en el congreso presencial
+import { ArrowRight, BadgeCheck, CalendarDays, Landmark, MonitorPlay } from 'lucide-react'
 import { RUTAS } from '../lib/rutas.js'
 import { TituloSeccion } from './Andino.jsx'
 import Reveal from './Reveal.jsx'
@@ -11,19 +11,19 @@ const PASOS = [
     texto: 'Conferencias y mesas temáticas en Educación Continua de la UNA Puno. Tu asistencia se registra con tu código o tu DNI.',
   },
   {
-    Icono: Video,
-    titulo: 'Virtual por Google Meet',
-    texto: 'Las sesiones se transmiten en vivo. Ingresa con tu nombre completo o el correo de tu inscripción para registrar tu asistencia.',
+    Icono: CalendarDays,
+    titulo: 'Dos días de programa',
+    texto: 'Conferencias centrales, mesas de trabajo y actividades culturales el 26 y 27 de noviembre de 2026.',
   },
   {
     Icono: MonitorPlay,
     titulo: 'Aula virtual',
-    texto: 'Al registrarte recibes tu usuario y una contraseña temporal. Ahí tienes el programa, los enlaces y el envío de resúmenes.',
+    texto: 'Al registrarte recibes tu usuario y una contraseña temporal. Ahí tienes el programa, el material y tu certificado.',
   },
   {
     Icono: BadgeCheck,
     titulo: 'Certificado digital',
-    texto: 'Con código QR de verificación. Lo descargas desde el aula al cumplir la asistencia mínima.',
+    texto: 'Otorgado por las instituciones organizadoras, con código QR de verificación. Lo descargas desde el aula al cumplir la asistencia mínima.',
   },
 ]
 
@@ -41,9 +41,9 @@ export default function ComoFunciona() {
         <div className="contenedor">
           <TituloSeccion
             claro
-            etiqueta="Presencial y virtual"
+            etiqueta="Presencial en Puno"
             titulo="Así funciona el congreso"
-            descripcion="Asiste a Educación Continua de la Universidad Nacional del Altiplano, en Puno, o participa en línea desde cualquier lugar. La inscripción es gratuita y todo lo que necesitas está en el Aula virtual."
+            descripcion="Asiste a Educación Continua de la Universidad Nacional del Altiplano (Av. El Sol 300, Puno). La inscripción es gratuita y todo lo que necesitas está en el Aula virtual."
           />
 
           <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

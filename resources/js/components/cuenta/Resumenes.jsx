@@ -9,8 +9,9 @@ import { AlertaError, Campo, CampoArchivo, CampoArea, CampoSelect, OpcionesTarje
 import Tarjeta from './Tarjeta.jsx'
 
 const TIPOS_RESUMEN = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
-const INICIAL = { titulo: '', eje: '', modalidad: '', coautores: '', palabras_clave: '', archivo: null }
-const listaClaves = (texto) => texto.split(',').map((p) => p.trim()).filter(Boolean)
+const INICIAL = { titulo: '', eje: '', modalidad: 'presencial', coautores: '', palabras_clave: '', archivo: null }
+// Las bases piden separarlas con punto y coma; también se aceptan comas
+const listaClaves = (texto) => texto.split(/[;,]/).map((p) => p.trim()).filter(Boolean)
 
 const COLOR = {
   recibida: 'bg-sky-50 text-sky-800 ring-sky-200',
@@ -25,9 +26,9 @@ function validar(d) {
   if (!titulo) e.titulo = 'Escribe el título de tu trabajo.'
   else if (titulo.length < 10) e.titulo = 'El título es muy corto: usa al menos 10 caracteres.'
   if (!d.eje) e.eje = 'Elige el eje temático en el que encaja tu trabajo.'
-  if (!d.modalidad) e.modalidad = 'Elige si presentarás tu ponencia de forma presencial o virtual.'
+  if (!d.modalidad) e.modalidad = 'Elige la modalidad de tu ponencia.'
   const n = listaClaves(d.palabras_clave).length
-  if (n < 5) e.palabras_clave = `Faltan palabras clave: escribe 5 separadas por comas (llevas ${n}).`
+  if (n < 5) e.palabras_clave = `Faltan palabras clave: escribe 5 separadas por punto y coma (llevas ${n}).`
   else if (n > 5) e.palabras_clave = `Son demasiadas: deja solo 5 palabras clave (llevas ${n}).`
   const err = validarArchivo(d.archivo, { tipos: TIPOS_RESUMEN, maxMB: 5 })
   if (err) e.archivo = err === 'Adjunta un archivo.' ? 'Adjunta tu resumen en PDF o Word.' : err
@@ -96,7 +97,7 @@ function FormularioResumen({ ejes, onEnviado, onCancelar }) {
           label="Palabras clave"
           Icono={Tags}
           placeholder="territorio, ayllu, identidad, Buen Vivir, interculturalidad"
-          ayuda={`Separa cada palabra con una coma · ${listaClaves(datos.palabras_clave).length} de 5`}
+          ayuda={`Separa cada palabra con punto y coma · ${listaClaves(datos.palabras_clave).length} de 5`}
         />
         <CampoArea
           {...campo('coautores')}

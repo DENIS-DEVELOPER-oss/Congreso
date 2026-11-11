@@ -1,8 +1,9 @@
-import { CalendarClock, Download, Mail, MessageCircle, Send } from 'lucide-react'
+import { CalendarClock, Mail, MessageCircle, Send } from 'lucide-react'
 import { canales, enlaceWhatsApp, evento } from '../data/evento.js'
 import { cierreResumenes, estructura, modalidades, normas } from '../data/convocatoria.js'
 import { descargas } from '../data/descargas.js'
 import { Chakana, TituloSeccion } from './Andino.jsx'
+import { FichaCompacta } from './Descargas.jsx'
 import Reveal from './Reveal.jsx'
 
 function Bases() {
@@ -10,7 +11,7 @@ function Bases() {
   return (
     <div className="space-y-6">
       <div className="tarjeta p-6 sm:p-7">
-        <h3 className="text-sm font-bold tracking-wide text-slate-500 uppercase">Modalidades</h3>
+        <h3 className="text-sm font-bold tracking-wide text-slate-500 uppercase">Modalidad</h3>
         <ul className="mt-4 space-y-3">
           {modalidades.map((m) => (
             <li key={m.valor} className="rounded-md bg-crema p-4">
@@ -40,11 +41,10 @@ function Bases() {
           ))}
         </ul>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <h3 className="mt-8 text-sm font-bold tracking-wide text-slate-500 uppercase">Documentos para participar</h3>
+        <div className="mt-4 space-y-3">
           {archivos.map((a) => (
-            <a key={a.id} href={a.archivo} download className="btn-secundario flex-1 px-4 py-3">
-              <Download className="h-4 w-4" aria-hidden="true" /> {a.titulo}
-            </a>
+            <FichaCompacta key={a.id} d={a} />
           ))}
         </div>
       </div>
@@ -71,7 +71,7 @@ function Bases() {
 }
 
 const MENSAJE_RESUMEN =
-  'Hola, envío mi resumen para el Congreso Saberes Andino-Amazónicos.\nNombre completo:\nDNI:\nEje temático:\nModalidad (presencial o virtual):'
+  'Hola, envío mi resumen para el Congreso Saberes Andino-Amazónicos.\nNombre completo:\nDNI:\nEje temático:'
 
 // Por ahora los resúmenes se reciben por WhatsApp o correo (la comisión los registra en el panel)
 function EnvioResumen() {
@@ -79,8 +79,8 @@ function EnvioResumen() {
   const correo = canales.correos[0]
   const pasos = [
     'Redacta tu resumen (250 palabras) con la plantilla oficial',
-    'Envíalo en PDF o Word por WhatsApp o correo, con tu nombre completo, DNI, eje temático y modalidad',
-    'Te confirmaremos la recepción y el comité científico te comunicará el resultado por correo',
+    'Envíalo en PDF o Word por WhatsApp o correo, con tu nombre completo, DNI y eje temático',
+    'El Comité organizador evaluará tu resumen y te comunicará el resultado por correo',
   ]
   return (
     <div className="tarjeta flex flex-col p-6 sm:p-10">
@@ -135,7 +135,7 @@ export default function Convocatoria() {
         <TituloSeccion
           etiqueta="Ponencias"
           titulo="Convocatoria de ponencias"
-          descripcion="Se reciben resúmenes de docentes, investigadores y estudiantes sobre saberes andino-amazónicos, interculturalidad y educación superior universitaria. El resultado de la evaluación se comunicará por correo electrónico."
+          descripcion="Se reciben resúmenes de docentes, investigadores y estudiantes sobre saberes andino-amazónicos, interculturalidad y educación superior universitaria. Los trabajos son evaluados por el Comité organizador y el resultado se comunica por correo electrónico."
         />
 
         <div className="grid gap-6 lg:grid-cols-12">

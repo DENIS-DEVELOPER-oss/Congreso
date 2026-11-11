@@ -73,8 +73,8 @@ export default function AnuncioInicio() {
           <img
             src="/media/afiches/afiche-vertical.jpg"
             width="900"
-            height="1573"
-            alt="I Congreso Internacional: Saberes Andino-Amazónicos, 26 y 27 de noviembre de 2026. ¡Inscríbete gratis!"
+            height="1314"
+            alt="Ponentes centrales del I Congreso Internacional Saberes Andino-Amazónicos: once ponentes de Argentina, México y el Perú. 26 y 27 de noviembre de 2026, Puno, evento presencial. ¡Inscríbete gratis!"
             className="block h-auto max-h-[calc(85dvh-2rem)] w-auto max-w-[calc(100vw-3.5rem)]"
           />
           <span className="sr-only">Ir a la inscripción</span>

@@ -118,7 +118,7 @@ class CuentaController extends Controller
                 'correoConfirmado' => $p->correoConfirmado(),
                 'debeCambiarClave' => (bool) $p->debe_cambiar_clave,
             ],
-            // Programa del aula; el enlace de Google Meet solo si el pago está validado (o si la organización lo permite)
+            // Programa del aula; el enlace de la sesión (si lo hay) solo si el pago está validado (o si la organización lo permite)
             'zoomBloqueado' => ! $verZoom,
             'sesiones' => Sesion::enOrden()->get()->map(fn (Sesion $s) => [
                 'id' => $s->id,

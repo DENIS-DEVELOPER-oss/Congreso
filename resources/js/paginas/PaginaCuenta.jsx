@@ -1,8 +1,8 @@
 // Aula virtual: el participante entra con su DNI o correo y la contraseña temporal que recibe al registrarse.
-// La primera vez crea su propia contraseña. Cuatro pestañas: Inicio (estado y sesiones por Google Meet),
+// La primera vez crea su propia contraseña. Cuatro pestañas: Inicio (estado y programa de sesiones),
 // Mi ponencia, Certificados y Mi perfil (nombre del certificado y contraseña).
 import { useCallback, useEffect, useState } from 'react'
-import { AlertTriangle, ArrowRight, Award, CalendarClock, CheckCircle2, Download, ExternalLink, FileText, Home, KeyRound, Loader2, Lock, LogOut, ShieldCheck, User, Video } from 'lucide-react'
+import { AlertTriangle, ArrowRight, Award, CalendarClock, CalendarDays, CheckCircle2, Download, ExternalLink, FileText, Home, KeyRound, Loader2, Lock, LogOut, MapPin, ShieldCheck, User } from 'lucide-react'
 import CabeceraPagina from '../components/CabeceraPagina.jsx'
 import Ingreso from '../components/cuenta/Ingreso.jsx'
 import Pago from '../components/cuenta/Pago.jsx'
@@ -12,11 +12,12 @@ import Tarjeta from '../components/cuenta/Tarjeta.jsx'
 import { AlertaError, BotonEnviar, Campo } from '../components/form/Campos.jsx'
 import { useFormulario } from '../hooks/useFormulario.js'
 import { enviar, obtener } from '../lib/api.js'
+import { evento } from '../data/evento.js'
 import Plantilla from './Plantilla.jsx'
 
 const hoyISO = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' })
 
-// Programa del aula con los enlaces de Google Meet (bloque oscuro, lo primero que se ve)
+// Programa de sesiones del congreso presencial (bloque oscuro, lo primero que se ve)
 function Sesiones({ sesiones, bloqueado }) {
   const hoy = hoyISO()
   return (
@@ -25,9 +26,9 @@ function Sesiones({ sesiones, bloqueado }) {
       <header className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <h2 className="flex items-center gap-3 text-2xl font-extrabold">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-naranja ring-1 ring-white/15">
-            <Video className="h-5 w-5" aria-hidden="true" />
+            <CalendarDays className="h-5 w-5" aria-hidden="true" />
           </span>
-          Mis sesiones en vivo
+          Programa de sesiones
         </h2>
         <span className="text-xs font-semibold tracking-wide text-white/60 uppercase">Hora de Perú</span>
       </header>
@@ -35,7 +36,7 @@ function Sesiones({ sesiones, bloqueado }) {
       {bloqueado && (
         <p className="mb-5 flex gap-3 rounded-xl bg-white/[0.07] p-4 text-sm text-white/85 ring-1 ring-white/10">
           <Lock className="h-5 w-5 shrink-0 text-naranja" aria-hidden="true" />
-          Los enlaces de Google Meet aparecerán aquí cuando validemos tu pago. Sube tu voucher más abajo.
+          Tu acceso a las sesiones se confirma cuando validemos tu pago. Sube tu voucher más abajo.
         </p>
       )}
 
@@ -64,28 +65,9 @@ function Sesiones({ sesiones, bloqueado }) {
                   )}
                 </div>
                 <div className="shrink-0">
-                  {s.enlace ? (
-                    <a
-                      href={s.enlace}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`btn px-5 py-2.5 text-sm ${esHoy ? 'bg-naranja text-tierra hover:bg-[#fcd34d]' : 'border border-white/25 bg-white/5 text-white hover:border-white/50 hover:bg-white/10'}`}
-                    >
-                      <Video className="h-4 w-4" aria-hidden="true" /> Unirse por Google Meet
-                    </a>
-                  ) : (
-                    <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2 text-xs font-semibold text-white/60 ring-1 ring-white/10">
-                      {bloqueado && s.tieneEnlace ? (
-                        <>
-                          <Lock className="h-3.5 w-3.5" aria-hidden="true" /> Al validar tu pago
-                        </>
-                      ) : (
-                        <>
-                          <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" /> Enlace pronto
-                        </>
-                      )}
-                    </span>
-                  )}
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2 text-xs font-semibold text-white/75 ring-1 ring-white/10">
+                    <MapPin className="h-3.5 w-3.5 text-naranja" aria-hidden="true" /> {evento.sede}
+                  </span>
                 </div>
               </li>
             )
@@ -385,7 +367,7 @@ export default function PaginaCuenta() {
         titulo="Aula virtual"
         descripcion={
           perfil
-            ? 'Tus sesiones por Google Meet, tu ponencia y tu certificado, en un solo lugar.'
+            ? 'El programa, tu ponencia y tu certificado, en un solo lugar.'
             : 'Ingresa con tu DNI o tu correo y la contraseña que te enviamos al registrarte.'
         }
       />

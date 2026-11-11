@@ -37,7 +37,7 @@ Route::get('/aula', fn () => $pagina(
     'cuenta',
     'resources/js/paginas/cuenta.jsx',
     'Aula virtual | Congreso Saberes Andino-Amazónicos 2026',
-    'Ingresa al Aula virtual con tu DNI o correo para ver los enlaces de Google Meet, subir tu voucher, enviar tus resúmenes y descargar tus certificados.',
+    'Ingresa al Aula virtual con tu DNI o correo para ver el programa, el estado de tu ponencia y descargar tus certificados.',
 ));
 
 // Direcciones anteriores: todo está ahora en el Aula virtual

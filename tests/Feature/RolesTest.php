@@ -265,7 +265,7 @@ class RolesTest extends TestCase
 
         // 4. Envía su resumen (5 palabras clave exactas)
         $resumen = fn () => UploadedFile::fake()->create('resumen.pdf', 200, 'application/pdf');
-        $datos = ['titulo' => 'Saberes andinos en la universidad', 'eje' => $eje->id, 'modalidad' => 'virtual', 'palabras_clave' => 'uno, dos, tres'];
+        $datos = ['titulo' => 'Saberes andinos en la universidad', 'eje' => $eje->id, 'modalidad' => 'presencial', 'palabras_clave' => 'uno, dos, tres'];
         $this->postJson('/cuenta/ponencias', $datos + ['archivo' => $resumen()])->assertUnprocessable()->assertJsonValidationErrors('palabras_clave');
         $codigo = $this->postJson('/cuenta/ponencias', ['palabras_clave' => 'uno, dos, tres, cuatro, cinco', 'archivo' => $resumen()] + $datos)
             ->assertCreated()->json('codigo');

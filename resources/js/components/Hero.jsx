@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, CalendarDays, CalendarPlus, ChevronLeft, ChevronRight, FileText, KeyRound, MailCheck, Mic, Pause, Play, UserPlus, Video } from 'lucide-react'
+import { ArrowRight, CalendarDays, CalendarPlus, ChevronLeft, ChevronRight, FileText, KeyRound, MailCheck, MapPin, Mic, Pause, Play, UserPlus } from 'lucide-react'
 import { descargarIcs, urlGoogleCalendar } from '../lib/calendario.js'
 import { evento } from '../data/evento.js'
 import { ponentes } from '../data/ponentes.js'
@@ -9,7 +9,6 @@ import { VisorAfiche } from './Afiches.jsx'
 import { RUTAS } from '../lib/rutas.js'
 import { FranjaTejida } from './Andino.jsx'
 import { useCarrusel } from './Carrusel.jsx'
-import { Magnetico } from './Efectos.jsx'
 import PaisajeHero from './PaisajeHero.jsx'
 
 const INTERVALO = 7000
@@ -133,11 +132,11 @@ function MosaicoPonentes() {
   )
 }
 
-// Modalidades de presentación de la convocatoria
+// Modalidad de presentación de la convocatoria
 function TarjetaConvocatoria() {
   return (
     <div className="rounded-2xl border border-white bg-white/90 p-7 shadow-[0_30px_60px_-30px_rgb(15_23_42/0.35)] backdrop-blur-xl">
-      <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">Modalidades de presentación</p>
+      <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">Modalidad de presentación</p>
       <ul className="mt-4 space-y-3">
         {modalidades.map((m) => (
           <li key={m.valor} className="flex gap-4 rounded-xl bg-crema p-4">
@@ -152,7 +151,7 @@ function TarjetaConvocatoria() {
         ))}
       </ul>
       <p className="mt-5 text-sm text-slate-600">
-        Resumen de 250 palabras con la plantilla oficial. Recepción hasta el <strong className="text-oscuro">20 de noviembre</strong>.
+        Resumen de 250 palabras con la plantilla oficial. Recepción hasta el <strong className="text-oscuro">15 de noviembre</strong>.
       </p>
     </div>
   )
@@ -165,9 +164,9 @@ function TarjetaPasos() {
       ? { Icono: UserPlus, titulo: 'Regístrate', texto: 'Completa el formulario con tus datos y tu categoría.' }
       : { Icono: UserPlus, titulo: 'Solicita tu inscripción', texto: 'Escríbenos por WhatsApp o correo con tus datos.' },
     evento.inscripcionesAbiertas
-      ? { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Al instante te llega tu usuario, tu contraseña y el programa con Google Meet.' }
-      : { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Te enviamos tu usuario, tu contraseña y el programa con Google Meet.' },
-    { Icono: KeyRound, titulo: 'Ingresa al Aula virtual', texto: 'Únete por Google Meet, envía tu resumen y descarga tu certificado.' },
+      ? { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Al instante te llega tu usuario, tu contraseña y el programa.' }
+      : { Icono: MailCheck, titulo: 'Recibe tu acceso', texto: 'Te enviamos tu usuario, tu contraseña y el programa.' },
+    { Icono: KeyRound, titulo: 'Ingresa al Aula virtual', texto: 'Consulta el programa, envía tu resumen y descarga tu certificado.' },
   ]
   return (
     <ol className="space-y-3">
@@ -223,7 +222,7 @@ const DIAPOSITIVAS = [
     etiqueta: 'Afiche oficial',
     antetitulo: 'Afiche oficial',
     titulo: 'I Congreso Internacional',
-    texto: '26 y 27 de noviembre de 2026 en Educación Continua de la UNA Puno, presencial y virtual. Lo organizan seis instituciones académicas del Perú.',
+    texto: '26 y 27 de noviembre de 2026 en Educación Continua de la UNA Puno, en modalidad presencial. Lo organizan seis instituciones académicas del Perú.',
     botones: [
       { texto: 'Ver el afiche', afiche: afiche('congreso'), principal: true },
       { texto: 'Ver los organizadores', href: '#comites' },
@@ -259,7 +258,7 @@ const DIAPOSITIVAS = [
     etiqueta: 'Convocatoria',
     antetitulo: 'Convocatoria de ponencias',
     titulo: 'Presenta tu investigación',
-    texto: 'Envía tu resumen por WhatsApp o correo electrónico hasta el 20 de noviembre. El comité científico evaluará cada trabajo.',
+    texto: 'Envía tu resumen por WhatsApp o correo electrónico hasta el 15 de noviembre. El Comité organizador evaluará cada trabajo.',
     botones: [
       { texto: 'Enviar mi resumen', href: '#convocatoria', principal: true },
       { texto: 'Inscribirme', href: RUTAS.inscripcion },
@@ -284,8 +283,8 @@ const DIAPOSITIVAS = [
     antetitulo: 'Inscripción gratuita',
     titulo: 'Asegura tu participación',
     texto: evento.inscripcionesAbiertas
-      ? 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno o por Google Meet. Al instante te llega tu acceso al Aula virtual.'
-      : 'Solicita tu inscripción gratuita por WhatsApp o correo y participa en Educación Continua de la UNA Puno o por Google Meet.',
+      ? 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno. Al instante te llega tu acceso al Aula virtual.'
+      : 'Solicita tu inscripción gratuita por WhatsApp o correo y participa en Educación Continua de la UNA Puno.',
     botones: [
       { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
       { texto: 'Ingresar al aula', href: RUTAS.cuenta },
@@ -297,10 +296,20 @@ const DIAPOSITIVAS = [
 // Entrada escalonada de la primera carga
 const entrada = (ms) => ({ className: 'animate-aparecer', style: { animationDelay: `${ms}ms` } })
 
+// Botones de la portada, con el mismo lenguaje que el botón del menú:
+// principal en azul noche con la flecha en un bloque dorado; secundario blanco con borde fino. Misma altura y esquinas.
 const claseBoton = (principal) =>
   principal
-    ? 'group btn-primario shadow-[0_12px_32px_-12px_rgb(30_58_138/0.6)]'
-    : 'btn border border-slate-300 bg-white/80 text-oscuro backdrop-blur-sm hover:border-rojizo-oscuro hover:text-rojizo-oscuro'
+    ? 'group inline-flex h-14 items-center justify-between gap-5 rounded-lg bg-linear-to-br from-[#0b1f5c] to-[#1e3a8a] pr-2 pl-6 text-[0.9375rem] font-bold whitespace-nowrap text-white shadow-[0_16px_32px_-16px_rgb(11_31_92/0.85)] ring-1 ring-white/10 transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_36px_-16px_rgb(11_31_92/0.9)]'
+    : 'group inline-flex h-14 items-center justify-center gap-2.5 rounded-lg border border-slate-300 bg-white/85 px-6 text-[0.9375rem] font-bold whitespace-nowrap text-[#0b1f5c] backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#0b1f5c] hover:bg-white'
+
+function FlechaDorada() {
+  return (
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-naranja text-[#0b1f5c] transition group-hover:bg-[#fcd34d]">
+      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
+    </span>
+  )
+}
 
 // Texto de la primera diapositiva: es el título principal (h1) de la página
 function TextoCongreso() {
@@ -331,7 +340,7 @@ function TextoCongreso() {
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-slate-600">«{evento.lema}»</p>
         <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-base font-medium text-slate-700">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-rojizo-oscuro px-3 py-1 text-sm font-semibold text-white">
-            <Video className="h-4 w-4" aria-hidden="true" /> Presencial y virtual
+            <MapPin className="h-4 w-4" aria-hidden="true" /> Presencial
           </span>
           <span>{evento.fechasTexto}</span>
           <span className="h-1 w-1 rounded-full bg-naranja" aria-hidden="true" />
@@ -339,13 +348,13 @@ function TextoCongreso() {
         </p>
       </div>
       <div data-apartar-flotantes className="mt-9 flex animate-aparecer flex-col gap-3 sm:flex-row" style={{ animationDelay: '460ms' }}>
-        <Magnetico href="#convocatoria" className={claseBoton(true)}>
+        <a href="#convocatoria" className={claseBoton(true)}>
           Presenta tu ponencia
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-        </Magnetico>
-        <Magnetico href={RUTAS.inscripcion} className={claseBoton(false)}>
-          Inscríbete
-        </Magnetico>
+          <FlechaDorada />
+        </a>
+        <a href={RUTAS.inscripcion} className={claseBoton(false)}>
+          <UserPlus className="h-[18px] w-[18px] text-[#1d4ed8]" aria-hidden="true" /> Inscríbete
+        </a>
       </div>
     </>
   )
@@ -369,7 +378,7 @@ function TextoDiapositiva({ d, onAfiche }) {
           const contenido = (
             <>
               {b.texto}
-              {b.principal && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />}
+              {b.principal && <FlechaDorada />}
             </>
           )
           return b.afiche ? (

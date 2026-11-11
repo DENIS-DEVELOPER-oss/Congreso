@@ -37,7 +37,7 @@
           'startDate' => config('congreso.fecha_inicio'),
           'endDate' => config('congreso.fecha_fin'),
           'eventStatus' => 'https://schema.org/EventScheduled',
-          'eventAttendanceMode' => 'https://schema.org/MixedEventAttendanceMode',
+          'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
           'inLanguage' => 'es',
           'url' => url('/'),
           'image' => [url('/og-image.jpg')],
@@ -55,7 +55,6 @@
                 'addressCountry' => 'PE',
               ],
             ],
-            ['@type' => 'VirtualLocation', 'url' => url('/aula')],
           ],
           'isAccessibleForFree' => true,
           'organizer' => [

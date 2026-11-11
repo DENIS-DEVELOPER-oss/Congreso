@@ -103,7 +103,7 @@ class DatosCongreso extends Page
                     ]),
 
                     Tab::make('Aula virtual')->icon(Heroicon::OutlinedVideoCamera)->schema([
-                        Toggle::make('zoom_solo_con_pago')->label('Mostrar los enlaces de Google Meet solo a quienes tienen el pago validado')
+                        Toggle::make('zoom_solo_con_pago')->label('Mostrar los enlaces de las sesiones solo a quienes tienen el pago validado')
                             ->helperText('Los enlaces y horarios de cada sesión se cargan en Asistencia → Sesiones.'),
                     ]),
 

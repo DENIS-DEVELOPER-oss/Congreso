@@ -9,8 +9,8 @@ import Reveal from './Reveal.jsx'
 
 // Con el formulario en línea cerrado, la inscripción se solicita por WhatsApp o correo
 const PASOS = evento.inscripcionesAbiertas
-  ? ['Regístrate con tus datos', 'Recibe al instante tu acceso al aula', 'Únete por Google Meet desde donde estés']
-  : ['Solicita tu inscripción por WhatsApp o correo', 'Recibe por correo tu acceso al aula', 'Únete por Google Meet desde donde estés']
+  ? ['Regístrate con tus datos', 'Recibe al instante tu acceso al aula', 'Asiste a las sesiones en Puno']
+  : ['Solicita tu inscripción por WhatsApp o correo', 'Recibe por correo tu acceso al aula', 'Asiste a las sesiones en Puno']
 
 export default function Accesos() {
   return (
@@ -21,8 +21,8 @@ export default function Accesos() {
           titulo="Inscripción y Aula virtual"
           descripcion={
             evento.inscripcionesAbiertas
-              ? 'Regístrese en la página y recibirá al instante, por correo, su acceso al Aula virtual: ahí realizará el resto de trámites y se unirá a las sesiones por Google Meet.'
-              : 'Solicite su inscripción por WhatsApp o correo electrónico y le enviaremos su acceso al Aula virtual, donde verá el programa y se unirá a las sesiones por Google Meet.'
+              ? 'Regístrese en la página y recibirá al instante, por correo, su acceso al Aula virtual: ahí verá el programa y descargará su certificado.'
+              : 'Solicite su inscripción por WhatsApp o correo electrónico y le enviaremos su acceso al Aula virtual, donde verá el programa y descargará su certificado.'
           }
         />
 
@@ -66,7 +66,7 @@ export default function Accesos() {
                 Ingresa con tu DNI o tu correo y la contraseña que recibiste al registrarte.
               </p>
               <ul className="mt-5 space-y-2 text-sm text-slate-600">
-                {['Únete a las sesiones por Google Meet', 'Envía tus resúmenes', 'Descarga tu certificado'].map((t) => (
+                {['Consulta el programa de sesiones', 'Revisa el estado de tu ponencia', 'Descarga tu certificado'].map((t) => (
                   <li key={t} className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-emerald-600" strokeWidth={3} aria-hidden="true" /> {t}
                   </li>

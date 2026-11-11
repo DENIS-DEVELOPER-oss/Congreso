@@ -1,19 +1,20 @@
 // Bases de la convocatoria de ponencias (según el afiche oficial)
 export const modalidades = [
   { valor: 'presencial', texto: 'Ponencia presencial', detalle: 'En Educación Continua de la UNA Puno' },
-  { valor: 'virtual', texto: 'Ponencia virtual', detalle: 'En vivo por Google Meet' },
 ]
 
-export const cierreResumenes = '20 de noviembre de 2026'
+export const cierreResumenes = '15 de noviembre de 2026'
 
 // Estructura del resumen
 export const estructura = ['Introducción', 'Métodos', 'Resultados', 'Conclusiones']
 
+// Normas del resumen según el documento oficial de la convocatoria
 export const normas = [
-  'Extensión de 250 palabras.',
-  'Formato APA; Times New Roman, 12 pt; doble espacio, sin sangría.',
-  'Título en español e inglés.',
-  'Cinco (5) palabras clave y abstract en inglés.',
-  'Autores con afiliación institucional y ORCID.',
-  'Archivo en PDF o Word (máx. 5 MB) con la plantilla oficial.',
+  'Extensión de 250 palabras, en formato APA.',
+  'Título en español y en inglés, de máximo 20 palabras cada uno.',
+  'Autores con correo, institución de afiliación (ciudad y país) y ORCID.',
+  'Abstract en inglés y cinco (5) palabras clave separadas por punto y coma.',
+  'Times New Roman 12 pt, doble espacio en todo el documento.',
+  'Texto alineado a la izquierda, sin justificación ni sangría.',
+  'Archivo en PDF o Word con la plantilla oficial.',
 ]

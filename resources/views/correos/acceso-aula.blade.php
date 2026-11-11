@@ -2,7 +2,7 @@
   <p style="margin:0 0 14px;">Hola, {{ $participante->nombres }}:</p>
   <p style="margin:0 0 20px;">
     Tu inscripción en el <strong>{{ config('congreso.nombre') }}</strong> está confirmada. Estos son tus datos para ingresar al
-    <strong>Aula virtual</strong>, donde encontrarás los enlaces de Google Meet, el envío de resúmenes y tu certificado.
+    <strong>Aula virtual</strong>, donde encontrarás el programa, el envío de resúmenes y tu certificado.
   </p>
 
   <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 20px;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;">

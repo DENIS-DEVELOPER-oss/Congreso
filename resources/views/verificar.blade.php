@@ -3,7 +3,7 @@
   @if ($c)
     <div class="icono ok">✓</div>
     <h1>Certificado válido</h1>
-    <p>Este certificado fue emitido por la organización del congreso.</p>
+    <p>Este certificado fue otorgado por las instituciones organizadoras del congreso: Universidad Nacional del Altiplano, Vicerrectorado Académico, Facultad de Ciencias Sociales, Escuela Profesional de Sociología, IIDSA y Colegio de Sociólogos del Perú.</p>
     <div class="datos">
       <strong>Otorgado a:</strong> {{ $c->participante->nombre_completo }}<br />
       <strong>En calidad de:</strong> {{ \App\Models\Certificado::TIPOS[$c->tipo] ?? $c->tipo }}<br />

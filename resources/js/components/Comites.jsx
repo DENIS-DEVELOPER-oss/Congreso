@@ -1,3 +1,4 @@
+import { Award, ClipboardCheck } from 'lucide-react'
 import { aliados } from '../data/aliados.js'
 import { comiteCientifico, comiteOrganizador } from '../data/comites.js'
 import { TituloSeccion } from './Andino.jsx'
@@ -47,7 +48,7 @@ export default function Comites() {
         <TituloSeccion
           etiqueta="Organización"
           titulo="Comité organizador"
-          descripcion="El congreso es organizado por las siguientes instituciones."
+          descripcion="El congreso es organizado por las siguientes instituciones, que evalúan las ponencias y otorgan las certificaciones."
         />
         <Reveal>
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -57,13 +58,39 @@ export default function Comites() {
           </ul>
         </Reveal>
 
+        {/* Qué hace el comité: evaluar las ponencias y certificar a nombre de las instituciones */}
+        <Reveal delay={100} className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="flex items-start gap-4 rounded-2xl bg-[#0b1f5c] p-5 text-white sm:p-6">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-naranja text-[#0b1f5c]">
+              <ClipboardCheck className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-display text-lg font-extrabold">Evaluación de ponencias</p>
+              <p className="mt-1 text-sm leading-relaxed text-white/80">
+                Los resúmenes recibidos son evaluados por el Comité organizador, que comunica el resultado a cada autor por correo.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4 rounded-2xl bg-[#0b1f5c] p-5 text-white sm:p-6">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-naranja text-[#0b1f5c]">
+              <Award className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-display text-lg font-extrabold">Certificación institucional</p>
+              <p className="mt-1 text-sm leading-relaxed text-white/80">
+                Los certificados se otorgan a nombre de las instituciones organizadoras y llevan sus insignias y un código QR de verificación.
+              </p>
+            </div>
+          </div>
+        </Reveal>
+
         {/* Personas de los comités: se muestran cuando estén confirmadas en data/comites.js */}
         {(comiteOrganizador.length > 0 || comiteCientifico.length > 0) && (
-          <div className="mt-12 grid gap-10 lg:grid-cols-2">
+          <div className={`mt-12 grid gap-10 ${comiteCientifico.length > 0 ? 'lg:grid-cols-2' : ''}`}>
             {comiteOrganizador.length > 0 && (
               <Reveal>
-                <h3 className="mb-5 text-sm font-bold tracking-wide text-rojizo-oscuro uppercase">Integrantes del comité organizador</h3>
-                <ul className="space-y-3">
+                <h3 className="mb-5 text-sm font-bold tracking-wide text-rojizo-oscuro uppercase">Comisión organizadora</h3>
+                <ul className={comiteCientifico.length > 0 ? 'space-y-3' : 'grid gap-3 sm:grid-cols-2 lg:grid-cols-3'}>
                   {comiteOrganizador.map((p) => (
                     <Persona key={p.nombre} nombre={p.nombre} detalle={p.cargo} color="bg-rojizo-oscuro/10 text-rojizo-oscuro" />
                   ))}

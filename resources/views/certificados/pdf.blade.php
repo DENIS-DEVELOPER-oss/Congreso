@@ -57,7 +57,7 @@
 
       <div class="texto">
         Por su participación en calidad de <strong>{{ $tipo }}</strong> en el {{ config('congreso.nombre') }},
-        realizado en la ciudad de Puno, en modalidad presencial y virtual, el {{ config('congreso.fechas_texto') }}, con una duración de
+        realizado en la ciudad de Puno, en modalidad presencial, el {{ config('congreso.fechas_texto') }}, con una duración de
         <strong>{{ $c->horas }} horas académicas</strong>.
       </div>
     </div>

@@ -7,6 +7,7 @@ import { ponentes } from '../data/ponentes.js'
 import { useDatos } from '../hooks/useDatos.js'
 import Banderas from './Banderas.jsx'
 import Reveal from './Reveal.jsx'
+import Temporizador from './Temporizador.jsx'
 
 export default function Cifras() {
   const ejes = useDatos('/api/ejes', ejesLocales)
@@ -46,6 +47,8 @@ export default function Cifras() {
             <Banderas paises={paises} />
           </span>
         </div>
+
+        <Temporizador />
 
         <ul className="grid grid-cols-1 gap-3 py-8 min-[380px]:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {cifras.map(({ Icono, numero, texto }, i) => (

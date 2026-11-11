@@ -1,7 +1,7 @@
 import { evento } from '../data/evento.js'
 
 const aUTC = (fecha) => new Date(fecha).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
-const lugar = `${evento.modalidad} · ${evento.sitio}/aula`
+const lugar = `${evento.sede}, ${evento.sedeDireccion}`
 
 export function urlGoogleCalendar() {
   const p = new URLSearchParams({

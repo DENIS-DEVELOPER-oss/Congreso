@@ -16,9 +16,9 @@ class GuardarPonencia extends FormRequest
             'modalidad' => ['required', Rule::in(array_keys(config('congreso.modalidades')))],
             'coautores' => ['nullable', 'string', 'max:1000'],
             'palabras_clave' => ['required', 'string', 'max:250', function ($campo, $valor, $falla) {
-                $n = count(array_filter(array_map('trim', explode(',', $valor))));
+                $n = count(array_filter(array_map('trim', preg_split('/[;,]/', $valor))));
                 if ($n !== 5) {
-                    $falla('Escribe 5 palabras clave separadas por comas.');
+                    $falla('Escribe 5 palabras clave separadas por punto y coma.');
                 }
             }],
             'archivo' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
@@ -32,8 +32,8 @@ class GuardarPonencia extends FormRequest
             'titulo.min' => 'El título es muy corto: usa al menos 10 caracteres.',
             'titulo.max' => 'El título puede tener hasta 200 caracteres.',
             'eje.*' => 'Elige el eje temático en el que encaja tu trabajo.',
-            'modalidad.*' => 'Elige si presentarás tu ponencia de forma presencial o virtual.',
-            'palabras_clave.required' => 'Escribe 5 palabras clave separadas por comas.',
+            'modalidad.*' => 'La ponencia se presenta de forma presencial.',
+            'palabras_clave.required' => 'Escribe 5 palabras clave separadas por punto y coma.',
             'archivo.required' => 'Adjunta tu resumen en PDF o Word.',
             'archivo.mimes' => 'El resumen debe ser PDF o Word (.doc o .docx).',
             'archivo.max' => 'El archivo pesa más de 5 MB.',

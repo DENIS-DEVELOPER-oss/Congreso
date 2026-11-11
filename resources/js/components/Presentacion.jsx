@@ -3,11 +3,14 @@ import { TituloSeccion } from './Andino.jsx'
 import PaisajeTiticaca from './Paisaje.jsx'
 import Reveal from './Reveal.jsx'
 
+// Objetivos según el documento oficial del congreso
+const OBJETIVO_GENERAL =
+  'Propiciar la reflexión y el análisis crítico sobre la importancia de promover el diálogo intercultural e interepistémico entre los saberes ancestrales de los pueblos originarios andinos y amazónicos y los conocimientos científicos y académicos que se imparten en las universidades del Perú y Latinoamérica, orientado a fortalecer la enseñanza, la investigación y la responsabilidad social desde una perspectiva multiparadigmática.'
+
 const OBJETIVOS = [
-  'Abrir un espacio de diálogo entre el conocimiento académico y los saberes de los pueblos andinos y amazónicos.',
-  'Dar a conocer investigaciones y experiencias de educación intercultural en la universidad.',
-  'Fortalecer el trabajo conjunto entre universidades del Perú y de otros países de la región.',
-  'Recoger propuestas para una formación universitaria con pertinencia intercultural e interepistémica.',
+  'Analizar los fundamentos y las posibilidades del diálogo intercultural e interepistémico entre los saberes ancestrales y los conocimientos científicos y académicos, desde una perspectiva de reconocimiento, reciprocidad y equidad entre diferentes sistemas de conocimiento.',
+  'Promover la construcción de propuestas orientadas al desarrollo de una educación superior universitaria multiparadigmática e intercultural, que reconozca y valore la pluralidad de sistemas de conocimiento, culturas y lenguas en las universidades peruanas y latinoamericanas.',
+  'Fomentar el desarrollo de redes de colaboración nacional e internacional entre universidades y organizaciones sociales originarias para promover la difusión y el reconocimiento de los conocimientos originarios en la educación superior universitaria.',
 ]
 
 const DIRIGIDO_A = [
@@ -32,17 +35,26 @@ export default function Presentacion() {
                 La Escuela Profesional de Sociología y el Instituto de Investigaciones para el Desarrollo Social Andino
                 (IIDSA) de la Universidad Nacional del Altiplano organizan el I Congreso Internacional «Saberes
                 Andino-Amazónicos y Diálogo Intercultural en la Educación Superior Universitaria», que se realizará en
-                Educación Continua de la UNA Puno, en modalidad presencial y virtual, el 26 y 27 de noviembre de 2026.
+                Educación Continua de la UNA Puno, en modalidad presencial, el 26 y 27 de noviembre de 2026.
               </p>
               <p>
-                El congreso parte de una pregunta que compartimos docentes y estudiantes: cómo formar profesionales
-                con pertinencia intercultural e interepistémica, es decir, en una universidad donde los saberes de los
-                pueblos andinos y amazónicos dialoguen en igualdad con el conocimiento académico. Para ello reúne en
-                Puno y en línea a investigadores, docentes y sabios originarios del Perú y de otros países de la región.
+                En una sociedad pluricultural y multilingüe como la peruana, articular los saberes académicos con los
+                conocimientos ancestrales de los pueblos originarios andinos y amazónicos es una tarea fundamental para
+                construir una educación superior inclusiva, pertinente y comprometida. Guiado por el diálogo intercultural
+                e interepistémico, este proceso no solo reconoce otras formas de conocimiento, sino que también mejora la
+                calidad académica, la investigación científica y la responsabilidad social de la universidad peruana y
+                latinoamericana.
+              </p>
+              <p>
+                El congreso es un espacio para revisar críticamente los fundamentos epistemológicos, pedagógicos y
+                curriculares de la educación superior, con el objetivo de construir una universidad intercultural que valore
+                la diversidad de saberes, promueva la equidad y contribuya a superar la discriminación epistémica.
               </p>
             </div>
 
-            <h3 className="mt-12 text-xl font-semibold text-oscuro">Objetivos</h3>
+            <h3 className="mt-12 text-xl font-semibold text-oscuro">Objetivo general</h3>
+            <p className="mt-3 rounded-lg border-l-4 border-naranja bg-crema p-4 text-[17px] leading-relaxed text-slate-700">{OBJETIVO_GENERAL}</p>
+            <h3 className="mt-8 text-xl font-semibold text-oscuro">Objetivos específicos</h3>
             <ol className="mt-4 list-decimal space-y-3 pl-5 text-[17px] leading-relaxed text-slate-700 marker:font-semibold marker:text-rojizo-oscuro">
               {OBJETIVOS.map((o) => (
                 <li key={o} className="pl-1">

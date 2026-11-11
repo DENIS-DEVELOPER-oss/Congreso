@@ -3,9 +3,9 @@ import { evento } from './evento.js'
 
 export const preguntas = [
   {
-    pregunta: '¿El congreso es presencial o virtual?',
+    pregunta: '¿Dónde se realiza el congreso?',
     respuesta:
-      'Es presencial y virtual: puedes asistir a Educación Continua de la Universidad Nacional del Altiplano, en Puno, o seguir las sesiones en vivo por Google Meet. Los enlaces están en el Aula virtual.',
+      'Es presencial: en Educación Continua de la Universidad Nacional del Altiplano (Av. El Sol 300, Puno), el 26 y 27 de noviembre de 2026.',
   },
   {
     pregunta: '¿Cuánto cuesta la inscripción?',
@@ -21,21 +21,17 @@ export const preguntas = [
   {
     pregunta: '¿Cómo envío mi ponencia?',
     respuesta:
-      `Envía tu resumen (250 palabras, con la plantilla oficial) en PDF o Word por WhatsApp al ${evento.telefono} o al correo ${evento.correo}, hasta el 20 de noviembre de 2026. Indica tu nombre completo, DNI, eje temático y modalidad. El comité científico comunicará los resultados por correo.`,
-  },
-  {
-    pregunta: '¿Puedo presentar mi ponencia de forma virtual?',
-    respuesta: 'Sí. Al enviar tu resumen eliges si la presentarás de forma presencial en Educación Continua o virtual por Google Meet.',
+      `Envía tu resumen (250 palabras, con la plantilla oficial) en PDF o Word por WhatsApp al ${evento.telefono} o al correo ${evento.correo}, hasta el 15 de noviembre de 2026. Indica tu nombre completo, DNI y eje temático. El Comité organizador evaluará tu trabajo y te comunicará el resultado por correo.`,
   },
   {
     pregunta: '¿Cómo se registra mi asistencia?',
     respuesta:
-      'En la sede, con tu código o tu DNI. En línea, a partir del reporte de participantes de Google Meet: ingresa con tu nombre completo o con el correo de tu inscripción.',
+      'En la sede, al ingresar a cada sesión, con tu código de inscripción o tu DNI.',
   },
   {
     pregunta: '¿Entregan certificado? ¿Cuántas horas?',
     respuesta:
-      'Sí. Se entrega un certificado digital por 48 horas académicas a quienes registren al menos el 80 % de asistencia. Podrás descargarlo desde el Aula virtual después del evento.',
+      'Sí. Las instituciones organizadoras (Universidad Nacional del Altiplano, Vicerrectorado Académico, Facultad de Ciencias Sociales, Escuela Profesional de Sociología, IIDSA y Colegio de Sociólogos del Perú) otorgan un certificado digital por 48 horas académicas a quienes registren al menos el 80 % de asistencia. Podrás descargarlo desde el Aula virtual después del evento.',
   },
   {
     pregunta: 'No me llegó el correo de acceso, ¿qué hago?',

@@ -1,10 +1,9 @@
-import { ArrowRight, Briefcase, Building2, Check, GraduationCap, IdCard, Mail, Mic, Phone, School, User, UserPlus } from 'lucide-react'
-import { evento } from '../data/evento.js'
+import { ArrowRight, Briefcase, Building2, Check, GraduationCap, IdCard, Mail, MessageCircle, Mic, Phone, School, User, UserPlus } from 'lucide-react'
+import { canales, enlaceWhatsApp, evento } from '../data/evento.js'
 import { useFormulario } from '../hooks/useFormulario.js'
 import { aFormData, enviar } from '../lib/api.js'
 import { RUTAS } from '../lib/rutas.js'
 import { ChakanaContorno, TituloSeccion } from './Andino.jsx'
-import { BotonesWhatsApp, EnlacesCorreo } from './Canales.jsx'
 import Reveal from './Reveal.jsx'
 import {
   AlertaError,
@@ -48,7 +47,7 @@ const PASOS = [
   evento.inscripcionesAbiertas
     ? { titulo: 'Recibe tu acceso al instante', texto: 'Te llega un correo con tu usuario, una contraseña temporal y el programa.' }
     : { titulo: 'Recibe tu acceso', texto: 'Te enviamos por correo tu usuario, una contraseña temporal y el programa.' },
-  { titulo: 'Ingresa al Aula virtual', texto: 'Únete a las sesiones por Google Meet y descarga tu certificado.' },
+  { titulo: 'Ingresa al Aula virtual', texto: 'Consulta el programa y descarga tu certificado.' },
 ]
 
 // El orden de las claves define qué campo recibe el foco primero
@@ -116,34 +115,55 @@ function PanelInformativo() {
 const SOLICITUD =
   'Hola, deseo inscribirme en el I Congreso Internacional Saberes Andino-Amazónicos.\nNombres y apellidos:\nDNI:\nCelular:\nCorreo:\nInstitución:\nParticipo como (estudiante, docente, profesional o ponente):'
 
-// Mientras el formulario en línea está cerrado, la inscripción se solicita a la comisión por WhatsApp o correo
-function InscripcionesCerradas() {
+// Mientras el formulario en línea está cerrado, la inscripción se solicita a la comisión: como asistente o como ponente
+function OpcionInscripcion({ Icono, titulo, texto, children }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center py-10 text-center">
-      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-crema text-rojizo-oscuro ring-1 ring-naranja/40">
-        <UserPlus className="h-8 w-8" aria-hidden="true" />
+    <div className="flex flex-col rounded-2xl border border-black/5 bg-slate-50/70 p-5 text-left sm:p-6">
+      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#0b1f5c] text-naranja">
+        <Icono className="h-5 w-5" aria-hidden="true" />
       </span>
-      <h3 className="mt-6 font-display text-2xl font-extrabold text-oscuro sm:text-3xl">Inscríbete ahora</h3>
-      <p className="mt-3 max-w-lg leading-relaxed text-slate-600">
-        La inscripción es <strong className="text-oscuro">gratuita</strong>. Solicítala a la comisión organizadora por WhatsApp o correo
-        electrónico con tus datos: te confirmaremos el registro y te enviaremos tu acceso al Aula virtual.
+      <h4 className="mt-4 font-display text-lg font-extrabold text-oscuro">{titulo}</h4>
+      <p className="mt-1 text-sm leading-relaxed text-slate-600">{texto}</p>
+      <div className="mt-auto pt-5">{children}</div>
+    </div>
+  )
+}
+
+function InscripcionesCerradas() {
+  const whatsapp = canales.whatsapp[0]
+  const correo = canales.correos[0]
+  return (
+    <div className="flex h-full flex-col justify-center py-6 text-center">
+      <h3 className="font-display text-2xl font-extrabold text-oscuro sm:text-3xl">Inscríbete ahora</h3>
+      <p className="mx-auto mt-2 max-w-lg leading-relaxed text-slate-600">
+        La inscripción es <strong className="text-oscuro">gratuita</strong>. Elige cómo participarás y escríbenos: te confirmaremos el
+        registro y te enviaremos tu acceso al Aula virtual.
       </p>
 
-      <div className="mt-8 w-full max-w-lg rounded-2xl border border-black/5 bg-slate-50/70 px-3 py-5 min-[360px]:px-5 sm:p-6">
-        <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">Solicita tu inscripción</p>
-        <BotonesWhatsApp mensaje={SOLICITUD} className="mt-4 justify-center" />
-        <EnlacesCorreo
-          className="mt-4 flex flex-col items-center"
-          asunto="Solicitud de inscripción – Congreso Saberes Andino-Amazónicos"
-          cuerpo={SOLICITUD}
-          claseEnlace="text-[13px] text-oscuro hover:text-rojizo-oscuro min-[360px]:text-sm sm:text-base"
-        />
+      <div className="mt-7 grid gap-4 sm:grid-cols-2">
+        <OpcionInscripcion Icono={UserPlus} titulo="Como asistente" texto="Participa en Educación Continua de la UNA Puno, con certificado otorgado por las instituciones organizadoras.">
+          <a href={enlaceWhatsApp(whatsapp.numero, SOLICITUD)} target="_blank" rel="noopener noreferrer" className="btn w-full bg-[#25D366] text-[#0b1f5c] hover:bg-[#3ee07c]">
+            <MessageCircle className="h-4 w-4" aria-hidden="true" /> Solicitar inscripción
+          </a>
+          <a
+            href={`mailto:${correo}?subject=${encodeURIComponent('Solicitud de inscripción – Congreso Saberes Andino-Amazónicos')}&body=${encodeURIComponent(SOLICITUD)}`}
+            className="mt-2.5 inline-flex items-center gap-1.5 text-sm font-semibold text-rojizo-oscuro hover:underline"
+          >
+            <Mail className="h-4 w-4" aria-hidden="true" /> o por correo
+          </a>
+        </OpcionInscripcion>
+
+        <OpcionInscripcion Icono={Mic} titulo="Como ponente" texto="Presenta tu investigación: envía tu resumen con la plantilla oficial hasta el 15 de noviembre.">
+          <a href="/#convocatoria" className="btn-primario w-full">
+            Enviar mi resumen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </a>
+          <p className="mt-2.5 text-sm text-slate-500">Revisa las bases y los ejes temáticos</p>
+        </OpcionInscripcion>
       </div>
 
-      <p className="mt-8 text-sm text-slate-500">¿Presentarás una ponencia?</p>
-      <a href="/#convocatoria" className="btn-secundario mt-3">
-        <Mic className="h-4 w-4" aria-hidden="true" /> Presenta tu ponencia
-      </a>
+      <p className="mt-5 text-sm text-slate-500">
+        Consultas: WhatsApp {whatsapp.texto} · {correo}
+      </p>
     </div>
   )
 }
@@ -166,7 +186,7 @@ export default function Inscripcion({ conTitulo = true }) {
           <TituloSeccion
             etiqueta="Registro"
             titulo="Inscripción"
-            descripcion="Regístrese con sus datos y recibirá al instante, por correo, su acceso al Aula virtual con el programa y los enlaces de Google Meet."
+            descripcion="Regístrese con sus datos y recibirá al instante, por correo, su acceso al Aula virtual con el programa del congreso."
           />
         )}
 
@@ -187,7 +207,7 @@ export default function Inscripcion({ conTitulo = true }) {
                   pasos={[
                     'Abre el correo «Aula virtual: confirmación de acceso» (si no lo ves, revisa spam).',
                     'Ingresa al aula con tu DNI y la contraseña temporal, y crea tu propia contraseña.',
-                    'Envía tu resumen hasta el 20 de noviembre y únete a las sesiones presencialmente o por Google Meet.',
+                    'Envía tu resumen hasta el 15 de noviembre y participa en las sesiones en Educación Continua de la UNA Puno.',
                   ]}
                   textoOtro="Registrar a otra persona"
                   onOtro={f.reiniciar}

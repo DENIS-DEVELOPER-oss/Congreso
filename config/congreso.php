@@ -10,7 +10,7 @@ return [
     'fecha_inicio' => '2026-11-26T08:00:00-05:00',
     'fecha_fin' => '2026-11-27T19:00:00-05:00',
     'ciudad' => 'Puno, Perú', // sede de la organización
-    'modalidad' => 'Presencial y virtual',
+    'modalidad' => 'Presencial',
     'sede' => 'Educación Continua UNA Puno',
     'organiza' => 'Escuela Profesional de Sociología · Instituto de Investigaciones para el Desarrollo Social Andino (IIDSA) · Universidad Nacional del Altiplano',
 
@@ -59,7 +59,6 @@ return [
 
     'modalidades' => [
         'presencial' => 'Ponencia presencial',
-        'virtual' => 'Ponencia virtual',
     ],
 
     // EDITABLE. Contacto que se muestra en la página y en los correos
@@ -69,7 +68,7 @@ return [
 
     // EDITABLE. Fechas importantes de la portada (fecha AAAA-MM-DD, en orden)
     'fechas_importantes' => [
-        ['fecha' => '2026-11-20', 'texto' => 'Cierre de recepción de resúmenes'],
+        ['fecha' => '2026-11-15', 'texto' => 'Cierre de recepción de resúmenes'],
         ['fecha' => '2026-11-26', 'texto' => 'Inauguración y primer día del congreso'],
         ['fecha' => '2026-11-27', 'texto' => 'Segundo día y clausura'],
     ],
@@ -80,7 +79,7 @@ return [
         ['nombre' => null, 'cargo' => 'Director(a) del Instituto de Investigaciones para el Desarrollo Social Andino (IIDSA)', 'firma' => null],
     ],
 
-    // EDITABLE. Si es true, el enlace de Google Meet solo se muestra en el Aula a quienes tienen el pago validado
+    // EDITABLE. Si es true, el enlace de las sesiones solo se muestra en el Aula a quienes tienen el pago validado
     'zoom_solo_con_pago' => true,
 
     // EDITABLE. Certificados
