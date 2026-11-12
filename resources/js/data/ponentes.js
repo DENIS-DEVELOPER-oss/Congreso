@@ -102,6 +102,15 @@ const ponentesBase = [
     ponencia: null,
     bio: 'Docente de la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano.',
   },
+  {
+    id: 12,
+    nombre: 'Dr. Juan José Pari Arapa',
+    institucion: 'Universidad Nacional del Altiplano',
+    pais: 'Perú',
+    foto: '/ponentes/juan-jose-pari.jpg',
+    ponencia: null,
+    bio: 'Docente de la Escuela Profesional de Educación Física de la Universidad Nacional del Altiplano.',
+  },
 ]
 
 const delServidor = globalThis.__CONGRESO__?.ponentes

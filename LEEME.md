@@ -128,7 +128,7 @@ composer install --no-dev --optimize-autoloader     # si "composer" no existe: p
 cp .env.produccion.example .env
 nano .env        # completa base de datos y contraseña del correo (valores entre < >)
 php artisan key:generate
-php artisan migrate --seed --force    # tablas, 6 ejes, 11 ponentes y 4 sesiones
+php artisan migrate --seed --force    # tablas, 6 ejes, 12 ponentes y 4 sesiones
 php artisan congreso:admin            # crea el administrador (pide correo, nombre y contraseña)
 php artisan optimize
 php artisan filament:optimize

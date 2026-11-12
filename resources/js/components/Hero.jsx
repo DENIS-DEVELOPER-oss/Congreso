@@ -256,7 +256,7 @@ const DIAPOSITIVAS = [
     id: 'afiche-ponentes',
     etiqueta: 'Afiche ponentes',
     antetitulo: 'Afiche · ponentes centrales',
-    titulo: 'Once ponentes de tres países',
+    titulo: 'Doce ponentes de tres países',
     texto: 'Especialistas de Perú, Argentina y México en conferencias centrales y mesas temáticas.',
     botones: [
       { texto: 'Ver el afiche', afiche: afiche('ponentes'), principal: true },

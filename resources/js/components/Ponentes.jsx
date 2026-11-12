@@ -120,7 +120,7 @@ export default function Ponentes() {
                       <span className="sr-only">: ver perfil</span>
                     </button>
                   </h3>
-                  <p className="mt-2 flex items-start gap-2 text-sm leading-relaxed text-slate-600">
+                  <p className="mt-2 flex items-start gap-2 text-left text-sm leading-relaxed text-slate-600">
                     <Building2 className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
                     <span>{p.institucion}</span>
                   </p>

@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use App\Models\PonenteCentral;
 use Illuminate\Database\Seeder;
 
-// Los 11 ponentes centrales del afiche. Solo se cargan si la tabla está vacía (no pisa lo editado en el panel).
+// Los ponentes centrales (los 11 del afiche y el Dr. Juan José Pari Arapa). Solo se cargan si la tabla está vacía
+// (no pisa lo editado en el panel); en una base que ya los tenía, el nuevo lo agrega su propia migración.
 class PonentesSeeder extends Seeder
 {
     public function run(): void
@@ -27,6 +28,7 @@ class PonentesSeeder extends Seeder
             ['Antrop. Rubén Saraza Barriga', 'Sabio originario aimara lupaka', 'Perú', 'ponentes/ruben-saraza.jpg', 'Antropólogo y sabio originario aimara lupaka, dedicado al estudio de la sabiduría ancestral.'],
             ['Antrop. Rolando Pilco Mallea', 'IDECA Puno', 'Perú', 'ponentes/rolando-pilco.jpg', 'Antropólogo y director de IDECA Puno.'],
             ['Dr. Porfirio Enríquez Salas', 'Universidad Nacional del Altiplano', 'Perú', 'ponentes/porfirio-enriquez.jpg', 'Docente de la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano.'],
+            ['Dr. Juan José Pari Arapa', 'Universidad Nacional del Altiplano', 'Perú', 'ponentes/juan-jose-pari.jpg', 'Docente de la Escuela Profesional de Educación Física de la Universidad Nacional del Altiplano.'],
         ];
         foreach ($ponentes as $i => [$nombre, $institucion, $pais, $foto, $bio]) {
             PonenteCentral::create(compact('nombre', 'institucion', 'pais', 'foto', 'bio') + ['orden' => $i + 1]);
