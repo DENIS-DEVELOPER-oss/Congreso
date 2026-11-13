@@ -15,31 +15,73 @@ const INTERVALO = 12000
 // La primera diapositiva (El congreso) se queda el triple de tiempo que las demás
 const duracion = (i) => (i === 0 ? INTERVALO * 3 : INTERVALO)
 
-// Video o foto de Puno detrás del hero (si está configurado en evento.heroMedia)
+const FOTOS_HERO = evento.heroMedia?.fotos ?? []
+
+// Fotos de fondo que se alternan con un fundido. La primera carga con prioridad; las demás se piden
+// después de mostrarla. Con «reducir movimiento» o la pestaña oculta, se queda quieta.
+function FotosHero() {
+  const [actual, setActual] = useState(0)
+  const [listas, setListas] = useState(1) // cuántas fotos ya se pueden montar (la primera siempre)
+
+  useEffect(() => {
+    if (FOTOS_HERO.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const cargar = setTimeout(() => setListas(FOTOS_HERO.length), 2500)
+    const t = setInterval(() => {
+      if (document.visibilityState === 'visible') setActual((a) => (a + 1) % FOTOS_HERO.length)
+    }, evento.heroMedia?.fotosIntervalo ?? 9000)
+    return () => {
+      clearTimeout(cargar)
+      clearInterval(t)
+    }
+  }, [])
+
+  return FOTOS_HERO.slice(0, listas).map((f, i) => (
+    <img
+      key={f.src}
+      src={f.src}
+      srcSet={f.movil ? `${f.movil} 1000w, ${f.src} 1672w` : undefined}
+      sizes={f.movil ? '100vw' : undefined}
+      alt=""
+      fetchPriority={i === 0 ? 'high' : 'low'}
+      decoding="async"
+      className={`absolute inset-0 h-full w-full object-cover object-[65%_center] transition-opacity duration-[1800ms] ease-in-out ${i === actual ? 'opacity-100' : 'opacity-0'}`}
+    />
+  ))
+}
+
+// Video o fotos de Puno detrás del hero (si están configurados en evento.heroMedia)
 function MediaHero() {
-  const { video, poster } = evento.heroMedia ?? {}
+  const { video } = evento.heroMedia ?? {}
   const [reducir, setReducir] = useState(false)
 
   useEffect(() => {
     setReducir(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   }, [])
 
-  if (!video && !poster) return null
-  return video && !reducir ? (
-    <video className="absolute inset-0 h-full w-full object-cover" src={video} poster={poster ?? undefined} autoPlay muted loop playsInline preload="metadata" />
-  ) : (
-    poster && <img src={poster} alt="" className="absolute inset-0 h-full w-full object-cover" />
-  )
+  if (video && !reducir) {
+    return <video className="absolute inset-0 h-full w-full object-cover" src={video} poster={FOTOS_HERO[0]?.src} autoPlay muted loop playsInline preload="metadata" />
+  }
+  return FOTOS_HERO.length > 0 ? <FotosHero /> : null
 }
 
 // Fondo claro: foto o video si están configurados; si no, el paisaje ilustrado del altiplano de día.
 // Un velo blanco a la izquierda asegura que el texto oscuro siempre se lea.
 function FondoHero() {
-  const conMedia = evento.heroMedia?.video || evento.heroMedia?.poster
+  const conMedia = evento.heroMedia?.video || FOTOS_HERO.length > 0
   return (
     <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       {conMedia ? <MediaHero /> : <PaisajeHero className="paralaje absolute inset-0 h-full w-full" />}
-      <div className="absolute inset-0 bg-linear-to-r from-white/95 via-white/70 to-white/10 lg:via-white/55" />
+      {conMedia ? (
+        <>
+          {/* Con foto: en celular el texto ocupa todo el ancho (velo parejo); en pantallas grandes, blanco firme
+              detrás del texto que se desvanece hacia la derecha, donde la foto queda viva */}
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] lg:hidden" />
+          <div className="absolute inset-0 hidden bg-linear-to-r from-white/95 from-25% via-white/75 via-50% to-white/5 lg:block" />
+          <div className="absolute inset-x-0 bottom-0 h-36 bg-linear-to-t from-white/90 to-transparent" />
+        </>
+      ) : (
+        <div className="absolute inset-0 bg-linear-to-r from-white/95 via-white/70 to-white/10 lg:via-white/55" />
+      )}
       <div className="absolute inset-x-0 top-0 h-40 bg-linear-to-b from-white/80 to-transparent" />
     </div>
   )

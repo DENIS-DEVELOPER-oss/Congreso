@@ -281,7 +281,7 @@ export default function Navbar({ pagina = 'inicio' }) {
             href={RUTAS.cuenta}
             aria-current={pagina === 'cuenta' ? 'page' : undefined}
             title="Aula virtual"
-            className="hidden items-center gap-1.5 text-[0.875rem] font-semibold whitespace-nowrap text-slate-700 transition hover:text-[#0b1f5c] md:inline-flex xl:h-10 xl:w-10 xl:justify-center xl:rounded-md xl:hover:bg-slate-900/5"
+            className="hidden items-center gap-1.5 text-[0.875rem] font-semibold whitespace-nowrap text-slate-700 transition hover:text-[#0b1f5c] lg:inline-flex xl:h-10 xl:w-10 xl:justify-center xl:rounded-md xl:hover:bg-slate-900/5"
           >
             {/* Con el menú completo (xl) solo cabe el ícono; el nombre queda para lectores de pantalla y al pasar el mouse */}
             <KeyRound className="h-4 w-4 text-[#1d4ed8] xl:h-[18px] xl:w-[18px]" aria-hidden="true" /> <span className="xl:sr-only">Aula virtual</span>

@@ -45,7 +45,13 @@ const eventoBase = {
   // Fondo del hero: coloca los archivos en /public/media/ (ver LEEME.txt). Con null se usa el fondo textil.
   heroMedia: {
     video: null, // p. ej. '/media/hero-puno.mp4' (MP4 H.264, 10–20 s, sin audio, < 6 MB)
-    poster: null, // p. ej. '/media/hero-puno.jpg' (se muestra mientras carga el video o si se reduce el movimiento)
+    // Fotos de fondo (sin video): si hay más de una, se alternan con un fundido cada fotosIntervalo ms.
+    // «movil» es una versión liviana (1000 px) para celulares; puede ser null.
+    fotos: [
+      { src: '/media/portada-ritual.jpg', movil: '/media/portada-ritual-movil.jpg' }, // ofrenda y fuego en la plaza
+      { src: '/media/portada-ritual-2.jpg', movil: '/media/portada-ritual-2-movil.jpg' }, // ritual frente a la catedral
+    ],
+    fotosIntervalo: 9000,
     credito: null, // p. ej. 'Foto: Nombre Apellido'
   },
   // Imagen del mosaico de Presentación (lago, Taquile, tejedoras…). null = tela de aguayo.

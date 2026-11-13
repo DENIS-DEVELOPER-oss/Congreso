@@ -75,11 +75,11 @@ function PerfilPonente({ ponente }) {
   )
 }
 
-// Cuántas tarjetas se ven a cada lado de la central: 2 en pantallas medianas y grandes, 1 en celulares
+// Cuántas tarjetas se ven a cada lado de la central: 2 en computadoras, 1 en tablets y celulares
 function useLadosVisibles() {
   const [lados, setLados] = useState(2)
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
+    const mq = window.matchMedia('(min-width: 1024px)')
     const medir = () => setLados(mq.matches ? 2 : 1)
     medir()
     mq.addEventListener('change', medir)
@@ -146,7 +146,7 @@ function CarruselPonentes({ ponentes, onAbrir }) {
       </p>
 
       {/* Escenario con perspectiva: alto de una tarjeta (3:4) y un margen para la sombra */}
-      <div className="relative h-[calc(var(--w)*4/3+2.5rem)] overflow-hidden [perspective:1400px] md:overflow-visible">
+      <div className="relative h-[calc(var(--w)*4/3+2.5rem)] overflow-hidden [perspective:1400px] lg:overflow-visible">
         {ponentes.map((p, i) => {
           const d = distancia(i)
           const lejos = Math.abs(d)
@@ -205,8 +205,8 @@ function CarruselPonentes({ ponentes, onAbrir }) {
 
         {/* Flechas sobre las tarjetas laterales */}
         {[
-          [anterior, ChevronLeft, 'Ponente anterior', 'left-1 md:left-[calc(50%-var(--w)*1.3)]'],
-          [siguiente, ChevronRight, 'Ponente siguiente', 'right-1 md:right-[calc(50%-var(--w)*1.3)]'],
+          [anterior, ChevronLeft, 'Ponente anterior', 'left-1 sm:left-[calc(50%-var(--w)*0.95)] lg:left-[calc(50%-var(--w)*1.3)]'],
+          [siguiente, ChevronRight, 'Ponente siguiente', 'right-1 sm:right-[calc(50%-var(--w)*0.95)] lg:right-[calc(50%-var(--w)*1.3)]'],
         ].map(([accion, Icono, etiqueta, lugar]) => (
           <button
             key={etiqueta}
@@ -249,7 +249,7 @@ export default function Ponentes() {
   const [verAfiche, setVerAfiche] = useState(false)
 
   return (
-    <section id="ponentes" className="seccion bg-white">
+    <section id="ponentes" className="seccion overflow-x-clip bg-white">
       <div className="contenedor">
         <TituloSeccion
           etiqueta="Conferencistas"
