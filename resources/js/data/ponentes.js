@@ -9,7 +9,7 @@ const ponentesBase = [
     institucion: 'CONICET',
     pais: 'Argentina',
     foto: '/ponentes/adrian-scribano.jpg',
-    ponencia: null,
+    ponencia: 'Reflexiones sociológicas sobre cultura e interculturalidad en Latinoamérica',
     bio: 'Sociólogo e investigador principal del Consejo Nacional de Investigaciones Científicas y Técnicas (CONICET) de Argentina.',
   },
   {
@@ -18,7 +18,7 @@ const ponentesBase = [
     institucion: 'Universidad Autónoma Chapingo',
     pais: 'México',
     foto: '/ponentes/lorenzo-espinoza.jpg',
-    ponencia: null,
+    ponencia: 'Desecación de lagos en el valle de México, una apreciación hermenéutica',
     bio: 'Docente del Departamento de Sociología Rural de la Universidad Autónoma Chapingo.',
   },
   {
@@ -27,7 +27,7 @@ const ponentesBase = [
     institucion: 'Universidad Nacional Mayor de San Marcos',
     pais: 'Perú',
     foto: '/ponentes/jaime-rios.jpg',
-    ponencia: null,
+    ponencia: 'El Buen Vivir en la educación universitaria latinoamericana: diálogo intercultural entre los conocimientos científicos y los saberes de los pueblos originarios',
     bio: 'Docente de la Facultad de Ciencias Sociales de la Universidad Nacional Mayor de San Marcos.',
   },
   {
@@ -36,7 +36,7 @@ const ponentesBase = [
     institucion: 'Universidad Intercultural de Quillabamba (UNIQ)',
     pais: 'Perú',
     foto: '/ponentes/florentino-vizcarra.jpg',
-    ponencia: null,
+    ponencia: 'La Universidad Intercultural de Quillabamba, educación pertinente para jóvenes de pueblos originarios y la integración de saberes',
     bio: 'Director académico de Ciencias Sociales de la Universidad Intercultural de Quillabamba.',
   },
   {
@@ -45,7 +45,7 @@ const ponentesBase = [
     institucion: 'Universidad Nacional del Altiplano',
     pais: 'Perú',
     foto: '/ponentes/vicente-alanoca.jpg',
-    ponencia: null,
+    ponencia: 'La apuesta por una descolonización para el diálogo intercultural emancipatorio en la educación superior universitaria desde el sur andino',
     bio: 'Docente de la Escuela Profesional de Antropología de la Facultad de Ciencias Sociales de la Universidad Nacional del Altiplano.',
   },
   {
@@ -54,7 +54,7 @@ const ponentesBase = [
     institucion: 'Universidad Nacional del Altiplano',
     pais: 'Perú',
     foto: '/ponentes/angel-canales.jpg',
-    ponencia: null,
+    ponencia: 'Conocimiento científico y tecnológico: aportes para la sostenibilidad y el desarrollo en la perspectiva del diálogo de saberes',
     bio: 'Docente principal de la Facultad de Biología de la Universidad Nacional del Altiplano.',
   },
   {
@@ -63,7 +63,7 @@ const ponentesBase = [
     institucion: 'Universidad Nacional del Altiplano',
     pais: 'Perú',
     foto: '/ponentes/emilio-chambi.jpg',
-    ponencia: null,
+    ponencia: 'El diálogo mítico en la cosmovisión andina',
     bio: 'Docente de la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano.',
   },
   {
@@ -72,7 +72,7 @@ const ponentesBase = [
     institucion: 'Universidad Nacional del Altiplano',
     pais: 'Perú',
     foto: '/ponentes/juan-casazola.jpg',
-    ponencia: null,
+    ponencia: '«Yaku Unu Mama» y «Madre Agua», sujeto de derechos en gobiernos subnacionales en la región Puno, periodo 2019-2025',
     bio: 'Docente de la Escuela Profesional de Derecho de la Facultad de Ciencias Jurídicas y Políticas de la Universidad Nacional del Altiplano.',
   },
   {
@@ -81,7 +81,7 @@ const ponentesBase = [
     institucion: 'Sabio originario aimara lupaka',
     pais: 'Perú',
     foto: '/ponentes/ruben-saraza.jpg',
-    ponencia: null,
+    ponencia: 'El saber sagrado y la interculturalidad en la educación universitaria',
     bio: 'Antropólogo y sabio originario aimara lupaka, dedicado al estudio de la sabiduría ancestral.',
   },
   {
@@ -99,7 +99,7 @@ const ponentesBase = [
     institucion: 'Universidad Nacional del Altiplano',
     pais: 'Perú',
     foto: '/ponentes/porfirio-enriquez.jpg',
-    ponencia: null,
+    ponencia: 'Perspectiva interepistémica del diálogo intercultural frente a la hegemonía del saber científico: hacia una propuesta de articulación equitativa de conocimientos en el Perú',
     bio: 'Docente de la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano.',
   },
   {
@@ -108,7 +108,7 @@ const ponentesBase = [
     institucion: 'Universidad Nacional del Altiplano',
     pais: 'Perú',
     foto: '/ponentes/juan-jose-pari.jpg',
-    ponencia: null,
+    ponencia: 'Los caminos de crianza del saber en los niños de Amantaní, Puno',
     bio: 'Docente de la Escuela Profesional de Educación Física de la Universidad Nacional del Altiplano.',
   },
 ]

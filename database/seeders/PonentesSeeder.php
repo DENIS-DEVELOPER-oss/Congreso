@@ -9,6 +9,21 @@ use Illuminate\Database\Seeder;
 // (no pisa lo editado en el panel); en una base que ya los tenía, el nuevo lo agrega su propia migración.
 class PonentesSeeder extends Seeder
 {
+    // Título de cada ponencia central, según la programación oficial (la migración del 18-11 los carga en bases existentes)
+    public const PONENCIAS = [
+        'Dr. Adrián Scribano' => 'Reflexiones sociológicas sobre cultura e interculturalidad en Latinoamérica',
+        'Mtro. Lorenzo Espinoza Gómez' => 'Desecación de lagos en el valle de México, una apreciación hermenéutica',
+        'Dr. Jaime Ríos Burga' => 'El Buen Vivir en la educación universitaria latinoamericana: diálogo intercultural entre los conocimientos científicos y los saberes de los pueblos originarios',
+        'Dr. Florentino Vizcarra Pinto' => 'La Universidad Intercultural de Quillabamba, educación pertinente para jóvenes de pueblos originarios y la integración de saberes',
+        'Dr. Vicente Alanoca Arocutipa' => 'La apuesta por una descolonización para el diálogo intercultural emancipatorio en la educación superior universitaria desde el sur andino',
+        'Dr. Ángel Canales Gutiérrez' => 'Conocimiento científico y tecnológico: aportes para la sostenibilidad y el desarrollo en la perspectiva del diálogo de saberes',
+        'Dr. Emilio Chambi Apaza' => 'El diálogo mítico en la cosmovisión andina',
+        'Dr. Juan Casazola Ccama' => '«Yaku Unu Mama» y «Madre Agua», sujeto de derechos en gobiernos subnacionales en la región Puno, periodo 2019-2025',
+        'Antrop. Rubén Saraza Barriga' => 'El saber sagrado y la interculturalidad en la educación universitaria',
+        'Dr. Porfirio Enríquez Salas' => 'Perspectiva interepistémica del diálogo intercultural frente a la hegemonía del saber científico: hacia una propuesta de articulación equitativa de conocimientos en el Perú',
+        'Dr. Juan José Pari Arapa' => 'Los caminos de crianza del saber en los niños de Amantaní, Puno',
+    ];
+
     public function run(): void
     {
         if (PonenteCentral::exists()) {
@@ -31,7 +46,7 @@ class PonentesSeeder extends Seeder
             ['Dr. Juan José Pari Arapa', 'Universidad Nacional del Altiplano', 'Perú', 'ponentes/juan-jose-pari.jpg', 'Docente de la Escuela Profesional de Educación Física de la Universidad Nacional del Altiplano.'],
         ];
         foreach ($ponentes as $i => [$nombre, $institucion, $pais, $foto, $bio]) {
-            PonenteCentral::create(compact('nombre', 'institucion', 'pais', 'foto', 'bio') + ['orden' => $i + 1]);
+            PonenteCentral::create(compact('nombre', 'institucion', 'pais', 'foto', 'bio') + ['ponencia' => self::PONENCIAS[$nombre] ?? null, 'orden' => $i + 1]);
         }
     }
 }

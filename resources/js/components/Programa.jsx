@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { CalendarX, MapPin, Star, User } from 'lucide-react'
+import { CalendarX, MapPin, MonitorPlay, Star, User } from 'lucide-react'
 import { programa as programaLocal } from '../data/programa.js'
 import { TituloSeccion } from './Andino.jsx'
 import Reveal from './Reveal.jsx'
@@ -94,7 +94,7 @@ export default function Programa() {
     <section id="programa" className="seccion">
       <div className="contenedor">
         <TituloSeccion etiqueta="Agenda" titulo="Programa"
-          descripcion="Programa preliminar, sujeto a cambios. Los horarios están en hora de Perú (UTC-5). Puede marcar con una estrella las actividades a las que piensa asistir."
+          descripcion="Programación de ponencias centrales. Los horarios están en hora de Perú (UTC-5). Puede marcar con una estrella las actividades a las que piensa asistir."
         />
 
         {/* Control segmentado con indicador deslizante */}
@@ -191,6 +191,7 @@ export default function Programa() {
                   <li key={id} className="group/fila flex animate-aparecer gap-4 sm:gap-6" style={{ animationDelay: `${i * 70}ms` }}>
                     <div className="hidden w-16 shrink-0 pt-6 text-right sm:block">
                       <time className="font-display text-lg font-extrabold text-oscuro transition-colors duration-300 group-hover/fila:text-rojizo-oscuro">{a.hora}</time>
+                      {a.fin && <span className="block text-xs font-semibold text-slate-500">a {a.fin}</span>}
                     </div>
 
                     {/* Línea de tiempo */}
@@ -215,21 +216,47 @@ export default function Programa() {
                           <Star className={`h-5 w-5 transition-transform ${marcada ? 'scale-110 fill-current' : ''}`} />
                         </button>
                         <div className="flex flex-wrap items-center gap-2">
-                          <time className="rounded-md bg-tierra px-2 py-0.5 font-display text-xs font-bold text-white sm:hidden">{a.hora}</time>
+                          <time className="rounded-md bg-tierra px-2 py-0.5 font-display text-xs font-bold text-white sm:hidden">
+                            {a.hora}
+                            {a.fin && ` – ${a.fin}`}
+                          </time>
                           <span className={`rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ${tipo.clase}`}>{tipo.texto}</span>
+                          {a.modalidad && (
+                            <span
+                              className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ${
+                                a.modalidad === 'Virtual' ? 'bg-azul/10 text-azul-oscuro ring-azul/20' : 'bg-emerald-50 text-emerald-800 ring-emerald-600/20'
+                              }`}
+                            >
+                              {a.modalidad === 'Virtual' ? <MonitorPlay className="h-3.5 w-3.5" aria-hidden="true" /> : <MapPin className="h-3.5 w-3.5" aria-hidden="true" />}
+                              {a.modalidad}
+                            </span>
+                          )}
                         </div>
                         <h3 className="mt-3 text-lg leading-snug font-bold text-oscuro transition-colors group-hover:text-rojizo-oscuro">
                           {a.titulo}
                         </h3>
-                        <div className="mt-3 flex flex-col gap-1.5 text-sm text-slate-600 sm:flex-row sm:gap-6">
-                          <span className="flex items-center gap-1.5">
-                            <User className="h-4 w-4 text-slate-400" aria-hidden="true" />
-                            <span className="sr-only">Ponente:</span> {a.ponente}
+                        <div className="mt-3 flex flex-col gap-1.5 text-sm text-slate-600 sm:flex-row sm:flex-wrap sm:gap-x-6">
+                          <span className="flex items-start gap-1.5 text-left">
+                            <User className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                            <span>
+                              <span className="sr-only">Ponente:</span>
+                              <span className={a.detalle ? 'font-semibold text-oscuro' : ''}>{a.ponente}</span>
+                              {a.detalle && <span className="block text-slate-500">{a.detalle}</span>}
+                            </span>
                           </span>
-                          <span className="flex items-center gap-1.5">
-                            <MapPin className="h-4 w-4 text-slate-400" aria-hidden="true" />
-                            <span className="sr-only">Lugar:</span> {a.lugar}
-                          </span>
+                          {a.modalidad === 'Virtual' ? (
+                            <span className="flex items-start gap-1.5">
+                              <MonitorPlay className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                              <span className="sr-only">Lugar:</span> Transmisión en línea
+                            </span>
+                          ) : (
+                            a.lugar && (
+                              <span className="flex items-start gap-1.5">
+                                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                                <span className="sr-only">Lugar:</span> {a.lugar}
+                              </span>
+                            )
+                          )}
                         </div>
                       </article>
                     </div>
