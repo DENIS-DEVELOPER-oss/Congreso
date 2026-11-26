@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Inscripcions\Pages;
 
 use App\Filament\Resources\Inscripcions\InscripcionResource;
 use App\Models\Inscripcion;
+use App\Support\Accesos;
 use App\Support\Ajustes;
 use App\Support\Recordatorios;
 use Filament\Actions\Action;
@@ -66,6 +67,42 @@ class ListInscripcions extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            // Usuario y contraseña del Aula a todos los inscritos que aún no lo tienen, por tandas
+            Action::make('accesosTodos')->label('Enviar accesos a todos')->icon(Heroicon::OutlinedKey)->color('primary')
+                ->badge(fn () => Accesos::pendientes()->count() ?: null)
+                ->modalHeading('Enviar usuario y contraseña del Aula virtual')
+                ->modalDescription(fn () => 'Cada persona recibe por correo su usuario (DNI) y una contraseña temporal. '
+                    .'Faltan '.Accesos::pendientes()->count().' inscritos sin acceso (las anuladas no se incluyen). '
+                    .'Cada vez que pulses «Enviar» se envía a los siguientes '.Accesos::LOTE_PANEL.': vuelve a pulsar hasta que no quede nadie. '
+                    .'Nunca se envía a quien ya creó su propia contraseña, para no cambiársela.')
+                ->schema([
+                    Toggle::make('sin_ingresar')->label('Incluir a quienes ya recibieron su acceso pero nunca ingresaron')
+                        ->helperText(fn () => Accesos::pendientes(true)->count().' en total con esta opción. Recibirán una contraseña temporal nueva (la anterior deja de funcionar).'),
+                ])
+                ->modalSubmitActionLabel('Enviar')
+                ->action(function (array $data) {
+                    @set_time_limit(120);
+                    $sinIngresar = (bool) ($data['sin_ingresar'] ?? false);
+                    // Los ya enviados en esta tanda salen de la lista: con «sin ingresar» se excluye a quien recibió acceso hace un momento
+                    $lote = Accesos::pendientes($sinIngresar)
+                        ->when($sinIngresar, fn (Builder $q) => $q->whereHas('participante', fn (Builder $p) => $p
+                            ->where(fn (Builder $p) => $p->whereNull('acceso_enviado_en')->orWhere('acceso_enviado_en', '<', now()->subHours(6)))))
+                        ->limit(Accesos::LOTE_PANEL)->get();
+                    if ($lote->isEmpty()) {
+                        Notification::make()->title('Todos los inscritos ya tienen su acceso')->success()->send();
+
+                        return;
+                    }
+                    $ok = $lote->filter(fn ($i) => Accesos::enviar($i->participante))->count();
+                    $faltan = Accesos::pendientes()->count();
+                    Notification::make()
+                        ->title("Se enviaron {$ok} de {$lote->count()} accesos")
+                        ->body($ok < $lote->count()
+                            ? 'Algunos correos no salieron: vuelve a pulsar para reintentar.'
+                            : ($faltan ? "Faltan {$faltan} sin acceso: vuelve a pulsar «Enviar accesos a todos»." : 'Listo: todos los inscritos tienen su acceso.'))
+                        ->{$ok === $lote->count() ? 'success' : 'warning'}()
+                        ->persistent()->send();
+                }),
             // Recordatorio a todos los correos registrados, por tandas: cada pulsación envía a los siguientes que aún no lo recibieron
             Action::make('recordatorioTodos')->label('Enviar recordatorio a todos')->icon(Heroicon::OutlinedEnvelope)->color('success')
                 ->badge(fn () => Recordatorios::pendientes()->count() ?: null)
