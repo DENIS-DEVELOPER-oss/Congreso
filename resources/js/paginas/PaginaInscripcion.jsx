@@ -12,17 +12,13 @@ export default function PaginaInscripcion() {
         titulo="Inscripción"
         descripcion={
           evento.inscripcionesFinalizadas
-            ? 'Las inscripciones al congreso han finalizado. Si ya te inscribiste, ingresa al Aula virtual con tu DNI.'
+            ? 'Las inscripciones al congreso han finalizado. Gracias por su interés.'
             : evento.inscripcionesAbiertas
             ? 'Regístrate con tu nombre, DNI, celular y correo. La inscripción es gratuita: al instante te llegará tu acceso al Aula virtual, con el programa del congreso.'
             : 'La inscripción es gratuita. Llena tus datos como asistente o ponente (con tu resumen) y te enviaremos tu acceso al Aula virtual, con el programa del congreso.'
         }
       >
-        {evento.inscripcionesFinalizadas ? (
-          <a href={RUTAS.cuenta} className="btn-primario">
-            <KeyRound className="h-4 w-4" aria-hidden="true" /> Ingresar al Aula virtual
-          </a>
-        ) : (
+        {evento.inscripcionesFinalizadas ? null : (
           <>
             <a href="#inscripcion" className="btn-primario">
               {evento.inscripcionesAbiertas ? 'Ir al registro' : 'Solicitar inscripción'} <ArrowDown className="h-4 w-4" aria-hidden="true" />

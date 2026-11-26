@@ -21,7 +21,7 @@ class GuardarInscripcion extends FormRequest
     protected function failedAuthorization(): void
     {
         throw new AuthorizationException(Ajustes::inscripcionesFinalizadas()
-            ? 'Las inscripciones al congreso ya finalizaron. Si te inscribiste, ingresa al Aula virtual con tu DNI.'
+            ? 'Las inscripciones al congreso han finalizado. Gracias por su interés.'
             : 'Las inscripciones aún no están abiertas. Vuelve pronto.');
     }
 

@@ -62,7 +62,7 @@ class CongresoTest extends TestCase
         config(['congreso.inscripciones_finalizadas' => true, 'congreso.inscripciones_abiertas' => true]);
 
         $this->postJson('/api/inscripciones', $this->datosInscripcion())
-            ->assertForbidden()->assertJsonFragment(['message' => 'Las inscripciones al congreso ya finalizaron. Si te inscribiste, ingresa al Aula virtual con tu DNI.']);
+            ->assertForbidden()->assertJsonFragment(['message' => 'Las inscripciones al congreso han finalizado. Gracias por su interés.']);
         $this->postJson('/api/solicitudes', $this->datosInscripcion() + ['tipo' => 'asistente'])->assertForbidden();
         // Tampoco con sesión del panel: desde el panel se inscribe con «Inscribir manualmente»
         $this->actingAs($this->usuarioPanel(false))->postJson('/api/inscripciones', $this->datosInscripcion())->assertForbidden();

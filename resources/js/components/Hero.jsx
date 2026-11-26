@@ -338,12 +338,12 @@ const DIAPOSITIVAS = [
     antetitulo: 'Inscripción gratuita',
     titulo: 'Asegura tu participación',
     texto: evento.inscripcionesFinalizadas
-      ? 'Las inscripciones han finalizado. Si ya te inscribiste, ingresa al Aula virtual con tu DNI para ver tu asistencia y tu certificado.'
+      ? 'Las inscripciones al congreso han finalizado. Gracias por su interés.'
       : evento.inscripcionesAbiertas
         ? 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno. Al instante te llega tu acceso al Aula virtual.'
         : 'Llena tu solicitud de inscripción gratuita en la web y participa en Educación Continua de la UNA Puno.',
     botones: evento.inscripcionesFinalizadas
-      ? [{ texto: 'Ingresar al Aula virtual', href: RUTAS.cuenta, principal: true }]
+      ? []
       : [
           { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
           { texto: 'Ingresar al aula', href: RUTAS.cuenta },
@@ -506,11 +506,7 @@ function TextoCongreso() {
           Presenta tu ponencia
           <FlechaDorada />
         </a>
-        {evento.inscripcionesFinalizadas ? (
-          <a href={RUTAS.cuenta} className={claseBoton(false)}>
-            <UserPlus className="h-[18px] w-[18px] text-[#1d4ed8]" aria-hidden="true" /> Aula virtual
-          </a>
-        ) : (
+        {!evento.inscripcionesFinalizadas && (
           <a href={RUTAS.inscripcion} className={claseBoton(false)}>
             <UserPlus className="h-[18px] w-[18px] text-[#1d4ed8]" aria-hidden="true" /> Inscríbete
           </a>

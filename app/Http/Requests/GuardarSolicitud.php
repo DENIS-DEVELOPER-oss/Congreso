@@ -19,7 +19,7 @@ class GuardarSolicitud extends FormRequest
 
     protected function failedAuthorization(): void
     {
-        throw new AuthorizationException('Las inscripciones al congreso ya finalizaron. Si te inscribiste, ingresa al Aula virtual con tu DNI.');
+        throw new AuthorizationException('Las inscripciones al congreso han finalizado. Gracias por su interés.');
     }
 
     public function rules(): array
