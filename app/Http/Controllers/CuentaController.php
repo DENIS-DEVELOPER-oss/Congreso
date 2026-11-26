@@ -97,14 +97,40 @@ class CuentaController extends Controller
     // GET /cuenta/yo: todo lo que muestra la página de la cuenta
     public function yo(Request $request): JsonResponse
     {
-        $p = $this->participante($request)->load('inscripcion', 'ponencias.eje', 'certificados');
+        $p = $this->participante($request)->load('inscripcion.asistencias', 'ponencias.eje', 'certificados');
         $i = $p->inscripcion;
         $gratuita = Ajustes::gratuita();
         $pagoPendiente = ! $gratuita && $i && $i->estado !== 'validada';
         $verZoom = $gratuita || ($i && $i->estado === 'validada') || ! config('congreso.zoom_solo_con_pago');
 
+        // Asistencia: en qué sesiones registró su DNI (entrada y salida de cada día) y cuántas pide el certificado
+        $sesiones = Sesion::enOrden()->get();
+        $roles = Sesion::roles($sesiones);
+        $marcas = $i ? $i->asistencias->keyBy('sesion_id') : collect();
+        $minimas = min(max(Inscripcion::asistenciasMinimas(), 1), max($sesiones->count(), 1));
+        $asistidas = $marcas->only($sesiones->pluck('id')->all())->count();
+
         return response()->json([
             'inscripcionGratuita' => $gratuita,
+            // La pestaña «Mi ponencia» solo es para quienes se inscribieron como ponentes o enviaron un resumen
+            'esPonente' => ($i && $i->tipo_participante === 'ponente') || $p->ponencias->isNotEmpty(),
+            'asistencia' => [
+                'asistidas' => $asistidas,
+                'total' => $sesiones->count(),
+                'minimas' => $sesiones->isEmpty() ? 0 : $minimas,
+                'cumple' => $sesiones->isNotEmpty() && $asistidas >= $minimas,
+                'porcentajeRequerido' => (int) config('congreso.porcentaje_asistencia'),
+                'sesiones' => $sesiones->map(fn (Sesion $s) => [
+                    'id' => $s->id,
+                    'nombre' => $s->nombre,
+                    'rol' => $roles[$s->id] ?? null,
+                    'fecha' => ucfirst($s->fechaTexto()),
+                    'dia' => $s->fecha->toDateString(),
+                    'horario' => $s->horarioTexto(),
+                    'asistio' => $marcas->has($s->id),
+                    'hora' => $marcas->get($s->id)?->registrado_en?->format('H:i'),
+                ])->values(),
+            ],
             'participante' => [
                 'nombres' => $p->nombres,
                 'apellidos' => $p->apellidos,
@@ -120,7 +146,7 @@ class CuentaController extends Controller
             ],
             // Programa del aula; el enlace de la sesión (si lo hay) solo si el pago está validado (o si la organización lo permite)
             'zoomBloqueado' => ! $verZoom,
-            'sesiones' => Sesion::enOrden()->get()->map(fn (Sesion $s) => [
+            'sesiones' => $sesiones->map(fn (Sesion $s) => [
                 'id' => $s->id,
                 'fecha' => ucfirst($s->fechaTexto()),
                 'dia' => $s->fecha->toDateString(),

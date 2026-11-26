@@ -77,16 +77,7 @@ class RegistrarAsistencia extends Page implements HasTable
     // En cada día, la primera sesión es la ENTRADA y la última la SALIDA
     public function rol(Sesion $s): ?string
     {
-        $delDia = Sesion::whereDate('fecha', $s->fecha)->orderBy('hora_inicio')->orderBy('id')->pluck('id');
-        if ($delDia->count() < 2) {
-            return null;
-        }
-
-        return match ($s->id) {
-            $delDia->first() => 'Entrada',
-            $delDia->last() => 'Salida',
-            default => null,
-        };
+        return Sesion::roles(Sesion::whereDate('fecha', $s->fecha)->get())[$s->id] ?? null;
     }
 
     public function otrasSesiones(): Collection

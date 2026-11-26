@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 // Sesión del congreso: aparece en el Aula y en el correo de acceso, y en ella se registra la asistencia
 class Sesion extends Model
@@ -27,6 +28,21 @@ class Sesion extends Model
     public function scopeEnOrden(Builder $q): Builder
     {
         return $q->orderBy('fecha')->orderBy('hora_inicio')->orderBy('id');
+    }
+
+    // En cada día con dos o más sesiones, la primera es la ENTRADA y la última la SALIDA: [id => 'Entrada' | 'Salida']
+    public static function roles(?Collection $sesiones = null): array
+    {
+        $sesiones ??= self::enOrden()->get();
+        $roles = [];
+        foreach ($sesiones->sortBy([['fecha', 'asc'], ['hora_inicio', 'asc'], ['id', 'asc']])->groupBy(fn (Sesion $s) => $s->fecha->toDateString()) as $delDia) {
+            if ($delDia->count() >= 2) {
+                $roles[$delDia->first()->id] = 'Entrada';
+                $roles[$delDia->last()->id] = 'Salida';
+            }
+        }
+
+        return $roles;
     }
 
     // "Jueves 26 de noviembre"

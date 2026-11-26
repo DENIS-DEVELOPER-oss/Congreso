@@ -93,6 +93,35 @@ class AsistenciaTest extends TestCase
         $this->assertSame(2, Asistencia::where('inscripcion_id', $i->id)->count());
     }
 
+    public function test_el_aula_muestra_cuantas_veces_asistio_y_oculta_la_ponencia_al_asistente(): void
+    {
+        config(['congreso.porcentaje_asistencia' => 75]);
+        $asistente = $this->inscrito('70123456', 'validada');
+        $manana = Sesion::create(['nombre' => 'Día 1 – mañana', 'fecha' => '2026-11-26', 'hora_inicio' => '08:00']);
+        Sesion::create(['nombre' => 'Día 1 – tarde', 'fecha' => '2026-11-26', 'hora_inicio' => '14:00']);
+        Sesion::create(['nombre' => 'Día 2 – mañana', 'fecha' => '2026-11-27', 'hora_inicio' => '09:00']);
+        Sesion::create(['nombre' => 'Día 2 – tarde', 'fecha' => '2026-11-27', 'hora_inicio' => '14:00']);
+        Asistencia::create(['inscripcion_id' => $asistente->id, 'sesion_id' => $manana->id, 'registrado_en' => now()->setTime(8, 12)]);
+
+        $this->actingAs($asistente->participante, 'participante')->getJson('/cuenta/yo')
+            ->assertOk()
+            ->assertJsonPath('esPonente', false)
+            ->assertJsonPath('asistencia.asistidas', 1)
+            ->assertJsonPath('asistencia.total', 4)
+            ->assertJsonPath('asistencia.minimas', 3)
+            ->assertJsonPath('asistencia.cumple', false)
+            ->assertJsonPath('asistencia.sesiones.0.rol', 'Entrada')
+            ->assertJsonPath('asistencia.sesiones.0.asistio', true)
+            ->assertJsonPath('asistencia.sesiones.0.hora', '08:12')
+            ->assertJsonPath('asistencia.sesiones.1.rol', 'Salida')
+            ->assertJsonPath('asistencia.sesiones.1.asistio', false);
+
+        // Quien se inscribió como ponente sí ve su ponencia
+        $ponente = $this->inscrito('70999888', 'validada');
+        $ponente->update(['tipo_participante' => 'ponente']);
+        $this->actingAs($ponente->participante, 'participante')->getJson('/cuenta/yo')->assertJsonPath('esPonente', true);
+    }
+
     public function test_por_la_tarde_se_elige_la_sesion_de_salida(): void
     {
         $this->travelTo(now()->setDate(2026, 11, 27)->setTime(16, 0));

@@ -1,8 +1,9 @@
 // Aula virtual: el participante entra con su DNI o correo y la contraseña temporal que recibe al registrarse.
-// La primera vez crea su propia contraseña. Cuatro pestañas: Inicio (estado y programa de sesiones),
-// Mi ponencia, Certificados y Mi perfil (nombre del certificado y contraseña).
+// La primera vez crea su propia contraseña. Pestañas: Inicio (estado y programa), Mi asistencia,
+// Mi ponencia (solo ponentes), Certificados y Mi perfil (nombre del certificado y contraseña).
 import { useCallback, useEffect, useState } from 'react'
-import { AlertTriangle, ArrowRight, Award, CalendarClock, CalendarDays, CheckCircle2, Download, ExternalLink, FileText, Home, KeyRound, Loader2, Lock, LogOut, MapPin, ShieldCheck, User } from 'lucide-react'
+import { AlertTriangle, ArrowRight, Award, CalendarCheck, CalendarDays, CheckCircle2, Download, ExternalLink, FileText, Home, IdCard, KeyRound, Loader2, Lock, LogOut, MapPin, ShieldCheck, User } from 'lucide-react'
+import Asistencia, { ResumenAsistencia } from '../components/cuenta/Asistencia.jsx'
 import CabeceraPagina from '../components/CabeceraPagina.jsx'
 import Ingreso from '../components/cuenta/Ingreso.jsx'
 import Pago from '../components/cuenta/Pago.jsx'
@@ -78,13 +79,32 @@ function Sesiones({ sesiones, bloqueado }) {
   )
 }
 
-function Certificados({ certificados }) {
+function Certificados({ certificados, asistencia, ir }) {
   return (
     <Tarjeta titulo="Certificados" Icono={Award}>
       {certificados.length === 0 ? (
-        <p className="text-sm leading-relaxed text-slate-600">
-          Tus certificados aparecerán aquí al terminar el congreso, si registraste al menos el 80 % de asistencia.
-        </p>
+        <div className="space-y-5">
+          <div className="flex items-start gap-4 rounded-xl bg-crema/60 p-4">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-rojizo-oscuro ring-1 ring-naranja/40">
+              <Award className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-semibold text-oscuro">Tu certificado aún no está disponible</p>
+              <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                Se publicará aquí al terminar el congreso para quienes cumplan con al menos el {asistencia.porcentajeRequerido} % de asistencia.
+                Te avisaremos por correo cuando puedas descargarlo.
+              </p>
+            </div>
+          </div>
+          {asistencia.total > 0 && (
+            <div className="rounded-xl border border-slate-200 p-4">
+              <ResumenAsistencia asistencia={asistencia} />
+              <button type="button" onClick={() => ir('asistencia')} className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-rojizo-oscuro hover:underline">
+                Ver mi asistencia <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
+            </div>
+          )}
+        </div>
       ) : (
         <ul className="space-y-3">
           {certificados.map((c) => (
@@ -176,15 +196,18 @@ function CrearClave({ perfil, onListo, onSalir }) {
   )
 }
 
-const PESTANAS = [
-  { id: 'inicio', texto: 'Inicio', Icono: Home },
-  { id: 'ponencia', texto: 'Mi ponencia', Icono: FileText },
-  { id: 'certificados', texto: 'Certificados', Icono: Award },
-  { id: 'perfil', texto: 'Mi perfil', Icono: User },
-]
-const pestanaDeUrl = () => {
+// «Mi ponencia» solo aparece a quienes se inscribieron como ponentes o enviaron un resumen
+const pestanasPara = (esPonente) =>
+  [
+    { id: 'inicio', texto: 'Inicio', Icono: Home },
+    { id: 'asistencia', texto: 'Mi asistencia', Icono: CalendarCheck },
+    esPonente && { id: 'ponencia', texto: 'Mi ponencia', Icono: FileText },
+    { id: 'certificados', texto: 'Certificados', Icono: Award },
+    { id: 'perfil', texto: 'Mi perfil', Icono: User },
+  ].filter(Boolean)
+const pestanaDeUrl = (pestanas) => {
   const h = window.location.hash.slice(1)
-  return PESTANAS.some((p) => p.id === h) ? h : 'inicio'
+  return pestanas.some((p) => p.id === h) ? h : 'inicio'
 }
 
 // Tarjeta de estado del Inicio: ícono, título, texto y una acción opcional
@@ -209,15 +232,23 @@ function Estado({ Icono, titulo, texto, tono = 'neutro', accion }) {
 }
 
 function Inicio({ perfil, ir, onActualizar }) {
-  const { participante, inscripcion, ponencias, certificados } = perfil
+  const { participante, inscripcion, ponencias, certificados, asistencia, esPonente } = perfil
   const ultima = ponencias[0]
+  const hoy = hoyISO()
+  const sesionesHoy = asistencia.sesiones.filter((s) => s.dia === hoy)
   const enlace = (texto, pestana) => (
     <button type="button" onClick={() => ir(pestana)} className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-rojizo-oscuro hover:underline">
       {texto} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
     </button>
   )
   const textoInscripcion =
-    inscripcion?.estado === 'validada' ? 'Confirmada' : inscripcion?.estado === 'pendiente' ? 'Pago pendiente' : (inscripcion?.estadoTexto ?? 'Sin inscripción')
+    inscripcion?.estado === 'validada'
+      ? 'Confirmada'
+      : inscripcion?.estado === 'pendiente'
+        ? perfil.inscripcionGratuita
+          ? 'Por confirmar'
+          : 'Pago pendiente'
+        : (inscripcion?.estadoTexto ?? 'Sin inscripción')
 
   return (
     <div className="space-y-6">
@@ -235,21 +266,57 @@ function Inicio({ perfil, ir, onActualizar }) {
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-3">
+      {sesionesHoy.length > 0 && (
+        <div className="flex flex-col gap-4 rounded-2xl border-2 border-naranja/50 bg-white p-5 sm:flex-row sm:items-center">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-naranja/15 text-rojizo-oscuro">
+            <IdCard className="h-6 w-6" aria-hidden="true" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-display text-lg font-bold text-oscuro">Hoy es día de congreso</p>
+            <p className="text-sm text-slate-600">
+              Registra tu <strong>entrada</strong> al llegar y tu <strong>salida</strong> al retirarte con tu DNI. Ingreso desde las 8:00 a. m. en {evento.sede}.
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            {sesionesHoy.map((s) => (
+              <span
+                key={s.id}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold ${
+                  s.asistio ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+                }`}
+              >
+                {s.asistio && <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />}
+                {s.rol ?? s.nombre}: {s.asistio ? s.hora : 'pendiente'}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className={`grid gap-4 sm:grid-cols-2 ${esPonente ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
         <Estado Icono={CheckCircle2} titulo="Inscripción" tono={inscripcion?.estado === 'validada' ? 'bien' : 'pendiente'} texto={textoInscripcion} />
         <Estado
-          Icono={FileText}
-          titulo="Mi resumen"
-          tono={!ultima ? 'neutro' : ultima.estado === 'aceptada' ? 'bien' : ultima.estado === 'observada' ? 'pendiente' : 'neutro'}
-          texto={!ultima ? 'Aún no enviaste' : ultima.estado === 'recibida' ? 'En evaluación' : ultima.estadoTexto}
-          accion={enlace(!ultima ? 'Enviar mi resumen' : ultima.estado === 'observada' ? 'Ver qué corregir' : 'Ver detalle', 'ponencia')}
+          Icono={CalendarCheck}
+          titulo="Mi asistencia"
+          tono={asistencia.cumple ? 'bien' : asistencia.asistidas ? 'pendiente' : 'neutro'}
+          texto={asistencia.total ? `${asistencia.asistidas} de ${asistencia.total} registros` : 'Por publicar'}
+          accion={enlace('Ver detalle', 'asistencia')}
         />
+        {esPonente && (
+          <Estado
+            Icono={FileText}
+            titulo="Mi resumen"
+            tono={!ultima ? 'neutro' : ultima.estado === 'aceptada' ? 'bien' : ultima.estado === 'observada' ? 'pendiente' : 'neutro'}
+            texto={!ultima ? 'Aún no enviaste' : ultima.estado === 'recibida' ? 'En evaluación' : ultima.estadoTexto}
+            accion={enlace(!ultima ? 'Enviar mi resumen' : ultima.estado === 'observada' ? 'Ver qué corregir' : 'Ver detalle', 'ponencia')}
+          />
+        )}
         <Estado
           Icono={Award}
           titulo="Certificado"
           tono={certificados.length ? 'bien' : 'neutro'}
           texto={certificados.length ? 'Disponible' : 'Al terminar el congreso'}
-          accion={certificados.length ? enlace('Descargar', 'certificados') : null}
+          accion={enlace(certificados.length ? 'Descargar' : 'Ver requisitos', 'certificados')}
         />
       </div>
 
@@ -262,13 +329,14 @@ function Inicio({ perfil, ir, onActualizar }) {
 
 function Panel({ perfil, onActualizar, onSalir }) {
   const { participante, inscripcion } = perfil
-  const [pestana, setPestana] = useState(pestanaDeUrl)
+  const PESTANAS = pestanasPara(perfil.esPonente)
+  const [pestana, setPestana] = useState(() => pestanaDeUrl(PESTANAS))
 
   useEffect(() => {
-    const alCambiar = () => setPestana(pestanaDeUrl())
+    const alCambiar = () => setPestana(pestanaDeUrl(pestanasPara(perfil.esPonente)))
     window.addEventListener('hashchange', alCambiar)
     return () => window.removeEventListener('hashchange', alCambiar)
-  }, [])
+  }, [perfil.esPonente])
 
   const ir = (id) => {
     setPestana(id)
@@ -296,7 +364,9 @@ function Panel({ perfil, onActualizar, onSalir }) {
         id="aula-pestanas"
         role="tablist"
         aria-label="Secciones del aula"
-        className="grid scroll-mt-24 grid-cols-2 gap-2 rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-slate-200 sm:grid-cols-4"
+        className={`grid scroll-mt-24 grid-cols-2 gap-2 rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-slate-200 ${
+          PESTANAS.length === 5 ? 'sm:grid-cols-5' : 'sm:grid-cols-4'
+        }`}
       >
         {PESTANAS.map(({ id, texto, Icono }) => {
           const activa = pestana === id
@@ -321,8 +391,9 @@ function Panel({ perfil, onActualizar, onSalir }) {
 
       <div role="tabpanel" id={`panel-${pestana}`} aria-labelledby={`tab-${pestana}`}>
         {pestana === 'inicio' && <Inicio perfil={perfil} ir={ir} onActualizar={onActualizar} />}
-        {pestana === 'ponencia' && <Resumenes ponencias={perfil.ponencias} ejes={perfil.ejes} onActualizar={onActualizar} />}
-        {pestana === 'certificados' && <Certificados certificados={perfil.certificados} />}
+        {pestana === 'asistencia' && <Asistencia asistencia={perfil.asistencia} />}
+        {pestana === 'ponencia' && perfil.esPonente && <Resumenes ponencias={perfil.ponencias} ejes={perfil.ejes} onActualizar={onActualizar} />}
+        {pestana === 'certificados' && <Certificados certificados={perfil.certificados} asistencia={perfil.asistencia} ir={ir} />}
         {pestana === 'perfil' && (
           <div className="grid gap-6 lg:grid-cols-5">
             <div className="lg:col-span-3">
@@ -367,7 +438,7 @@ export default function PaginaCuenta() {
         titulo="Aula virtual"
         descripcion={
           perfil
-            ? 'El programa, tu ponencia y tu certificado, en un solo lugar.'
+            ? 'Tu programa, tu asistencia y tu certificado, en un solo lugar.'
             : 'Ingresa con tu DNI o tu correo y la contraseña que te enviamos al registrarte.'
         }
       />
