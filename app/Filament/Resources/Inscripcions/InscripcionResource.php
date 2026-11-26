@@ -7,11 +7,13 @@ use App\Filament\Resources\Inscripcions\Pages\CreateInscripcion;
 use App\Filament\Resources\Inscripcions\Pages\EditInscripcion;
 use App\Filament\Resources\Inscripcions\Pages\ListInscripcions;
 use App\Mail\InscripcionValidada;
+use App\Mail\RecordatorioAsistencia;
 use App\Models\Inscripcion;
 use App\Models\Ponencia;
 use App\Support\Accesos;
 use App\Support\Ajustes;
 use App\Support\Correo;
+use App\Support\Recordatorios;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -56,6 +58,9 @@ class InscripcionResource extends Resource
     protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'codigo';
+
+    // Desde el panel se envía en la misma petición: con muchos correos se cortaría por tiempo
+    public const MAX_RECORDATORIOS_PANEL = 30;
 
     // Junto al menú: solicitudes por confirmar (inscripción gratuita) o vouchers por revisar (con pago)
     public static function getNavigationBadge(): ?string
@@ -238,6 +243,11 @@ class InscripcionResource extends Resource
                 TextColumn::make('estado')->badge()
                     ->formatStateUsing(fn ($state) => self::nombreEstado($state))
                     ->color(fn ($state) => self::colorEstado($state)),
+                IconColumn::make('recordatorio')->label('Recordatorio')->alignCenter()->toggleable()
+                    ->state(fn (Inscripcion $r) => $r->recordatorio_enviado_en !== null)
+                    ->boolean()->trueIcon(Heroicon::OutlinedCalendarDays)->falseIcon(Heroicon::OutlinedMinus)
+                    ->trueColor('success')->falseColor('gray')
+                    ->tooltip(fn (Inscripcion $r) => $r->recordatorio_enviado_en ? 'Enviado el '.$r->recordatorio_enviado_en->format('d/m/Y H:i') : 'Aún no recibe el recordatorio'),
                 TextColumn::make('created_at')->label('Recibida')->since()->sortable()
                     ->tooltip(fn (Inscripcion $r) => $r->created_at->format('d/m/Y H:i')),
             ])
@@ -312,6 +322,26 @@ class InscripcionResource extends Resource
                             $ok = $sin->filter(fn ($r) => Accesos::enviar($r->participante))->count();
                             Notification::make()->title("Se enviaron {$ok} de {$sin->count()} accesos")
                                 ->{$ok === $sin->count() ? 'success' : 'warning'}()->send();
+                        }),
+                    // Para pocas personas o una prueba; a todos los inscritos se envía en el servidor con php artisan congreso:recordatorio
+                    BulkAction::make('enviarRecordatorio')->label('Enviar recordatorio de asistencia')
+                        ->icon(Heroicon::OutlinedCalendarDays)
+                        ->modalHeading('Enviar recordatorio de asistencia')
+                        ->modalDescription('Cada persona recibe, con su nombre tal como se inscribió, la fecha, la ingreso a partir de las 8:00 a. m. y el aviso de registrar su entrada y salida con su DNI. Las anuladas se omiten. Máximo '.self::MAX_RECORDATORIOS_PANEL.' por vez.')
+                        ->schema([
+                            Select::make('dia')->label('¿Para qué días?')->options(RecordatorioAsistencia::DIAS)->default('ambos')->required(),
+                        ])
+                        ->action(function (Collection $records, array $data) {
+                            $destino = $records->load('participante')->where('estado', '!=', 'anulada')->filter(fn ($r) => filled($r->participante->correo));
+                            if ($destino->count() > self::MAX_RECORDATORIOS_PANEL) {
+                                Notification::make()->title('Selecciona como máximo '.self::MAX_RECORDATORIOS_PANEL.' inscripciones')
+                                    ->body('Para enviarlo a todos usa en el servidor: php artisan congreso:recordatorio')->warning()->send();
+
+                                return;
+                            }
+                            $ok = $destino->filter(fn ($r) => Recordatorios::enviar($r, $data['dia']))->count();
+                            Notification::make()->title("Se enviaron {$ok} de {$destino->count()} recordatorios")
+                                ->{$ok === $destino->count() ? 'success' : 'warning'}()->send();
                         }),
                     DeleteBulkAction::make(),
                 ]),

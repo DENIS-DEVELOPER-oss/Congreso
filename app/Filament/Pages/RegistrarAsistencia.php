@@ -2,9 +2,11 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Resources\Inscripcions\InscripcionResource;
 use App\Models\Asistencia;
 use App\Models\Inscripcion;
 use App\Models\Sesion;
+use App\Support\Ajustes;
 use BackedEnum;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -40,8 +42,10 @@ class RegistrarAsistencia extends Page implements HasTable
 
     public function mount(): void
     {
-        // Por defecto, la primera sesión de hoy (o la primera del congreso)
-        $sesion = Sesion::whereDate('fecha', today())->orderBy('id')->first() ?? Sesion::orderBy('fecha')->orderBy('id')->first();
+        // Por defecto, la sesión de hoy según la hora: la de la mañana (entrada) hasta las 13:30 y luego la de la tarde (salida)
+        $hoy = Sesion::whereDate('fecha', today())->orderBy('hora_inicio')->orderBy('id')->get();
+        $sesion = (now()->format('H:i') >= '13:30' ? $hoy->last() : $hoy->first())
+            ?? Sesion::orderBy('fecha')->orderBy('id')->first();
         $this->form->fill(['sesion_id' => $sesion?->id]);
     }
 
@@ -54,7 +58,9 @@ class RegistrarAsistencia extends Page implements HasTable
                     Select::make('sesion_id')->label('Sesión')->required()->live()
                         ->options(fn () => Sesion::orderBy('fecha')->orderBy('id')->get()
                             ->mapWithKeys(fn (Sesion $s) => [$s->id => $s->nombre.' · '.$s->fecha->format('d/m').($s->titulo ? ' · '.$s->titulo : '')]))
-                        ->helperText(fn () => Sesion::exists() ? null : 'Primero crea las sesiones en Asistencia → Sesiones.'),
+                        ->helperText(fn () => Sesion::exists()
+                            ? 'Entrada: sesión de la mañana · Salida: sesión de la tarde.'
+                            : 'Primero crea las sesiones en Asistencia → Sesiones.'),
                     TextInput::make('texto')->label('Código, DNI o correo de un participante')->autofocus()
                         ->placeholder('SA-2026-0001, 70123456 o nombre@correo.com')
                         ->autocomplete(false)
@@ -62,7 +68,7 @@ class RegistrarAsistencia extends Page implements HasTable
                 ]),
                 Textarea::make('lista')->label('Registrar varios a la vez')->rows(4)
                     ->placeholder("Pega aquí los DNI o correos de la lista de asistentes,\nuno por línea o separados por comas")
-                    ->helperText('Se registran solo las inscripciones confirmadas (validadas); al terminar verás el resumen.'),
+                    ->helperText('Las solicitudes pendientes quedan confirmadas al registrar su asistencia; las anuladas u observadas no se registran. Al terminar verás el resumen.'),
             ]);
     }
 
@@ -80,6 +86,17 @@ class RegistrarAsistencia extends Page implements HasTable
             ->where('codigo', $texto)
             ->orWhereHas('participante', fn ($q) => $q->where('documento', $texto))
             ->first();
+    }
+
+    // Con inscripción gratuita, quien llega con su solicitud aún pendiente queda confirmado al registrar su asistencia.
+    // Las inscripciones anuladas u observadas siguen sin poder registrarse.
+    private function admitir(Inscripcion $inscripcion): bool
+    {
+        if ($inscripcion->estado === 'pendiente' && Ajustes::gratuita()) {
+            InscripcionResource::cambiarEstado($inscripcion, 'validada');
+        }
+
+        return $inscripcion->estado === 'validada';
     }
 
     public function registrar(): void
@@ -100,7 +117,7 @@ class RegistrarAsistencia extends Page implements HasTable
 
         if (! $inscripcion) {
             Notification::make()->title("No hay ninguna inscripción con «{$texto}»")->danger()->send();
-        } elseif ($inscripcion->estado !== 'validada') {
+        } elseif (! $this->admitir($inscripcion)) {
             Notification::make()->title($inscripcion->participante->nombre_completo)
                 ->body('Su inscripción no está validada (estado: '.Inscripcion::ESTADOS[$inscripcion->estado].'). Revísala en Inscripciones.')
                 ->warning()->send();
@@ -130,7 +147,7 @@ class RegistrarAsistencia extends Page implements HasTable
             $i = $this->buscar($v);
             if (! $i) {
                 $noEncontrados[] = $v;
-            } elseif ($i->estado !== 'validada') {
+            } elseif (! $this->admitir($i)) {
                 $sinPago[] = $i->participante->nombre_completo;
             } else {
                 $a = Asistencia::firstOrCreate(
@@ -143,7 +160,7 @@ class RegistrarAsistencia extends Page implements HasTable
 
         $detalle = collect([
             $ya ? "{$ya} ya estaban registrados" : null,
-            $sinPago ? count($sinPago).' sin inscripción validada: '.implode(', ', array_slice($sinPago, 0, 5)) : null,
+            $sinPago ? count($sinPago).' con inscripción anulada u observada: '.implode(', ', array_slice($sinPago, 0, 5)) : null,
             $noEncontrados ? count($noEncontrados).' no encontrados: '.implode(', ', array_slice($noEncontrados, 0, 5)) : null,
         ])->filter()->implode(' · ');
 

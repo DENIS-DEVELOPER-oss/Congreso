@@ -20,7 +20,8 @@ class PonentesSeeder extends Seeder
         'Dr. Emilio Chambi Apaza' => 'El diálogo mítico en la cosmovisión andina',
         'Dr. Juan Casazola Ccama' => '«Yaku Unu Mama» y «Madre Agua», sujeto de derechos en gobiernos subnacionales en la región Puno, periodo 2019-2025',
         'Antrop. Rubén Saraza Barriga' => 'El saber sagrado y la interculturalidad en la educación universitaria',
-        'Dr. Porfirio Enríquez Salas' => 'Perspectiva interepistémica del diálogo intercultural frente a la hegemonía del saber científico: hacia una propuesta de articulación equitativa de conocimientos en el Perú',
+        'Antrop. Rolando Pilco Mallea' => 'Pueblos indígenas, interculturalidad y educación superior: el caso del pueblo aimara peruano. De construcción colectiva a demandas',
+        'Dr. Porfirio Enríquez Salas' => 'Perspectiva interepistémica del diálogo intercultural: del saber científico hegemónico a la articulación equitativa de conocimientos en la educación universitaria peruana',
         'Dr. Juan José Pari Arapa' => 'Los caminos de crianza del saber en los niños de Amantaní, Puno',
     ];
 

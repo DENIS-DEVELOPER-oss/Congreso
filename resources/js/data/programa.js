@@ -67,15 +67,20 @@ export const programa = [
       },
       {
         hora: '11:00', fin: '11:30', tipo: 'conferencia', modalidad: 'Presencial',
-        titulo: 'Perspectiva interepistémica del diálogo intercultural frente a la hegemonía del saber científico: hacia una propuesta de articulación equitativa de conocimientos en el Perú',
-        ponente: 'Dr. Porfirio Enríquez Salas y Carlos V. Enríquez Añamuro', detalle: 'Docentes de la Facultad de Ciencias Sociales y de la FMVZ, UNA Puno', lugar: SEDE,
+        titulo: 'Pueblos indígenas, interculturalidad y educación superior: el caso del pueblo aimara peruano. De construcción colectiva a demandas',
+        ponente: 'Antrop. Rolando Pilco Mallea', detalle: 'Director de IDECA Puno', lugar: SEDE,
       },
       {
         hora: '11:30', fin: '12:00', tipo: 'conferencia', modalidad: 'Presencial',
+        titulo: 'Perspectiva interepistémica del diálogo intercultural: del saber científico hegemónico a la articulación equitativa de conocimientos en la educación universitaria peruana',
+        ponente: 'Dr. Porfirio Enríquez Salas y Carlos V. Enríquez Añamuro', detalle: 'Docentes de la Facultad de Ciencias Sociales y de la FMVZ, UNA Puno', lugar: SEDE,
+      },
+      {
+        hora: '12:30', fin: '13:00', tipo: 'conferencia', modalidad: 'Presencial',
         titulo: 'El saber sagrado y la interculturalidad en la educación universitaria',
         ponente: 'Antrop. Rubén Saraza Barriga', detalle: 'Sabio originario aimara lupaka, en estudios de sabiduría ancestral', lugar: SEDE,
       },
-      { hora: '12:00', tipo: 'general', titulo: 'Almuerzo', ponente: 'Receso', lugar: null },
+      { hora: '13:00', tipo: 'general', titulo: 'Almuerzo', ponente: 'Receso', lugar: null },
       { hora: '14:00', tipo: 'mesa', titulo: 'Inicio de ponencias de las mesas de trabajo', ponente: 'Ponentes de las mesas temáticas', lugar: SEDE },
       { hora: 'Cierre', tipo: 'general', titulo: 'Clausura del evento', ponente: 'Comisión organizadora', lugar: SEDE },
     ],

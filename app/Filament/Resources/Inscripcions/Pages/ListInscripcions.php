@@ -3,10 +3,15 @@
 namespace App\Filament\Resources\Inscripcions\Pages;
 
 use App\Filament\Resources\Inscripcions\InscripcionResource;
+use App\Mail\RecordatorioAsistencia;
 use App\Models\Inscripcion;
 use App\Support\Ajustes;
+use App\Support\Recordatorios;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Support\Icons\Heroicon;
@@ -63,6 +68,35 @@ class ListInscripcions extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            // Recordatorio a todos los correos registrados, por tandas: cada pulsación envía a los siguientes que aún no lo recibieron
+            Action::make('recordatorioTodos')->label('Enviar recordatorio a todos')->icon(Heroicon::OutlinedEnvelope)->color('success')
+                ->badge(fn () => Recordatorios::pendientes()->count() ?: null)
+                ->modalHeading('Enviar recordatorio de asistencia a todos')
+                ->modalDescription(fn () => 'Faltan '.Recordatorios::pendientes()->count().' inscritos por recibirlo (las anuladas no se incluyen). '
+                    .'Cada vez que pulses «Enviar» se envía a los siguientes '.Recordatorios::LOTE_PANEL.' y nunca se repite a quien ya lo recibió: '
+                    .'vuelve a pulsar el botón hasta que no quede nadie.')
+                ->schema([
+                    Select::make('dia')->label('¿Para qué días?')->options(RecordatorioAsistencia::DIAS)->default('27')->required(),
+                    Toggle::make('solo_confirmadas')->label('Solo inscripciones confirmadas')
+                        ->helperText('Apagado: también reciben quienes aún figuran como pendientes.'),
+                ])
+                ->modalSubmitActionLabel('Enviar')
+                ->action(function (array $data) {
+                    @set_time_limit(120);
+                    $lote = Recordatorios::pendientes((bool) $data['solo_confirmadas'])->limit(Recordatorios::LOTE_PANEL)->get();
+                    if ($lote->isEmpty()) {
+                        Notification::make()->title('Todos ya recibieron el recordatorio')->success()->send();
+
+                        return;
+                    }
+                    $ok = $lote->filter(fn ($i) => Recordatorios::enviar($i, $data['dia']))->count();
+                    $faltan = Recordatorios::pendientes((bool) $data['solo_confirmadas'])->count();
+                    Notification::make()
+                        ->title("Se enviaron {$ok} de {$lote->count()} recordatorios")
+                        ->body($faltan ? "Faltan {$faltan}: vuelve a pulsar «Enviar recordatorio a todos»." : 'Listo: ya lo recibieron todos.')
+                        ->{$ok === $lote->count() ? 'success' : 'warning'}()
+                        ->persistent()->send();
+                }),
             CreateAction::make()->label('Inscribir manualmente')->icon(Heroicon::OutlinedUserPlus),
             // CSV que Excel abre directamente (separador ; y acentos correctos)
             Action::make('exportar')->label('Exportar a Excel')->icon(Heroicon::OutlinedArrowDownTray)->color('gray')

@@ -30,6 +30,7 @@ class Inscripcion extends Model
         return [
             'monto' => 'decimal:2',
             'validado_en' => 'datetime',
+            'recordatorio_enviado_en' => 'datetime',
             'acepta_privacidad' => 'boolean',
         ];
     }

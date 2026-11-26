@@ -90,7 +90,7 @@ const ponentesBase = [
     institucion: 'IDECA Puno',
     pais: 'Perú',
     foto: '/ponentes/rolando-pilco.jpg',
-    ponencia: null,
+    ponencia: 'Pueblos indígenas, interculturalidad y educación superior: el caso del pueblo aimara peruano. De construcción colectiva a demandas',
     bio: 'Antropólogo y director de IDECA Puno.',
   },
   {
@@ -99,7 +99,7 @@ const ponentesBase = [
     institucion: 'Universidad Nacional del Altiplano',
     pais: 'Perú',
     foto: '/ponentes/porfirio-enriquez.jpg',
-    ponencia: 'Perspectiva interepistémica del diálogo intercultural frente a la hegemonía del saber científico: hacia una propuesta de articulación equitativa de conocimientos en el Perú',
+    ponencia: 'Perspectiva interepistémica del diálogo intercultural: del saber científico hegemónico a la articulación equitativa de conocimientos en la educación universitaria peruana',
     bio: 'Docente de la Escuela Profesional de Sociología de la Universidad Nacional del Altiplano.',
   },
   {
