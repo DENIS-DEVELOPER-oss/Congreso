@@ -2,6 +2,7 @@
 // se cierra con la X, con Esc o tocando fuera del afiche.
 import { useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
+import { evento } from '../data/evento.js'
 import { RUTAS } from '../lib/rutas.js'
 
 const CLAVE = 'anuncio-inicio-visto'
@@ -21,7 +22,7 @@ export default function AnuncioInicio() {
 
   useEffect(() => {
     // No aparece si la persona llegó buscando una sección concreta (/#programa)
-    if (yaVisto() || window.location.hash.length > 1) return
+    if (evento.inscripcionesFinalizadas || yaVisto() || window.location.hash.length > 1) return
     const t = setTimeout(() => setAbierto(true), RETRASO)
     return () => clearTimeout(t)
   }, [])

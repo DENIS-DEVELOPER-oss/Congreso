@@ -27,6 +27,7 @@ const eventoBase = {
   modalidad: 'Presencial',
   inscripcionGratuita: true,
   inscripcionesAbiertas: false, // se abren desde el panel (Datos del congreso)
+  inscripcionesFinalizadas: false, // el congreso ya empezó: la web no recibe inscripciones
   puedeProbarInscripcion: false,
   ciudad: 'Puno, Perú',
   correo: 'p.enriquez@unap.edu.pe',

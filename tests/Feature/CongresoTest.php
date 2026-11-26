@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use App\Mail\AccesoAula;
 use App\Mail\InscripcionRecibida;
-use App\Mail\PonenciaRecibida;
 use App\Mail\SolicitudRecibida;
+use App\Models\Ajuste;
 use App\Models\EjeTematico;
 use App\Models\Participante;
 use App\Models\Ponencia;
@@ -55,6 +55,26 @@ class CongresoTest extends TestCase
 
         $this->postJson('/api/inscripciones', $this->datosInscripcion())->assertForbidden();
         $this->assertDatabaseCount('participantes', 0);
+    }
+
+    public function test_con_inscripciones_finalizadas_la_web_no_recibe_inscripciones_ni_solicitudes(): void
+    {
+        config(['congreso.inscripciones_finalizadas' => true, 'congreso.inscripciones_abiertas' => true]);
+
+        $this->postJson('/api/inscripciones', $this->datosInscripcion())
+            ->assertForbidden()->assertJsonFragment(['message' => 'Las inscripciones al congreso ya finalizaron. Si te inscribiste, ingresa al Aula virtual con tu DNI.']);
+        $this->postJson('/api/solicitudes', $this->datosInscripcion() + ['tipo' => 'asistente'])->assertForbidden();
+        // Tampoco con sesión del panel: desde el panel se inscribe con «Inscribir manualmente»
+        $this->actingAs($this->usuarioPanel(false))->postJson('/api/inscripciones', $this->datosInscripcion())->assertForbidden();
+        $this->assertDatabaseCount('participantes', 0);
+
+        // La página avisa que finalizaron
+        $this->get('/inscripcion')->assertOk()->assertSee('"inscripcionesFinalizadas":true', false);
+    }
+
+    public function test_la_migracion_deja_las_inscripciones_finalizadas(): void
+    {
+        $this->assertTrue((bool) Ajuste::where('clave', 'inscripciones_finalizadas')->value('valor'));
     }
 
     public function test_un_organizador_puede_probar_el_formulario_cerrado(): void

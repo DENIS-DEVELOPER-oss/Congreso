@@ -68,6 +68,8 @@ class DatosCongreso extends Page
             ->components([
                 Tabs::make()->persistTabInQueryString()->tabs([
                     Tab::make('Inscripción y pagos')->icon(Heroicon::OutlinedBanknotes)->schema([
+                        Toggle::make('inscripciones_finalizadas')->label('Inscripciones finalizadas')->onColor('danger')
+                            ->helperText('Activado: la página ya no recibe inscripciones ni solicitudes y los botones «Inscríbete» llevan al Aula virtual. Desde este panel puedes seguir inscribiendo personas (Inscripciones → Inscribir manualmente).'),
                         Toggle::make('inscripciones_abiertas')->label('Inscripciones abiertas al público')
                             ->helperText('Desactivado: el formulario de la página muestra «Inscripciones muy pronto». Mientras tanto, si inicias sesión en este panel, puedes probar el formulario en /inscripcion.'),
                         Toggle::make('inscripcion_gratuita')->label('La inscripción es gratuita')

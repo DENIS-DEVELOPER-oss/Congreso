@@ -20,7 +20,9 @@ export default function Accesos() {
           etiqueta="Participa"
           titulo="Inscripción y Aula virtual"
           descripcion={
-            evento.inscripcionesAbiertas
+            evento.inscripcionesFinalizadas
+              ? 'Las inscripciones han finalizado. Si ya te inscribiste, ingresa al Aula virtual con tu DNI: ahí verás el programa, tu asistencia y descargarás tu certificado.'
+              : evento.inscripcionesAbiertas
               ? 'Regístrese en la página y recibirá al instante, por correo, su acceso al Aula virtual: ahí verá el programa y descargará su certificado.'
               : 'Llene su solicitud de inscripción en la web (los ponentes adjuntan su resumen) y le enviaremos su acceso al Aula virtual, donde verá el programa y descargará su certificado.'
           }
@@ -48,8 +50,8 @@ export default function Accesos() {
                 ))}
               </ol>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <a href={RUTAS.inscripcion} className="group btn-primario">
-                  Registrarme
+                <a href={evento.inscripcionesFinalizadas ? RUTAS.cuenta : RUTAS.inscripcion} className="group btn-primario">
+                  {evento.inscripcionesFinalizadas ? 'Ingresar al Aula virtual' : 'Registrarme'}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </a>
               </div>

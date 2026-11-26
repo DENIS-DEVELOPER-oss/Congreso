@@ -14,18 +14,27 @@ class Ajustes
     // Claves que se pueden editar desde el panel
     public const EDITABLES = [
         'tarifas', 'medios_pago_detalle', 'fecha_preventa_fin', 'correo_contacto', 'telefono', 'whatsapp', 'grupo_whatsapp',
-        'fechas_importantes', 'firmantes', 'porcentaje_asistencia', 'horas', 'zoom_solo_con_pago', 'inscripcion_gratuita', 'inscripciones_abiertas',
+        'fechas_importantes', 'firmantes', 'porcentaje_asistencia', 'horas', 'zoom_solo_con_pago', 'inscripcion_gratuita', 'inscripciones_abiertas', 'inscripciones_finalizadas',
         'aviso_correo', 'aviso_whatsapp', 'aviso_whatsapp_clave',
     ];
 
     public static function inscripcionesAbiertas(): bool
     {
-        return (bool) config('congreso.inscripciones_abiertas');
+        return (bool) config('congreso.inscripciones_abiertas') && ! self::inscripcionesFinalizadas();
+    }
+
+    public static function inscripcionesFinalizadas(): bool
+    {
+        return (bool) config('congreso.inscripciones_finalizadas');
     }
 
     // Con las inscripciones cerradas, los usuarios del panel pueden probar el formulario
     public static function puedeInscribir(): bool
     {
+        if (self::inscripcionesFinalizadas()) {
+            return false;
+        }
+
         return self::inscripcionesAbiertas() || auth('web')->check();
     }
 
@@ -95,7 +104,8 @@ class Ajustes
         return [
             'evento' => [
                 'inscripcionesAbiertas' => self::inscripcionesAbiertas(),
-                'puedeProbarInscripcion' => ! self::inscripcionesAbiertas() && auth('web')->check(),
+                'inscripcionesFinalizadas' => self::inscripcionesFinalizadas(),
+                'puedeProbarInscripcion' => ! self::inscripcionesFinalizadas() && ! self::inscripcionesAbiertas() && auth('web')->check(),
                 'inscripcionGratuita' => self::gratuita(),
                 'correo' => config('congreso.correo_contacto'),
                 'telefono' => config('congreso.telefono'),

@@ -14,7 +14,9 @@ export const preguntas = [
   {
     pregunta: '¿Cómo me inscribo?',
     respuesta:
-      evento.inscripcionesAbiertas
+      evento.inscripcionesFinalizadas
+        ? 'Las inscripciones al congreso han finalizado. Si ya te inscribiste, ingresa al Aula virtual con tu DNI y la contraseña que te enviamos por correo.'
+        : evento.inscripcionesAbiertas
         ? 'Completa el formulario de inscripción. Al instante te llega un correo con tu usuario (tu DNI), una contraseña temporal para el Aula virtual y el programa. Al ingresar por primera vez creas tu propia contraseña.'
         : `Solicita tu inscripción por WhatsApp al ${evento.telefono} o al correo ${evento.correo} con tu nombre completo, DNI, celular y correo. Te enviaremos tu usuario y una contraseña temporal para el Aula virtual; al ingresar por primera vez creas tu propia contraseña.`,
   },

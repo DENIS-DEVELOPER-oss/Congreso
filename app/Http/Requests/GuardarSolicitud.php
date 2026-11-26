@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Support\Ajustes;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -9,6 +11,17 @@ use Illuminate\Validation\Rule;
 // Asistente: datos personales y categoría. Ponente: además su resumen con la plantilla oficial (obligatorio).
 class GuardarSolicitud extends FormRequest
 {
+    // Con las inscripciones finalizadas la web ya no recibe solicitudes
+    public function authorize(): bool
+    {
+        return ! Ajustes::inscripcionesFinalizadas();
+    }
+
+    protected function failedAuthorization(): void
+    {
+        throw new AuthorizationException('Las inscripciones al congreso ya finalizaron. Si te inscribiste, ingresa al Aula virtual con tu DNI.');
+    }
+
     public function rules(): array
     {
         $ponente = $this->input('tipo') === 'ponente';

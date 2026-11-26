@@ -3,6 +3,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Briefcase,
+  CalendarCheck,
   Building2,
   Check,
   ClipboardPen,
@@ -10,6 +11,7 @@ import {
   FileText,
   GraduationCap,
   IdCard,
+  KeyRound,
   Layers,
   Mail,
   MessageCircle,
@@ -370,6 +372,29 @@ function OpcionInscripcion({ Icono, titulo, texto, children }) {
   )
 }
 
+// El congreso ya empezó: no se reciben inscripciones; quien ya se inscribió entra al Aula
+function InscripcionesFinalizadas() {
+  const whatsapp = canales.whatsapp[0]
+  return (
+    <div className="flex h-full flex-col justify-center py-6 text-center">
+      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-crema text-rojizo-oscuro ring-1 ring-naranja/40">
+        <CalendarCheck className="h-7 w-7" aria-hidden="true" />
+      </span>
+      <h3 className="mt-5 font-display text-2xl font-extrabold text-oscuro sm:text-3xl">Las inscripciones han finalizado</h3>
+      <p className="mx-auto mt-3 max-w-lg leading-relaxed text-slate-600">
+        Gracias por tu interés. El congreso ya está en curso y no se reciben nuevas inscripciones por la web.
+        Si ya te inscribiste, ingresa al <strong className="text-oscuro">Aula virtual</strong> con tu DNI para ver el programa, tu asistencia y tu certificado.
+      </p>
+      <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href={RUTAS.cuenta} className="btn-primario">
+          <KeyRound className="h-4 w-4" aria-hidden="true" /> Ingresar al Aula virtual
+        </a>
+      </div>
+      {whatsapp && <p className="mt-4 text-sm text-slate-500">Consultas: WhatsApp {whatsapp.texto}</p>}
+    </div>
+  )
+}
+
 function InscripcionesCerradas() {
   const [modo, setModo] = useState(null) // null | 'asistente' | 'ponente'
   const whatsapp = canales.whatsapp[0]
@@ -445,7 +470,9 @@ export default function Inscripcion({ conTitulo = true }) {
 
           <Reveal delay={150} className="lg:col-span-3">
             <div className="relative h-full rounded-xl border border-black/5 bg-white px-4 py-7 shadow-elevada sm:p-10">
-              {!evento.inscripcionesAbiertas && !evento.puedeProbarInscripcion ? (
+              {evento.inscripcionesFinalizadas ? (
+                <InscripcionesFinalizadas />
+              ) : !evento.inscripcionesAbiertas && !evento.puedeProbarInscripcion ? (
                 <InscripcionesCerradas />
               ) : f.estado === 'exito' ? (
                 <PantallaExito

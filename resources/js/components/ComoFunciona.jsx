@@ -1,5 +1,6 @@
 // "Así funciona el congreso": sección oscura que explica cómo se participa en el congreso presencial
 import { ArrowRight, BadgeCheck, CalendarDays, Landmark, MonitorPlay } from 'lucide-react'
+import { evento } from '../data/evento.js'
 import { RUTAS } from '../lib/rutas.js'
 import { TituloSeccion } from './Andino.jsx'
 import Reveal from './Reveal.jsx'
@@ -62,10 +63,12 @@ export default function ComoFunciona() {
           </ol>
 
           <Reveal delay={200} className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <a href={RUTAS.inscripcion} className="group btn bg-naranja text-[#081a4d] shadow-[0_10px_30px_-10px_rgb(251_191_36/0.6)] hover:-translate-y-0.5 hover:bg-[#fcd34d]">
-              Registrarme
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </a>
+            {!evento.inscripcionesFinalizadas && (
+              <a href={RUTAS.inscripcion} className="group btn bg-naranja text-[#081a4d] shadow-[0_10px_30px_-10px_rgb(251_191_36/0.6)] hover:-translate-y-0.5 hover:bg-[#fcd34d]">
+                Registrarme
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </a>
+            )}
             <a href={RUTAS.cuenta} className="btn border border-white/25 bg-white/5 text-white hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/10">
               Ya tengo usuario: ingresar al aula
             </a>

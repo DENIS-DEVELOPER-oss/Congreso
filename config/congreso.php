@@ -21,6 +21,10 @@ return [
     // y solo los usuarios del panel (con sesión iniciada) pueden probarlo.
     'inscripciones_abiertas' => false,
 
+    // EDITABLE. Inscripciones finalizadas (el congreso ya empezó): la web ya no recibe inscripciones ni solicitudes
+    // y los botones de «Inscríbete» llevan al Aula virtual. Desde el panel se pueden seguir inscribiendo personas.
+    'inscripciones_finalizadas' => false,
+
     // EDITABLE. Inscripción gratuita: al registrarse queda confirmada, sin pago ni voucher (como indican los afiches)
     'inscripcion_gratuita' => true,
 

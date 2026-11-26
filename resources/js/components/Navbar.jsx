@@ -288,13 +288,15 @@ export default function Navbar({ pagina = 'inicio' }) {
           </a>
           {/* Un solo botón para los dos públicos: la página de inscripción ofrece «asistente» o «ponente» */}
           <a
-            href={RUTAS.inscripcion}
-            aria-current={pagina === 'inscripcion' ? 'page' : undefined}
+            href={evento.inscripcionesFinalizadas ? RUTAS.cuenta : RUTAS.inscripcion}
+            aria-current={pagina === (evento.inscripcionesFinalizadas ? 'cuenta' : 'inscripcion') ? 'page' : undefined}
             className="group hidden items-center gap-3 rounded-lg bg-linear-to-br from-[#0b1f5c] to-[#1e3a8a] py-1.5 pr-1.5 pl-4 whitespace-nowrap text-white shadow-[0_12px_28px_-14px_rgb(11_31_92/0.85)] ring-1 ring-white/10 transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-14px_rgb(11_31_92/0.9)] sm:inline-flex"
           >
             <span className="flex flex-col text-left leading-none">
-              <span className="text-[0.9375rem] font-bold">Inscríbete</span>
-              <span className="mt-1 text-[10px] font-semibold tracking-[0.12em] text-naranja uppercase">Asistentes y ponentes</span>
+              <span className="text-[0.9375rem] font-bold">{evento.inscripcionesFinalizadas ? 'Aula virtual' : 'Inscríbete'}</span>
+              <span className="mt-1 text-[10px] font-semibold tracking-[0.12em] text-naranja uppercase">
+                {evento.inscripcionesFinalizadas ? 'Ingresa con tu DNI' : 'Asistentes y ponentes'}
+              </span>
             </span>
             <span className="flex h-8 w-8 items-center justify-center rounded-md bg-naranja text-[#0b1f5c] transition group-hover:bg-[#fcd34d]">
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
@@ -332,8 +334,13 @@ export default function Navbar({ pagina = 'inicio' }) {
                 <EnlaceMovil key={e.href} e={e} i={i + PRINCIPALES.length} {...movil} />
               ))}
             </ul>
-            <a href={RUTAS.inscripcion} className="btn-primario mt-4 w-full sm:hidden" onClick={() => setAbierto(false)}>
-              Inscríbete · asistentes y ponentes <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <a
+              href={evento.inscripcionesFinalizadas ? RUTAS.cuenta : RUTAS.inscripcion}
+              className="btn-primario mt-4 w-full sm:hidden"
+              onClick={() => setAbierto(false)}
+            >
+              {evento.inscripcionesFinalizadas ? 'Ingresar al Aula virtual' : 'Inscríbete · asistentes y ponentes'}{' '}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
           </div>
         </div>

@@ -312,10 +312,12 @@ const DIAPOSITIVAS = [
     antetitulo: 'Convocatoria de ponencias',
     titulo: 'Presenta tu investigación',
     texto: 'Inscríbete como ponente y sube tu resumen hasta el 20 de noviembre. El Comité organizador evaluará cada trabajo.',
-    botones: [
-      { texto: 'Enviar mi resumen', href: '#convocatoria', principal: true },
-      { texto: 'Inscribirme', href: RUTAS.inscripcion },
-    ],
+    botones: evento.inscripcionesFinalizadas
+      ? [{ texto: 'Ver la convocatoria', href: '#convocatoria', principal: true }]
+      : [
+          { texto: 'Enviar mi resumen', href: '#convocatoria', principal: true },
+          { texto: 'Inscribirme', href: RUTAS.inscripcion },
+        ],
     Visual: TarjetaConvocatoria,
   },
   {
@@ -335,13 +337,17 @@ const DIAPOSITIVAS = [
     etiqueta: 'Inscripciones',
     antetitulo: 'Inscripción gratuita',
     titulo: 'Asegura tu participación',
-    texto: evento.inscripcionesAbiertas
-      ? 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno. Al instante te llega tu acceso al Aula virtual.'
-      : 'Llena tu solicitud de inscripción gratuita en la web y participa en Educación Continua de la UNA Puno.',
-    botones: [
-      { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
-      { texto: 'Ingresar al aula', href: RUTAS.cuenta },
-    ],
+    texto: evento.inscripcionesFinalizadas
+      ? 'Las inscripciones han finalizado. Si ya te inscribiste, ingresa al Aula virtual con tu DNI para ver tu asistencia y tu certificado.'
+      : evento.inscripcionesAbiertas
+        ? 'Regístrate en dos minutos y participa en Educación Continua de la UNA Puno. Al instante te llega tu acceso al Aula virtual.'
+        : 'Llena tu solicitud de inscripción gratuita en la web y participa en Educación Continua de la UNA Puno.',
+    botones: evento.inscripcionesFinalizadas
+      ? [{ texto: 'Ingresar al Aula virtual', href: RUTAS.cuenta, principal: true }]
+      : [
+          { texto: 'Registrarme', href: RUTAS.inscripcion, principal: true },
+          { texto: 'Ingresar al aula', href: RUTAS.cuenta },
+        ],
     Visual: TarjetaPasos,
   },
 ]
@@ -500,9 +506,15 @@ function TextoCongreso() {
           Presenta tu ponencia
           <FlechaDorada />
         </a>
-        <a href={RUTAS.inscripcion} className={claseBoton(false)}>
-          <UserPlus className="h-[18px] w-[18px] text-[#1d4ed8]" aria-hidden="true" /> Inscríbete
-        </a>
+        {evento.inscripcionesFinalizadas ? (
+          <a href={RUTAS.cuenta} className={claseBoton(false)}>
+            <UserPlus className="h-[18px] w-[18px] text-[#1d4ed8]" aria-hidden="true" /> Aula virtual
+          </a>
+        ) : (
+          <a href={RUTAS.inscripcion} className={claseBoton(false)}>
+            <UserPlus className="h-[18px] w-[18px] text-[#1d4ed8]" aria-hidden="true" /> Inscríbete
+          </a>
+        )}
       </div>
     </>
   )

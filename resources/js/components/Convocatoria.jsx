@@ -92,9 +92,13 @@ function EnvioResumen() {
       </ol>
 
       <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-        <a href={`${RUTAS.inscripcion}?como=ponente`} className="btn-primario">
-          <FileUp className="h-4 w-4" aria-hidden="true" /> Inscribirme y subir mi resumen
-        </a>
+        {evento.inscripcionesFinalizadas ? (
+          <p className="rounded-lg bg-crema/70 px-4 py-3 text-sm font-semibold text-oscuro">La recepción de resúmenes e inscripciones ha concluido.</p>
+        ) : (
+          <a href={`${RUTAS.inscripcion}?como=ponente`} className="btn-primario">
+            <FileUp className="h-4 w-4" aria-hidden="true" /> Inscribirme y subir mi resumen
+          </a>
+        )}
       </div>
       <p className="mt-3 text-sm [overflow-wrap:anywhere] text-slate-500">
         Consultas: WhatsApp {whatsapp.texto} · {correo}

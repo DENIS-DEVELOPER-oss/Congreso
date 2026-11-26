@@ -21,17 +21,28 @@ export default function Llamado() {
               Te esperamos en Puno
             </h2>
             <p className="mt-3 text-white/75">
-              {evento.inscripcionesAbiertas
+              {evento.inscripcionesFinalizadas
+                ? 'Las inscripciones han finalizado. Si ya te inscribiste, recuerda registrar tu entrada y tu salida con tu DNI cada día, e ingresa al Aula virtual para ver tu asistencia y tu certificado.'
+                : evento.inscripcionesAbiertas
                 ? 'La inscripción es gratuita: regístrate en dos minutos y recibe al instante tu acceso al Aula virtual, con el programa del congreso.'
                 : 'La inscripción es gratuita: llena tus datos en la web y te enviaremos tu acceso al Aula virtual, con el programa del congreso.'}
             </p>
           </div>
           <div className="mt-8 flex shrink-0 flex-col gap-3 sm:flex-row lg:mt-0">
-            <a href={RUTAS.inscripcion} className="group btn bg-naranja text-[#081a4d] hover:-translate-y-0.5 hover:bg-[#fcd34d]">
-              {evento.inscripcionesAbiertas ? 'Registrarme ahora' : 'Solicitar inscripción'}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </a>
-            <a href={RUTAS.cuenta} className="btn border border-white/25 bg-white/5 text-white hover:border-white/50 hover:bg-white/10">
+            {!evento.inscripcionesFinalizadas && (
+              <a href={RUTAS.inscripcion} className="group btn bg-naranja text-[#081a4d] hover:-translate-y-0.5 hover:bg-[#fcd34d]">
+                {evento.inscripcionesAbiertas ? 'Registrarme ahora' : 'Solicitar inscripción'}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </a>
+            )}
+            <a
+              href={RUTAS.cuenta}
+              className={
+                evento.inscripcionesFinalizadas
+                  ? 'group btn bg-naranja text-[#081a4d] hover:-translate-y-0.5 hover:bg-[#fcd34d]'
+                  : 'btn border border-white/25 bg-white/5 text-white hover:border-white/50 hover:bg-white/10'
+              }
+            >
               Ingresar al aula
             </a>
           </div>

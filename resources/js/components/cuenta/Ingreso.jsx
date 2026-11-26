@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Eye, EyeOff, Lock, MailCheck, MonitorPlay, UserRound } from 'lucide-react'
 import { useFormulario } from '../../hooks/useFormulario.js'
 import { enviar } from '../../lib/api.js'
+import { evento } from '../../data/evento.js'
 import { RUTAS } from '../../lib/rutas.js'
 import { AlertaError, BotonEnviar, Campo } from '../form/Campos.jsx'
 
@@ -94,7 +95,7 @@ export default function Ingreso({ onIngreso }) {
             <strong className="text-white">Contraseña:</strong> la temporal que te enviamos por correo. La primera vez crearás una propia.
           </li>
         </ul>
-        <p className="mt-6 text-sm text-white/70">
+        <p className="mt-6 text-sm text-white/70" hidden={evento.inscripcionesFinalizadas}>
           ¿Aún no te registras?{' '}
           <a href={RUTAS.inscripcion} className="font-semibold text-naranja underline underline-offset-2 hover:text-white">
             Regístrate aquí
