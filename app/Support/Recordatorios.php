@@ -41,8 +41,15 @@ class Recordatorios
     {
         return [
             Select::make('dia')->label('¿Para qué días es el recordatorio?')->options(RecordatorioAsistencia::DIAS)->required(),
-            self::campoGrupoWhatsApp()->default(fn () => config('congreso.grupo_whatsapp')),
+            self::campoGrupoWhatsApp()->default(fn () => config('congreso.grupo_whatsapp'))
+                ->visible(fn () => self::grupoEnCorreo()),
         ];
+    }
+
+    // Por ahora el grupo de WhatsApp no va en el correo (config congreso.grupo_whatsapp_en_recordatorio)
+    public static function grupoEnCorreo(): bool
+    {
+        return (bool) config('congreso.grupo_whatsapp_en_recordatorio');
     }
 
     public static function campoGrupoWhatsApp(): TextInput
@@ -51,12 +58,17 @@ class Recordatorios
             ->url()->maxLength(200)->placeholder('https://chat.whatsapp.com/…')
             ->regex('#^https://chat\.whatsapp\.com/\S+$#')
             ->validationMessages(['regex' => 'Pega el enlace de invitación del grupo: empieza con https://chat.whatsapp.com/'])
-            ->helperText('Si lo pones, el recordatorio incluye un botón para unirse al grupo donde se compartirán comunicados.');
+            ->helperText(fn () => self::grupoEnCorreo()
+                ? 'Si lo pones, el recordatorio incluye un botón para unirse al grupo donde se compartirán comunicados.'
+                : 'Se guarda para más adelante: por ahora no se incluye en los correos.');
     }
 
     // Guarda el enlace del grupo (vacío = sin grupo) para que vaya en este envío y en los siguientes
     public static function guardarGrupo(?string $enlace): void
     {
+        if (! self::grupoEnCorreo()) {
+            return; // el campo no se muestra: no se toca el enlace guardado
+        }
         $enlace = filled($enlace) ? trim($enlace) : null;
         Ajustes::guardar(['grupo_whatsapp' => $enlace]);
         config(['congreso.grupo_whatsapp' => $enlace]);

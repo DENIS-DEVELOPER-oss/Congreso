@@ -44,6 +44,7 @@ class RecordatorioTest extends TestCase
     public function test_el_organizador_envia_para_los_dos_dias_con_el_grupo_de_whatsapp_sin_tocar_otros_datos(): void
     {
         Mail::fake();
+        config(['congreso.grupo_whatsapp_en_recordatorio' => true]);
         $this->actingAs(User::factory()->create(['es_admin' => false]));
         $i = $this->inscrito('Rosa', 'Mamani', 'rosa@example.com', 'pendiente');
         $antes = $i->fresh()->only(['estado', 'tipo_participante', 'codigo', 'observacion', 'validado_en']);
@@ -67,9 +68,25 @@ class RecordatorioTest extends TestCase
         $this->assertSame($grupo, config('congreso.grupo_whatsapp'));
     }
 
+    public function test_mientras_este_apagado_el_grupo_no_va_en_el_correo(): void
+    {
+        Mail::fake();
+        config(['congreso.grupo_whatsapp' => 'https://chat.whatsapp.com/AbCdEf123456']);
+        $this->actingAs(User::factory()->create(['es_admin' => false]));
+        $this->inscrito('Rosa', 'Mamani', 'rosa@example.com');
+
+        Livewire::test(ListInscripcions::class)
+            ->assertActionExists('recordatorioTodos')
+            ->callAction('recordatorioTodos', data: ['dia' => 'ambos', 'solo_confirmadas' => false])
+            ->assertHasNoActionErrors();
+
+        Mail::assertSent(RecordatorioAsistencia::class, fn ($m) => $m->hasTo('rosa@example.com') && ! str_contains($m->render(), 'chat.whatsapp.com'));
+    }
+
     public function test_el_enlace_del_grupo_debe_ser_de_whatsapp_y_es_opcional(): void
     {
         Mail::fake();
+        config(['congreso.grupo_whatsapp_en_recordatorio' => true]);
         $this->actingAs(User::factory()->create(['es_admin' => true]));
         $this->inscrito('Rosa', 'Mamani', 'rosa@example.com');
 

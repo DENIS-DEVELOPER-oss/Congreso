@@ -24,7 +24,7 @@
     </td></tr>
   </table>
 
-  @if (filled(config('congreso.grupo_whatsapp')))
+  @if (config('congreso.grupo_whatsapp_en_recordatorio') && filled(config('congreso.grupo_whatsapp')))
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px;background:#ecfdf3;border-radius:8px;width:100%;">
       <tr><td style="padding:14px 18px;font-size:14px;line-height:1.7;">
         <strong>Grupo de WhatsApp del congreso</strong><br />

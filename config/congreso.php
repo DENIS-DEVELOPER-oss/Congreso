@@ -67,6 +67,8 @@ return [
     'whatsapp' => '51930805537', // solo dígitos, con código de país
     // EDITABLE. Enlace de invitación al grupo de WhatsApp de participantes (comunicados); va en el recordatorio de asistencia
     'grupo_whatsapp' => null,
+    // Mientras sea false, el enlace del grupo NO va en el recordatorio ni se pide al enviarlo (se activará más adelante)
+    'grupo_whatsapp_en_recordatorio' => false,
 
     // EDITABLE. Avisos a la comisión por cada nueva inscripción (panel → Datos del congreso → Avisos).
     // Correo: si está vacío, se usa el correo de contacto. WhatsApp: con CallMeBot (callmebot.com),
