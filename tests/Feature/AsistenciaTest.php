@@ -42,7 +42,7 @@ class AsistenciaTest extends TestCase
         $sesion = Sesion::create(['nombre' => 'Día 2 – mañana', 'fecha' => '2026-11-27', 'hora_inicio' => '09:00']);
 
         Livewire::test(RegistrarAsistencia::class)
-            ->fillForm(['sesion_id' => $sesion->id, 'texto' => '70123456'])
+            ->set('data.sesion_id', $sesion->id)->set('data.texto', '70123456')
             ->call('registrar');
 
         $this->assertSame('validada', $i->refresh()->estado);
@@ -56,12 +56,41 @@ class AsistenciaTest extends TestCase
         $sesion = Sesion::create(['nombre' => 'Día 2 – mañana', 'fecha' => '2026-11-27', 'hora_inicio' => '09:00']);
 
         Livewire::test(RegistrarAsistencia::class)
-            ->fillForm(['sesion_id' => $sesion->id, 'lista' => "70000001\n70000002"])
+            ->set('data.sesion_id', $sesion->id)->set('data.lista', "70000001\n70000002")
             ->call('registrar');
 
         $this->assertSame(0, Asistencia::count());
         $this->assertSame('anulada', $anulada->refresh()->estado);
         $this->assertSame('observada', $observada->refresh()->estado);
+    }
+
+    public function test_la_pagina_muestra_entrada_y_salida_y_el_resultado_de_cada_dni(): void
+    {
+        $this->travelTo(now()->setDate(2026, 11, 27)->setTime(9, 30));
+        $i = $this->inscrito('70123456', 'validada');
+        $manana = Sesion::create(['nombre' => 'Día 2 – mañana', 'fecha' => '2026-11-27', 'hora_inicio' => '09:00', 'hora_fin' => '13:00']);
+        $tarde = Sesion::create(['nombre' => 'Día 2 – tarde', 'fecha' => '2026-11-27', 'hora_inicio' => '14:00', 'hora_fin' => '19:00']);
+
+        $pagina = Livewire::test(RegistrarAsistencia::class)
+            ->assertSet('data.sesion_id', $manana->id)
+            ->assertSee('Entrada')->assertSee('Salida')->assertSee('Escriba el DNI y presione Enter');
+
+        // Primer registro: tarjeta verde con el nombre; el campo queda vacío para la siguiente persona
+        $pagina->set('data.texto', '70123456')->call('registrar')
+            ->assertSet('resultado.tipo', 'ok')->assertSet('data.texto', '')
+            ->assertSee('Rosa Mamani')->assertDispatched('enfocar-dni');
+
+        // El mismo DNI otra vez: avisa y no duplica
+        $pagina->set('data.texto', '70123456')->call('registrar')->assertSet('resultado.tipo', 'ya');
+        $this->assertSame(1, Asistencia::where('sesion_id', $manana->id)->count());
+
+        // DNI inexistente
+        $pagina->set('data.texto', '11111111')->call('registrar')->assertSet('resultado.tipo', 'no_encontrado');
+
+        // Al pasar a SALIDA se registra aparte
+        $pagina->call('elegirSesion', $tarde->id)->assertSet('resultado', null)
+            ->set('data.texto', '70123456')->call('registrar')->assertSet('resultado.tipo', 'ok');
+        $this->assertSame(2, Asistencia::where('inscripcion_id', $i->id)->count());
     }
 
     public function test_por_la_tarde_se_elige_la_sesion_de_salida(): void

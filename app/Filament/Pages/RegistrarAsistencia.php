@@ -8,22 +8,18 @@ use App\Models\Inscripcion;
 use App\Models\Sesion;
 use App\Support\Ajustes;
 use BackedEnum;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 use UnitEnum;
 
-// Registro de asistencia de las sesiones presenciales: uno por uno (código, DNI o correo)
-// o varios a la vez pegando una lista de DNI o correos
+// Registro de asistencia en la puerta: se elige ENTRADA (sesión de la mañana) o SALIDA (sesión de la tarde),
+// se escribe el DNI (o código o correo) y Enter. También se puede pegar una lista de DNI o correos.
 class RegistrarAsistencia extends Page implements HasTable
 {
     use InteractsWithTable;
@@ -38,38 +34,97 @@ class RegistrarAsistencia extends Page implements HasTable
 
     protected static ?int $navigationSort = 1;
 
-    public ?array $data = [];
+    // sesion_id: sesión elegida · texto: DNI, código o correo · lista: varios a la vez
+    public array $data = ['sesion_id' => null, 'texto' => '', 'lista' => ''];
+
+    // Último resultado que se muestra en grande: tipo (ok | ya | confirmado | bloqueado | no_encontrado), nombre, detalle
+    public ?array $resultado = null;
 
     public function mount(): void
     {
         // Por defecto, la sesión de hoy según la hora: la de la mañana (entrada) hasta las 13:30 y luego la de la tarde (salida)
-        $hoy = Sesion::whereDate('fecha', today())->orderBy('hora_inicio')->orderBy('id')->get();
+        $hoy = $this->sesionesDeHoy();
         $sesion = (now()->format('H:i') >= '13:30' ? $hoy->last() : $hoy->first())
             ?? Sesion::orderBy('fecha')->orderBy('id')->first();
-        $this->form->fill(['sesion_id' => $sesion?->id]);
+        $this->data['sesion_id'] = $sesion?->id;
     }
 
-    public function form(Schema $schema): Schema
+    public function getSubheading(): ?string
     {
-        return $schema
-            ->statePath('data')
-            ->components([
-                Grid::make(3)->schema([
-                    Select::make('sesion_id')->label('Sesión')->required()->live()
-                        ->options(fn () => Sesion::orderBy('fecha')->orderBy('id')->get()
-                            ->mapWithKeys(fn (Sesion $s) => [$s->id => $s->nombre.' · '.$s->fecha->format('d/m').($s->titulo ? ' · '.$s->titulo : '')]))
-                        ->helperText(fn () => Sesion::exists()
-                            ? 'Entrada: sesión de la mañana · Salida: sesión de la tarde.'
-                            : 'Primero crea las sesiones en Asistencia → Sesiones.'),
-                    TextInput::make('texto')->label('Código, DNI o correo de un participante')->autofocus()
-                        ->placeholder('SA-2026-0001, 70123456 o nombre@correo.com')
-                        ->autocomplete(false)
-                        ->columnSpan(2),
-                ]),
-                Textarea::make('lista')->label('Registrar varios a la vez')->rows(4)
-                    ->placeholder("Pega aquí los DNI o correos de la lista de asistentes,\nuno por línea o separados por comas")
-                    ->helperText('Las solicitudes pendientes quedan confirmadas al registrar su asistencia; las anuladas u observadas no se registran. Al terminar verás el resumen.'),
-            ]);
+        return 'Elija ENTRADA o SALIDA, escriba el DNI y presione Enter.';
+    }
+
+    public function sesionesDeHoy(): Collection
+    {
+        return Sesion::whereDate('fecha', today())->orderBy('hora_inicio')->orderBy('id')->get();
+    }
+
+    // Tarjetas de la parte superior: las sesiones de hoy (o, fuera de las fechas del congreso, todas)
+    public function tarjetas(): Collection
+    {
+        $hoy = $this->sesionesDeHoy();
+        $lista = $hoy->isNotEmpty() ? $hoy : Sesion::enOrden()->get();
+
+        return $lista->map(fn (Sesion $s) => [
+            'id' => $s->id,
+            'rol' => $this->rol($s),
+            'nombre' => $s->nombre,
+            'cuando' => $s->fechaTexto().($s->horarioTexto() ? ' · '.$s->horarioTexto() : ''),
+            'registrados' => $s->asistencias()->count(),
+        ]);
+    }
+
+    // En cada día, la primera sesión es la ENTRADA y la última la SALIDA
+    public function rol(Sesion $s): ?string
+    {
+        $delDia = Sesion::whereDate('fecha', $s->fecha)->orderBy('hora_inicio')->orderBy('id')->pluck('id');
+        if ($delDia->count() < 2) {
+            return null;
+        }
+
+        return match ($s->id) {
+            $delDia->first() => 'Entrada',
+            $delDia->last() => 'Salida',
+            default => null,
+        };
+    }
+
+    public function otrasSesiones(): Collection
+    {
+        return Sesion::enOrden()->get()->mapWithKeys(fn (Sesion $s) => [$s->id => $s->nombre.' · '.$s->fecha->format('d/m')]);
+    }
+
+    public function sesionActual(): ?Sesion
+    {
+        return $this->data['sesion_id'] ? Sesion::find($this->data['sesion_id']) : null;
+    }
+
+    // Contadores de la sesión elegida
+    public function resumen(): array
+    {
+        $registrados = Asistencia::where('sesion_id', $this->data['sesion_id'] ?? 0)->count();
+        $inscritos = Inscripcion::whereIn('estado', ['validada', 'pendiente'])->count();
+
+        return [
+            'registrados' => $registrados,
+            'inscritos' => $inscritos,
+            'faltan' => max($inscritos - $registrados, 0),
+            'porcentaje' => $inscritos ? min(100, (int) round($registrados * 100 / $inscritos)) : 0,
+        ];
+    }
+
+    public function elegirSesion(int $id): void
+    {
+        $this->data['sesion_id'] = $id;
+        $this->resultado = null;
+        $this->resetTable();
+        $this->dispatch('enfocar-dni');
+    }
+
+    public function updatedDataSesionId(): void
+    {
+        $this->resultado = null;
+        $this->resetTable();
     }
 
     // Busca una inscripción por código, DNI/pasaporte o correo
@@ -101,57 +156,74 @@ class RegistrarAsistencia extends Page implements HasTable
 
     public function registrar(): void
     {
-        $datos = $this->form->getState();
-        if (filled($datos['lista'] ?? null)) {
-            $this->registrarVarios($datos);
+        $sesion = $this->sesionActual();
+        if (! $sesion) {
+            Notification::make()->title('Primero elija la sesión (ENTRADA o SALIDA)')->warning()->send();
 
             return;
         }
-        if (blank($datos['texto'] ?? null)) {
-            Notification::make()->title('Escribe un código, DNI o correo, o pega una lista')->warning()->send();
+        if (filled(trim($this->data['lista'] ?? ''))) {
+            $this->registrarVarios($sesion);
 
             return;
         }
-        $texto = trim($datos['texto']);
+        $texto = trim($this->data['texto'] ?? '');
+        if ($texto === '') {
+            $this->dispatch('enfocar-dni');
+
+            return;
+        }
+
         $inscripcion = $this->buscar($texto);
+        $rol = $this->rol($sesion) ?? $sesion->nombre;
 
         if (! $inscripcion) {
-            Notification::make()->title("No hay ninguna inscripción con «{$texto}»")->danger()->send();
-        } elseif (! $this->admitir($inscripcion)) {
-            Notification::make()->title($inscripcion->participante->nombre_completo)
-                ->body('Su inscripción no está validada (estado: '.Inscripcion::ESTADOS[$inscripcion->estado].'). Revísala en Inscripciones.')
-                ->warning()->send();
+            $this->resultado = ['tipo' => 'no_encontrado', 'nombre' => "No se encontró «{$texto}»",
+                'detalle' => 'Revise el número. Si la persona no está inscrita, puede inscribirla en Inscripciones → Inscribir manualmente.'];
         } else {
-            $asistencia = Asistencia::firstOrCreate(
-                ['inscripcion_id' => $inscripcion->id, 'sesion_id' => $datos['sesion_id']],
-                ['registrado_por' => auth()->id(), 'registrado_en' => now()],
-            );
-            $asistencia->wasRecentlyCreated
-                ? Notification::make()->title('Asistencia registrada')->body($inscripcion->participante->nombre_completo)->success()->send()
-                : Notification::make()->title('Ya estaba registrado en esta sesión')
-                    ->body($inscripcion->participante->nombre_completo.' · '.$asistencia->registrado_en->format('H:i'))->info()->send();
+            $p = $inscripcion->participante;
+            $estabaPendiente = $inscripcion->estado === 'pendiente';
+            if (! $this->admitir($inscripcion)) {
+                $this->resultado = ['tipo' => 'bloqueado', 'nombre' => $p->nombre_completo,
+                    'detalle' => 'Su inscripción está '.mb_strtolower(Inscripcion::ESTADOS[$inscripcion->estado] ?? $inscripcion->estado).'. Revísela en Inscripciones antes de registrarla.',
+                    'dni' => $p->documento, 'codigo' => $inscripcion->codigo];
+            } else {
+                $asistencia = Asistencia::firstOrCreate(
+                    ['inscripcion_id' => $inscripcion->id, 'sesion_id' => $sesion->id],
+                    ['registrado_por' => auth()->id(), 'registrado_en' => now()],
+                );
+                $this->resultado = $asistencia->wasRecentlyCreated
+                    ? ['tipo' => $estabaPendiente ? 'confirmado' : 'ok', 'nombre' => $p->nombre_completo,
+                        'detalle' => "{$rol} registrada a las ".$asistencia->registrado_en->format('H:i')
+                            .($estabaPendiente ? ' · Su inscripción quedó confirmada.' : ''),
+                        'dni' => $p->documento, 'codigo' => $inscripcion->codigo]
+                    : ['tipo' => 'ya', 'nombre' => $p->nombre_completo,
+                        'detalle' => "Ya tenía registrada su {$rol} a las ".$asistencia->registrado_en->format('H:i').'. No se duplica.',
+                        'dni' => $p->documento, 'codigo' => $inscripcion->codigo];
+            }
         }
 
-        // Se limpia el campo para el siguiente participante, manteniendo la sesión elegida
-        $this->form->fill(['sesion_id' => $datos['sesion_id'], 'texto' => null, 'lista' => null]);
+        // Se limpia el campo para la siguiente persona, manteniendo la sesión elegida
+        $this->data['texto'] = '';
+        $this->dispatch('enfocar-dni');
     }
 
-    // Lista pegada (DNI o correos): registra los validados y resume lo que no se pudo
-    private function registrarVarios(array $datos): void
+    // Lista pegada (DNI o correos): registra los admitidos y resume lo que no se pudo
+    private function registrarVarios(Sesion $sesion): void
     {
-        $valores = collect(preg_split('/[\s,;]+/', $datos['lista']))->map(fn ($v) => trim($v, " \t\"'"))->filter()->unique();
+        $valores = collect(preg_split('/[\s,;]+/', $this->data['lista']))->map(fn ($v) => trim($v, " \t\"'"))->filter()->unique();
         $nuevos = $ya = 0;
-        $sinPago = $noEncontrados = [];
+        $bloqueados = $noEncontrados = [];
 
         foreach ($valores as $v) {
             $i = $this->buscar($v);
             if (! $i) {
                 $noEncontrados[] = $v;
             } elseif (! $this->admitir($i)) {
-                $sinPago[] = $i->participante->nombre_completo;
+                $bloqueados[] = $i->participante->nombre_completo;
             } else {
                 $a = Asistencia::firstOrCreate(
-                    ['inscripcion_id' => $i->id, 'sesion_id' => $datos['sesion_id']],
+                    ['inscripcion_id' => $i->id, 'sesion_id' => $sesion->id],
                     ['registrado_por' => auth()->id(), 'registrado_en' => now()],
                 );
                 $a->wasRecentlyCreated ? $nuevos++ : $ya++;
@@ -160,13 +232,15 @@ class RegistrarAsistencia extends Page implements HasTable
 
         $detalle = collect([
             $ya ? "{$ya} ya estaban registrados" : null,
-            $sinPago ? count($sinPago).' con inscripción anulada u observada: '.implode(', ', array_slice($sinPago, 0, 5)) : null,
+            $bloqueados ? count($bloqueados).' con inscripción anulada u observada: '.implode(', ', array_slice($bloqueados, 0, 5)) : null,
             $noEncontrados ? count($noEncontrados).' no encontrados: '.implode(', ', array_slice($noEncontrados, 0, 5)) : null,
         ])->filter()->implode(' · ');
 
         Notification::make()->title("Se registraron {$nuevos} asistencias")->body($detalle ?: null)
-            ->{($sinPago || $noEncontrados) ? 'warning' : 'success'}()->persistent()->send();
-        $this->form->fill(['sesion_id' => $datos['sesion_id'], 'texto' => null, 'lista' => null]);
+            ->{($bloqueados || $noEncontrados) ? 'warning' : 'success'}()->persistent()->send();
+        $this->data['lista'] = '';
+        $this->data['texto'] = '';
+        $this->resultado = null;
     }
 
     public function table(Table $table): Table
@@ -178,12 +252,19 @@ class RegistrarAsistencia extends Page implements HasTable
                 ->where('sesion_id', $this->data['sesion_id'] ?? 0))
             ->defaultSort('registrado_en', 'desc')
             ->columns([
-                TextColumn::make('registrado_en')->label('Hora')->time('H:i'),
-                TextColumn::make('inscripcion.codigo')->label('Código'),
-                TextColumn::make('inscripcion.participante.nombre_completo')->label('Participante'),
+                TextColumn::make('registrado_en')->label('Hora')->time('H:i')->badge()->color('gray'),
+                TextColumn::make('inscripcion.participante.nombre_completo')->label('Participante')->weight('bold')
+                    ->description(fn (Asistencia $a) => $a->inscripcion->codigo)
+                    ->searchable(query: fn ($query, string $search) => $query->whereHas('inscripcion.participante', fn ($p) => $p
+                        ->where('nombres', 'like', "%{$search}%")
+                        ->orWhere('apellidos', 'like', "%{$search}%")
+                        ->orWhere('documento', 'like', "%{$search}%"))),
                 TextColumn::make('inscripcion.participante.documento')->label('DNI / Pasaporte'),
-                TextColumn::make('registrador.name')->label('Registró'),
+                TextColumn::make('registrador.name')->label('Registró')->color('gray')->toggleable(),
             ])
+            ->emptyStateHeading('Aún no hay registros en esta sesión')
+            ->emptyStateDescription('Escriba un DNI arriba y presione Enter.')
+            ->emptyStateIcon(Heroicon::OutlinedIdentification)
             ->paginated([10, 25, 50]);
     }
 }

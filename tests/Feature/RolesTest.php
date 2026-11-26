@@ -248,9 +248,9 @@ class RolesTest extends TestCase
 
         // Uno por uno (DNI) y varios a la vez (lista de correos del reporte de Meet)
         Livewire::test(RegistrarAsistencia::class)
-            ->fillForm(['sesion_id' => $sesion->id, 'texto' => '70123456'])
+            ->set('data.sesion_id', $sesion->id)->set('data.texto', '70123456')
             ->call('registrar')
-            ->fillForm(['sesion_id' => $sesion->id, 'lista' => "otro@example.com\nnoexiste@example.com"])
+            ->set('data.sesion_id', $sesion->id)->set('data.lista', "otro@example.com\nnoexiste@example.com")
             ->call('registrar');
         $this->assertSame(2, Asistencia::count());
 
