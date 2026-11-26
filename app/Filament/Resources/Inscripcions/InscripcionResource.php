@@ -7,7 +7,6 @@ use App\Filament\Resources\Inscripcions\Pages\CreateInscripcion;
 use App\Filament\Resources\Inscripcions\Pages\EditInscripcion;
 use App\Filament\Resources\Inscripcions\Pages\ListInscripcions;
 use App\Mail\InscripcionValidada;
-use App\Mail\RecordatorioAsistencia;
 use App\Models\Inscripcion;
 use App\Models\Ponencia;
 use App\Support\Accesos;
@@ -328,11 +327,10 @@ class InscripcionResource extends Resource
                         ->icon(Heroicon::OutlinedCalendarDays)
                         ->modalHeading('Enviar recordatorio de asistencia')
                         ->modalDescription('Cada persona recibe, con su nombre tal como se inscribió, la fecha, la ingreso a partir de las 8:00 a. m. y el aviso de registrar su entrada y salida con su DNI. Las anuladas se omiten. Máximo '.self::MAX_RECORDATORIOS_PANEL.' por vez.')
-                        ->schema([
-                            Select::make('dia')->label('¿Para qué días?')->options(RecordatorioAsistencia::DIAS)->default('ambos')->required(),
-                        ])
+                        ->schema(Recordatorios::campos())
                         ->action(function (Collection $records, array $data) {
                             $destino = $records->load('participante')->where('estado', '!=', 'anulada')->filter(fn ($r) => filled($r->participante->correo));
+                            Recordatorios::guardarGrupo($data['grupo_whatsapp'] ?? null);
                             if ($destino->count() > self::MAX_RECORDATORIOS_PANEL) {
                                 Notification::make()->title('Selecciona como máximo '.self::MAX_RECORDATORIOS_PANEL.' inscripciones')
                                     ->body('Para enviarlo a todos usa en el servidor: php artisan congreso:recordatorio')->warning()->send();

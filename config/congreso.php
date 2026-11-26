@@ -65,6 +65,8 @@ return [
     'correo_contacto' => env('CONGRESO_CORREO', 'p.enriquez@unap.edu.pe'),
     'telefono' => '+51 930 805 537',
     'whatsapp' => '51930805537', // solo dígitos, con código de país
+    // EDITABLE. Enlace de invitación al grupo de WhatsApp de participantes (comunicados); va en el recordatorio de asistencia
+    'grupo_whatsapp' => null,
 
     // EDITABLE. Avisos a la comisión por cada nueva inscripción (panel → Datos del congreso → Avisos).
     // Correo: si está vacío, se usa el correo de contacto. WhatsApp: con CallMeBot (callmebot.com),

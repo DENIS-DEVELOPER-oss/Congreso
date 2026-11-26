@@ -6,6 +6,7 @@ use App\Mail\AvisoPrueba;
 use App\Support\Ajustes;
 use App\Support\Avisos;
 use App\Support\Correo;
+use App\Support\Recordatorios;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
@@ -99,6 +100,7 @@ class DatosCongreso extends Page
                             TextInput::make('whatsapp')->label('WhatsApp')->placeholder('51951000000')
                                 ->helperText('Solo números, con el 51 de Perú adelante.')->regex('/^\d{9,15}$/'),
                         ]),
+                        Recordatorios::campoGrupoWhatsApp(),
                         Repeater::make('fechas_importantes')->label('Fechas importantes (portada)')
                             ->columns(3)->reorderable()
                             ->itemLabel(fn (array $state) => $state['texto'] ?? null)

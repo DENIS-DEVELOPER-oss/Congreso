@@ -41,6 +41,49 @@ class RecordatorioTest extends TestCase
         $this->assertStringContainsString('DNI', $html);
     }
 
+    public function test_el_organizador_envia_para_los_dos_dias_con_el_grupo_de_whatsapp_sin_tocar_otros_datos(): void
+    {
+        Mail::fake();
+        $this->actingAs(User::factory()->create(['es_admin' => false]));
+        $i = $this->inscrito('Rosa', 'Mamani', 'rosa@example.com', 'pendiente');
+        $antes = $i->fresh()->only(['estado', 'tipo_participante', 'codigo', 'observacion', 'validado_en']);
+        $participante = $i->participante->fresh()->only(['nombres', 'apellidos', 'correo', 'documento', 'password']);
+        $grupo = 'https://chat.whatsapp.com/AbCdEf123456';
+
+        Livewire::test(ListInscripcions::class)
+            ->callAction('recordatorioTodos', data: ['dia' => 'ambos', 'grupo_whatsapp' => $grupo, 'solo_confirmadas' => false])
+            ->assertHasNoActionErrors();
+
+        Mail::assertSent(RecordatorioAsistencia::class, function ($m) use ($grupo) {
+            $html = $m->render();
+
+            return $m->hasTo('rosa@example.com') && $m->dia === 'ambos'
+                && str_contains($html, $grupo) && str_contains($html, 'jueves 26 y viernes 27');
+        });
+        // Solo se anota la fecha del recordatorio: estado, datos y acceso de la persona quedan igual
+        $this->assertSame($antes, $i->fresh()->only(array_keys($antes)));
+        $this->assertSame($participante, $i->participante->fresh()->only(array_keys($participante)));
+        $this->assertNotNull($i->fresh()->recordatorio_enviado_en);
+        $this->assertSame($grupo, config('congreso.grupo_whatsapp'));
+    }
+
+    public function test_el_enlace_del_grupo_debe_ser_de_whatsapp_y_es_opcional(): void
+    {
+        Mail::fake();
+        $this->actingAs(User::factory()->create(['es_admin' => true]));
+        $this->inscrito('Rosa', 'Mamani', 'rosa@example.com');
+
+        Livewire::test(ListInscripcions::class)
+            ->callAction('recordatorioTodos', data: ['dia' => '27', 'grupo_whatsapp' => 'https://sitio-falso.com/x', 'solo_confirmadas' => false])
+            ->assertHasActionErrors(['grupo_whatsapp']);
+        Mail::assertNothingSent();
+
+        Livewire::test(ListInscripcions::class)
+            ->callAction('recordatorioTodos', data: ['dia' => '27', 'grupo_whatsapp' => '', 'solo_confirmadas' => false])
+            ->assertHasNoActionErrors();
+        Mail::assertSent(RecordatorioAsistencia::class, fn ($m) => ! str_contains($m->render(), 'chat.whatsapp.com'));
+    }
+
     public function test_el_comando_envia_a_todos_menos_anulados_y_no_repite(): void
     {
         Mail::fake();

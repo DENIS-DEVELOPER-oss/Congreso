@@ -3,13 +3,11 @@
 namespace App\Filament\Resources\Inscripcions\Pages;
 
 use App\Filament\Resources\Inscripcions\InscripcionResource;
-use App\Mail\RecordatorioAsistencia;
 use App\Models\Inscripcion;
 use App\Support\Ajustes;
 use App\Support\Recordatorios;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
@@ -76,13 +74,14 @@ class ListInscripcions extends ListRecords
                     .'Cada vez que pulses «Enviar» se envía a los siguientes '.Recordatorios::LOTE_PANEL.' y nunca se repite a quien ya lo recibió: '
                     .'vuelve a pulsar el botón hasta que no quede nadie.')
                 ->schema([
-                    Select::make('dia')->label('¿Para qué días?')->options(RecordatorioAsistencia::DIAS)->default('27')->required(),
+                    ...Recordatorios::campos(),
                     Toggle::make('solo_confirmadas')->label('Solo inscripciones confirmadas')
                         ->helperText('Apagado: también reciben quienes aún figuran como pendientes.'),
                 ])
                 ->modalSubmitActionLabel('Enviar')
                 ->action(function (array $data) {
                     @set_time_limit(120);
+                    Recordatorios::guardarGrupo($data['grupo_whatsapp'] ?? null);
                     $lote = Recordatorios::pendientes((bool) $data['solo_confirmadas'])->limit(Recordatorios::LOTE_PANEL)->get();
                     if ($lote->isEmpty()) {
                         Notification::make()->title('Todos ya recibieron el recordatorio')->success()->send();

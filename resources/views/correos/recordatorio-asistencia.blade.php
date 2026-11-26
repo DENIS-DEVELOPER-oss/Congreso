@@ -24,6 +24,16 @@
     </td></tr>
   </table>
 
+  @if (filled(config('congreso.grupo_whatsapp')))
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px;background:#ecfdf3;border-radius:8px;width:100%;">
+      <tr><td style="padding:14px 18px;font-size:14px;line-height:1.7;">
+        <strong>Grupo de WhatsApp del congreso</strong><br />
+        Le invitamos a unirse al grupo oficial, donde se compartirán comunicados e información del evento.<br />
+        <a href="{{ config('congreso.grupo_whatsapp') }}" style="display:inline-block;margin-top:10px;background:#16a34a;color:#ffffff;text-decoration:none;font-weight:bold;padding:10px 20px;border-radius:4px;">Unirse al grupo de WhatsApp</a>
+      </td></tr>
+    </table>
+  @endif
+
   <p style="margin:0 0 6px;">El evento es presencial y de acceso gratuito. Para cualquier consulta, puede comunicarse con nosotros a través del correo electrónico o el número de WhatsApp indicados al pie de este mensaje.</p>
   <p style="margin:0;">Agradecemos su participación y será un gusto contar con su presencia.</p>
 </x-correo>
